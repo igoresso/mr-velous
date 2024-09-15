@@ -22,7 +22,7 @@
 	});
 
 	let tiles = [
-		{ name: 'Toggle Toolbar', icon: Menu, onClick: () => (isToolbarVisible = !isToolbarVisible) },
+		{ name: 'Toggle toolbar', icon: Menu, onClick: () => (isToolbarVisible = !isToolbarVisible) },
 		{ name: 'Information', icon: Info, onClick: () => (activeTile = 'Information') },
 		{
 			name: 'Settings',
@@ -30,13 +30,11 @@
 			onClick: () => (activeTile = 'Settings'),
 			isDisabled: true
 		},
-		{ name: 'Toggle Theme', icon: Sun, class: 'mt-auto dark:hidden', onClick: toggleMode },
-		{ name: 'Toggle Theme', icon: Moon, class: 'mt-auto hidden dark:block', onClick: toggleMode },
+		{ name: 'Toggle theme', icon: Sun, class: 'mt-auto dark:hidden', onClick: toggleMode },
+		{ name: 'Toggle theme', icon: Moon, class: 'mt-auto hidden dark:block', onClick: toggleMode },
 		{ name: 'Help', icon: HelpCircle, isDisabled: true },
-		{ name: 'GitHub Link', icon: Github, href: '' }
+		{ name: 'GitHub link', icon: Github, href: '' }
 	];
-
-	$inspect(isToolbarVisible);
 </script>
 
 <svelte:window bind:innerWidth />
@@ -57,7 +55,7 @@
 			</aside>
 		</div>
 
-		<main>
+		<main class="grow p-5">
 			{@render children()}
 		</main>
 	</div>

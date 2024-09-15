@@ -11,8 +11,8 @@
 	let { tile, activeTile }: Props = $props();
 
 	function getClasses(tile: Tile) {
-		let isActive = activeTile === tile.name;
-		let classesInteractivity = `${tile.isDisabled ? 'text-neutral-400' : 'hover:bg-neutral-100 active:bg-neutral-300 dark:hover:bg-neutral-900 dark:active:bg-neutral-700'}`;
+		const isActive = activeTile === tile.name;
+		const classesInteractivity = `${tile.isDisabled ? 'text-neutral-400' : 'hover:bg-neutral-100 active:bg-neutral-300 dark:hover:bg-neutral-900 dark:active:bg-neutral-700'}`;
 		return `${tile.class} block p-3.5 ${isActive ? 'bg-neutral-200 dark:bg-neutral-800 cursor-default' : classesInteractivity}`;
 	}
 </script>
