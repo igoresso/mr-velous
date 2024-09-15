@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { ModeWatcher, toggleMode } from 'mode-watcher';
 	import { Toaster } from '$lib/components/ui/sonner';
+	import { Separator } from '$lib/components/ui/separator';
 	import { Menu, Info, SlidersHorizontal, Moon, Sun, HelpCircle, Github } from 'lucide-svelte';
 	import { Rail } from '$lib/components/rail';
 
@@ -48,12 +49,23 @@
 		<Rail {tiles} {activeTile} />
 
 		<div class="w-72 border-r-2" class:hidden={!isToolbarVisible}>
-			<header class="border-b-2 p-2.5">
-				<h1 class="text-center text-2xl font-bold">MR.VELOUS</h1>
+			<header class="border-b-2 p-3">
+				<h1 class="text-center text-xl font-bold">MR.VELOUS</h1>
 			</header>
 
 			<aside class="px-5 py-3">
-				<h2 class="text-lg font-semibold">{activeTile}</h2>
+				<!-- <h2 class="text-lg font-semibold">{activeTile}</h2> -->
+
+				<h2 class="text-lg font-medium">
+					MR Viewer with Enhanced Layout and Optimised User Satisfaction
+				</h2>
+
+				<Separator class="my-3" />
+
+				<p class="text-md font-thin">
+					Explore medical images with ease and a touch of elegance. Enjoy a delightful experience as
+					more features are on the way!
+				</p>
 			</aside>
 		</div>
 

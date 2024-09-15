@@ -1,38 +1,17 @@
-# create-svelte
+# 🩻 MR.VELOUS
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Creating a project
+Welcome to **MR.VELOUS**! This hobby project is all about exploring medical images with style and a smile.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## 🤔 What's in the Name?
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+**MR.VELOUS** stands for **"MR Viewer with Enhanced Layout and Optimised User Satisfaction."** The name is a play on the word "marvelous," reflecting the goal of creating a viewer that’s not just functional but also a joy to use.
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+## 🧩 What's Inside?
 
-## Developing
+- **NIfTI Image Support**: Open and explore medical images in the NIfTI format. (More formats are on the way!)
+- **Enhanced Layout**: Designed to be easy to use and pleasant to look at. Why settle for dull when it can be delightful?
+- **Active Development**: This app is a work in progress, with new features and improvements added regularly. The aim is to make this the best online viewer out there.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+**MR.VELOUS** is a passion project, and working on it is an absolute blast. Feedback and suggestions are the sprinkles on the ice cream 🍦, so feel free to share your thoughts!
