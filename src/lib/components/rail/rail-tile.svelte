@@ -10,10 +10,13 @@
 
 	let { tile, activeTile }: Props = $props();
 
+	let isActive = $derived(activeTile === tile.name);
+
 	function getClasses(tile: Tile) {
-		const isActive = activeTile === tile.name;
-		const classesInteractivity = `${tile.isDisabled ? 'text-neutral-400' : 'hover:bg-neutral-100 active:bg-neutral-300 dark:hover:bg-neutral-900 dark:active:bg-neutral-700'}`;
-		return `${tile.class} block p-3.5 ${isActive ? 'bg-neutral-200 dark:bg-neutral-800 cursor-default' : classesInteractivity}`;
+		const base = 'block p-3.5';
+		const interactivity = `${tile.isDisabled ? 'text-neutral-400' : 'hover:bg-neutral-100 active:bg-neutral-300 dark:hover:bg-neutral-900 dark:active:bg-neutral-700'}`;
+		const accessibility = 'outline-none focus:ring-2 ring-ring ring-inset';
+		return `${base} ${tile.class} ${isActive ? 'bg-neutral-200 dark:bg-neutral-800 cursor-default' : interactivity} ${accessibility}`;
 	}
 </script>
 
@@ -23,7 +26,12 @@
 {/snippet}
 
 {#if tile.href === undefined}
-	<button class={getClasses(tile)} type="button" onclick={tile.onClick} disabled={tile.isDisabled}>
+	<button
+		class={getClasses(tile)}
+		type="button"
+		onclick={tile.onClick}
+		disabled={tile.isDisabled || isActive}
+	>
 		{@render content(tile)}
 	</button>
 {:else}
