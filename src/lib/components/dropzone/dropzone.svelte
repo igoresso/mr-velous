@@ -87,7 +87,7 @@
 	</span>
 
 	{#if acceptedExtensions}
-		<span class="italic text-gray-500 dark:text-gray-400">{acceptedExtensions}</span>
+		<span class="italic text-muted-foreground">{acceptedExtensions}</span>
 	{/if}
 
 	<input

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ModeWatcher, toggleMode } from 'mode-watcher';
+	import { Toaster } from '$lib/components/ui/sonner';
 	import { Menu, Info, SlidersHorizontal, Moon, Sun, HelpCircle, Github } from 'lucide-svelte';
 	import { Rail } from '$lib/components/rail';
 
@@ -40,6 +41,7 @@
 <svelte:window bind:innerWidth />
 
 <ModeWatcher track={false} defaultMode={'dark'} />
+<Toaster expand={true} richColors />
 
 {#if innerWidth > 0}
 	<div class="flex h-full">

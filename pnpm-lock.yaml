@@ -7,6 +7,10 @@ settings:
 importers:
 
   .:
+    dependencies:
+      svelte-sonner:
+        specifier: ^0.3.28
+        version: 0.3.28(svelte@5.0.0-next.246)
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^3.0.0
@@ -1397,6 +1401,11 @@ packages:
     peerDependencies:
       svelte: ^3.54.0 || ^4.0.0
 
+  svelte-sonner@0.3.28:
+    resolution: {integrity: sha512-K3AmlySeFifF/cKgsYNv5uXqMVNln0NBAacOYgmkQStLa/UoU0LhfAACU6Gr+YYC8bOCHdVmFNoKuDbMEsppJg==}
+    peerDependencies:
+      svelte: ^3.0.0 || ^4.0.0 || ^5.0.0-next.1
+
   svelte@5.0.0-next.246:
     resolution: {integrity: sha512-FRfq6W17mOHiSbY9nen6/skCV7AHQJdB9yaS9DA4x4mKXR/RIGMDLlxxU3jhQsMiLoqmUFHXJc6Rqe1o6HWlow==}
     engines: {node: '>=18'}
@@ -2774,6 +2783,10 @@ snapshots:
   svelte-file-dropzone@2.0.8(svelte@5.0.0-next.246):
     dependencies:
       file-selector: 0.6.0
+      svelte: 5.0.0-next.246
+
+  svelte-sonner@0.3.28(svelte@5.0.0-next.246):
+    dependencies:
       svelte: 5.0.0-next.246
 
   svelte@5.0.0-next.246:

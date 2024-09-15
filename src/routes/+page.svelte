@@ -1,6 +1,7 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+	import { toast } from 'svelte-sonner';
 	import { Dropzone } from '$lib/components/dropzone';
 
 	function handleFiles(event: CustomEvent<FileList>) {
@@ -8,8 +9,11 @@
 	}
 
 	function handleUnsupportedFiles(event: CustomEvent<string[]>) {
-		console.warn('Some files are unsupported:', event.detail);
-		console.log(event.detail);
+		const files = event.detail;
+
+		files.forEach((file) => {
+			toast.error(`Unsupported filetype`, { description: `File: ${file}` });
+		});
 	}
 </script>
 
