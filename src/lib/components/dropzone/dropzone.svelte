@@ -1,6 +1,9 @@
+<svelte:options runes={true} />
+
 <script lang="ts">
 	import { createEventDispatcher } from 'svelte';
 	import { FileUp } from 'lucide-svelte';
+	import { toast } from 'svelte-sonner';
 
 	type Props = {
 		acceptedExtensions?: string;
@@ -49,11 +52,18 @@
 			files = (event.target as HTMLInputElement).files || null;
 		}
 
-		if (files) {
-			const filteredFiles = filterFilesByExtension(files);
-			if (filteredFiles.length > 0) {
-				dispatch('filesDropped', filteredFiles);
-			}
+		if (!files) {
+			return;
+		}
+
+		if (files.length !== 1 && !multiple) {
+			toast.error('Multiple file uploads are not supported yet...');
+			return;
+		}
+
+		const filteredFiles = filterFilesByExtension(files);
+		if (filteredFiles.length > 0) {
+			dispatch('filesDropped', filteredFiles);
 		}
 	}
 

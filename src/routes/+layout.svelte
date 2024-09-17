@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { setCollectionState } from '$lib/collection-state.svelte';
 	import { ModeWatcher, toggleMode } from 'mode-watcher';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import { Separator } from '$lib/components/ui/separator';
@@ -10,6 +11,8 @@
 	import '../app.css';
 
 	let { children }: { children: Snippet } = $props();
+
+	setCollectionState();
 
 	let innerWidth = $state(0);
 	let activeTile = $state('Information');
