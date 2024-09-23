@@ -1,18 +1,19 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
-	import { getCollectionState } from '$lib/collection-state.svelte';
 	import { toast } from 'svelte-sonner';
-	import { processFile } from '$lib/helpers';
 	import { Dropzone } from '$lib/components/dropzone';
+	import { Panel } from '$lib/components/panel';
+	import { getViewerState } from '$lib/viewer-state.svelte';
+	import { processFile } from '$lib/helpers';
 
-	const collectionState = getCollectionState();
+	const viewerState = getViewerState();
 
 	async function handleFiles(event: CustomEvent<FileList>) {
 		for (const file of event.detail) {
 			try {
 				const dataset = await processFile(file);
-				collectionState.add(file.name, dataset);
+				viewerState.add(file.name, dataset);
 			} catch (error) {
 				if (error instanceof Error) {
 					toast.error(`Error adding file`, { description: error.message });
@@ -20,6 +21,8 @@
 					toast.error(`Error adding file`, { description: 'An unknown error occurred.' });
 				}
 			}
+
+			toast.success(`File loaded successfully`, { description: file.name });
 		}
 	}
 
@@ -32,15 +35,19 @@
 	}
 </script>
 
-<div class="grid h-full place-content-center">
-	{#if collectionState.collection.length > 0}
-		<h1 class="text-2xl font-bold">Views</h1>
-	{:else}
+{#if viewerState.views.length > 0}
+	<div class="grid h-full grid-cols-2 gap-3">
+		{#each viewerState.views as view}
+			<Panel {view} />
+		{/each}
+	</div>
+{:else}
+	<div class="grid h-full place-content-center">
 		<Dropzone
 			acceptedExtensions=".nii, .nii.gz"
 			multiple={false}
 			on:filesDropped={handleFiles}
 			on:unsupportedFiles={handleUnsupportedFiles}
 		/>
-	{/if}
-</div>
+	</div>
+{/if}

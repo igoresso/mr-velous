@@ -17,9 +17,7 @@ vi.mock('nifti-reader-js', () => ({
 		TYPE_INT16: 4,
 		TYPE_INT32: 8,
 		TYPE_FLOAT32: 16,
-		TYPE_FLOAT64: 64,
-		TYPE_INT64: 1024,
-		TYPE_UINT64: 1280
+		TYPE_FLOAT64: 64
 	}
 }));
 

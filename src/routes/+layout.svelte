@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { setCollectionState } from '$lib/collection-state.svelte';
+	import { setViewerState } from '$lib/viewer-state.svelte';
 	import { ModeWatcher, toggleMode } from 'mode-watcher';
-	import { Toaster } from '$lib/components/ui/sonner';
-	import { Separator } from '$lib/components/ui/separator';
 	import { Menu, Info, SlidersHorizontal, Moon, Sun, HelpCircle, Github } from 'lucide-svelte';
+	import { Toaster } from '$lib/components/ui/sonner';
 	import { Rail } from '$lib/components/rail';
+	import { Information } from '$lib/components/information';
 
 	import type { Snippet } from 'svelte';
 
@@ -12,7 +12,7 @@
 
 	let { children }: { children: Snippet } = $props();
 
-	setCollectionState();
+	setViewerState();
 
 	let innerWidth = $state(0);
 	let activeTile = $state('Information');
@@ -56,23 +56,12 @@
 				<h1 class="text-center text-xl font-bold">MR.VELOUS</h1>
 			</header>
 
-			<aside class="px-5 py-3">
-				<!-- <h2 class="text-lg font-semibold">{activeTile}</h2> -->
-
-				<h2 class="text-lg font-medium">
-					MR Viewer with Enhanced Layout and Optimised User Satisfaction
-				</h2>
-
-				<Separator class="my-3" />
-
-				<p class="text-md font-thin">
-					Explore medical images with ease and a touch of elegance. Enjoy a delightful experience as
-					more features are on the way!
-				</p>
+			<aside class="flex flex-col space-y-4 px-5 py-3">
+				<Information />
 			</aside>
 		</div>
 
-		<main class="grow p-5">
+		<main class="grow p-3">
 			{@render children()}
 		</main>
 	</div>

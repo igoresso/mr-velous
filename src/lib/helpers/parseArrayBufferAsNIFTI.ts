@@ -22,9 +22,7 @@ export async function parseArrayBufferAsNIFTI(arrayBuffer: ArrayBuffer): Promise
 		[nifti.NIFTI1.TYPE_INT16]: Int16Array,
 		[nifti.NIFTI1.TYPE_INT32]: Int32Array,
 		[nifti.NIFTI1.TYPE_FLOAT32]: Float32Array,
-		[nifti.NIFTI1.TYPE_FLOAT64]: Float64Array,
-		[nifti.NIFTI1.TYPE_INT64]: BigInt64Array,
-		[nifti.NIFTI1.TYPE_UINT64]: BigUint64Array
+		[nifti.NIFTI1.TYPE_FLOAT64]: Float64Array
 	};
 
 	const TypedArrayConstructor = dataTypeMap[niftiHeader.datatypeCode];
