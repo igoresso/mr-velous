@@ -48,10 +48,10 @@
 			</Collapsible.Trigger>
 		</div>
 		<div class="flex items-center justify-between space-x-4 rounded-md border px-4 py-3">
-			<span class="font-mono text-sm">{activeVolume}</span>
+			<span class="truncate font-mono text-sm">{activeVolume}</span>
 			<Button variant="ghost" size="sm" class="p-2" onclick={() => viewerState.reset()}>
 				<X size="16" />
-				<span class="sr-only">Remove file</span>
+				<span class="sr-only">Remove volume</span>
 			</Button>
 		</div>
 		<!-- <Collapsible.Content class="space-y-2"></Collapsible.Content> -->
@@ -85,6 +85,8 @@
 			<Input
 				type="number"
 				value={slice_1 + 1}
+				min={1}
+				max={dims[1]}
 				oninput={(event) => handleSliceChange(views[0].id, event)}
 			/>
 			<Separator orientation="vertical" />
@@ -99,7 +101,7 @@
 			<Input
 				type="number"
 				value={slice_3 + 1}
-				min={-10}
+				min={1}
 				max={dims[3]}
 				oninput={(event) => handleSliceChange(views[2].id, event)}
 			/>

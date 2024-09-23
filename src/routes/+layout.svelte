@@ -38,7 +38,7 @@
 		{ name: 'Toggle theme', icon: Sun, class: 'mt-auto dark:hidden', onClick: toggleMode },
 		{ name: 'Toggle theme', icon: Moon, class: 'mt-auto hidden dark:block', onClick: toggleMode },
 		{ name: 'Help', icon: HelpCircle, isDisabled: true },
-		{ name: 'GitHub link', icon: Github, href: '' }
+		{ name: 'GitHub link', icon: Github, href: 'https://github.com/igoresso/mr-velous' }
 	];
 </script>
 
