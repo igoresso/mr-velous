@@ -1,4 +1,5 @@
 <script lang="ts">
+	import type { Snippet } from 'svelte';
 	import { setViewerState } from '$lib/viewer-state.svelte';
 	import { ModeWatcher, toggleMode } from 'mode-watcher';
 	import { Menu, Info, SlidersHorizontal, Moon, Sun, HelpCircle, Github } from 'lucide-svelte';
@@ -6,9 +7,9 @@
 	import { Rail } from '$lib/components/rail';
 	import { Information } from '$lib/components/information';
 
-	import type { Snippet } from 'svelte';
-
 	import '../app.css';
+
+	export const prerender = true;
 
 	let { children }: { children: Snippet } = $props();
 
