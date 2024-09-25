@@ -5,7 +5,7 @@
 
 	type Props = {
 		tile: Tile;
-		activeTile: string;
+		activeTile: string | false;
 	};
 
 	let { tile, activeTile }: Props = $props();

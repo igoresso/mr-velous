@@ -7,7 +7,7 @@
 	// Props for the rail
 	type Props = {
 		tiles: TileType[];
-		activeTile: string;
+		activeTile: string | false;
 	};
 
 	let { tiles, activeTile }: Props = $props();

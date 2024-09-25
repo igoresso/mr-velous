@@ -9,8 +9,6 @@
 
 	import '../app.css';
 
-	export const prerender = true;
-
 	let { children }: { children: Snippet } = $props();
 
 	setViewerState();
@@ -50,7 +48,7 @@
 
 {#if innerWidth > 0}
 	<div class="flex h-full">
-		<Rail {tiles} {activeTile} />
+		<Rail {tiles} activeTile={isToolbarVisible && activeTile} />
 
 		<div class="w-72 border-r-2" class:hidden={!isToolbarVisible}>
 			<header class="border-b-2 p-3">

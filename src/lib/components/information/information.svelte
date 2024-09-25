@@ -2,26 +2,17 @@
 
 <script lang="ts">
 	import { getViewerState } from '$lib/viewer-state.svelte';
-	import { ChevronsUpDown, X } from 'lucide-svelte';
-	import * as Collapsible from '$lib/components/ui/collapsible';
+	import { X } from 'lucide-svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
 	import { Input } from '$lib/components/ui/input/index.js';
 
 	const viewerState = getViewerState();
 
-	let activeVolume = $derived(viewerState.views[0].fileName);
-	let views = $derived(viewerState.views);
-	let dims = $derived(viewerState.views[0].header.dims);
-	let fov = $derived(viewerState.views[0].fov);
-	let slice_1 = $derived(viewerState.views[0].slice);
-	let slice_2 = $derived(viewerState.views[1].slice);
-	let slice_3 = $derived(viewerState.views[2].slice);
-
-	function handleSliceChange(id: string, event: Event) {
+	function handleSliceChange(axis: number, event: Event) {
 		const target = event.target as HTMLInputElement;
 		const slice = Number(target.value) - 1;
-		viewerState.changeSlice(id, slice);
+		viewerState.changeSlice(axis, slice);
 	}
 </script>
 
@@ -37,38 +28,33 @@
 		features are on the way!
 	</p>
 {:else}
-	<Collapsible.Root class="space-y-2">
-		<div class="flex items-center justify-between space-x-4">
-			<h2 class="text-lg font-semibold">Volume</h2>
-			<Collapsible.Trigger asChild let:builder>
-				<Button builders={[builder]} variant="ghost" size="sm" class="w-9 p-0" disabled>
-					<ChevronsUpDown size="18" />
-					<span class="sr-only">Toggle</span>
-				</Button>
-			</Collapsible.Trigger>
-		</div>
+	{#each viewerState.volumes as volume}
 		<div class="flex items-center justify-between space-x-4 rounded-md border px-4 py-3">
-			<span class="truncate font-mono text-sm">{activeVolume}</span>
-			<Button variant="ghost" size="sm" class="p-2" onclick={() => viewerState.reset()}>
+			<span class="truncate font-mono text-sm">{volume.fileName}</span>
+			<Button
+				variant="ghost"
+				size="sm"
+				class="p-2"
+				onclick={() => viewerState.removeVolume(volume.id)}
+			>
 				<X size="16" />
 				<span class="sr-only">Remove volume</span>
 			</Button>
 		</div>
-		<!-- <Collapsible.Content class="space-y-2"></Collapsible.Content> -->
-	</Collapsible.Root>
+	{/each}
 
 	<div class="flex flex-col space-y-2">
 		<h2 class="text-lg font-semibold">Dimensions</h2>
 		<div class="flex justify-between">
-			<span class="grow text-center font-semibold">{dims[1]}</span>
+			<span class="grow text-center font-semibold">{viewerState.views[0].slices + 1}</span>
 			<Separator orientation="vertical" />
-			<span class="grow text-center font-semibold">{dims[2]}</span>
+			<span class="grow text-center font-semibold">{viewerState.views[1].slices + 1}</span>
 			<Separator orientation="vertical" />
-			<span class="grow text-center font-semibold">{dims[3]}</span>
+			<span class="grow text-center font-semibold">{viewerState.views[2].slices + 1}</span>
 		</div>
 	</div>
 
-	<div class="flex flex-col space-y-2">
+	<!-- <div class="flex flex-col space-y-2">
 		<h2 class="text-lg font-semibold">Field of View</h2>
 		<div class="flex justify-between">
 			<span class="grow text-center font-semibold">{Math.round(fov[0])}</span>
@@ -77,33 +63,33 @@
 			<Separator orientation="vertical" />
 			<span class="grow text-center font-semibold">{Math.round(fov[2])}</span>
 		</div>
-	</div>
+	</div> -->
 
 	<div class="flex flex-col space-y-2">
 		<h2 class="text-lg font-semibold">Current Slices</h2>
 		<div class="flex justify-between space-x-2">
 			<Input
 				type="number"
-				value={slice_1 + 1}
+				value={viewerState.views[0].slice + 1}
 				min={1}
-				max={dims[1]}
-				oninput={(event) => handleSliceChange(views[0].id, event)}
+				max={viewerState.views[0].slices + 1}
+				oninput={(event) => handleSliceChange(1, event)}
 			/>
 			<Separator orientation="vertical" />
 			<Input
 				type="number"
-				value={slice_2 + 1}
+				value={viewerState.views[1].slice + 1}
 				min={1}
-				max={dims[2]}
-				oninput={(event) => handleSliceChange(views[1].id, event)}
+				max={viewerState.views[1].slices + 1}
+				oninput={(event) => handleSliceChange(2, event)}
 			/>
 			<Separator orientation="vertical" />
 			<Input
 				type="number"
-				value={slice_3 + 1}
+				value={viewerState.views[2].slice + 1}
 				min={1}
-				max={dims[3]}
-				oninput={(event) => handleSliceChange(views[2].id, event)}
+				max={viewerState.views[2].slices + 1}
+				oninput={(event) => handleSliceChange(3, event)}
 			/>
 		</div>
 	</div>

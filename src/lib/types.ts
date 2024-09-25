@@ -1,3 +1,4 @@
+import type { ZoomTransform } from 'd3-zoom';
 import type { NIFTI1, NIFTI2 } from 'nifti-reader-js';
 
 export type Header = NIFTI1 | NIFTI2;
@@ -17,15 +18,24 @@ export type Dataset = {
 	data: TypedArray;
 };
 
-export type View = Dataset & {
+export type Volume = Dataset & {
 	id: string;
 	fileName: string;
-	axis: 1 | 2 | 3;
-	slice: number;
-	rows: number;
-	cols: number;
-	fov: [number, number, number];
-	voxelRatio: number;
 	min: number;
 	max: number;
+	brightnessFactor: number;
+	contrastFactor: number;
+	opacity: number;
+	isActive: boolean;
+	isVisible: boolean;
+};
+
+export type View = {
+	axis: 1 | 2 | 3;
+	slice: number;
+	slices: number;
+	rows: number;
+	cols: number;
+	voxelRatio: number;
+	transform: ZoomTransform;
 };

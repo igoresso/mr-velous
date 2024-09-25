@@ -1,108 +1,168 @@
 import { getContext, setContext } from 'svelte';
-import type { TypedArray, Dataset, View } from '$lib/types';
+import { zoomIdentity } from 'd3-zoom';
+import { processFile, computeMinAndMax, extractSliceFromVolume } from '$lib/helpers';
+import type { ZoomTransform } from 'd3-zoom';
+import type { TypedArray, Dataset, View, Volume } from '$lib/types';
+
+enum Axis {
+	X = 1,
+	Y = 2,
+	Z = 3
+}
 
 export class ViewerState {
+	volumes = $state<Volume[]>([]);
 	views = $state<View[]>([]);
 
-	add(fileName: string, dataset: Dataset): void {
-		const { min, max } = this.computeMinAndMax(dataset.data);
+	async addVolume(file: File): Promise<void> {
+		const dataset: Dataset = await processFile(file);
+		const { min, max } = computeMinAndMax(dataset.data);
 
-		this.views.push({
-			id: crypto.randomUUID(),
-			fileName,
-			header: dataset.header,
-			data: dataset.data,
-			axis: 1,
-			slice: Math.floor(dataset.header.dims[1] / 2),
-			rows: dataset.header.dims[3],
-			cols: dataset.header.dims[2],
-			fov: [
-				dataset.header.dims[1] * dataset.header.pixDims[1],
-				dataset.header.dims[2] * dataset.header.pixDims[2],
-				dataset.header.dims[3] * dataset.header.pixDims[3]
-			],
-			voxelRatio: dataset.header.pixDims[2] / dataset.header.pixDims[3],
-			min,
-			max
+		this.volumes.forEach((volume) => {
+			volume.isActive = false;
 		});
 
-		this.views.push({
+		const newVolume: Volume = {
 			id: crypto.randomUUID(),
-			fileName,
-			header: dataset.header,
-			data: dataset.data,
-			axis: 2,
-			slice: Math.floor(dataset.header.dims[2] / 2),
-			rows: dataset.header.dims[3],
-			cols: dataset.header.dims[1],
-			fov: [
-				dataset.header.dims[1] * dataset.header.pixDims[1],
-				dataset.header.dims[1] * dataset.header.pixDims[1],
-				dataset.header.dims[3] * dataset.header.pixDims[3]
-			],
-			voxelRatio: dataset.header.pixDims[1] / dataset.header.pixDims[3],
+			fileName: file.name,
+			...dataset,
 			min,
-			max
-		});
+			max,
+			brightnessFactor: 0,
+			contrastFactor: 1,
+			opacity: 1,
+			isActive: true,
+			isVisible: true
+		};
 
-		this.views.push({
-			id: crypto.randomUUID(),
-			fileName,
-			header: dataset.header,
-			data: dataset.data,
-			axis: 3,
-			slice: Math.floor(dataset.header.dims[3] / 2),
-			rows: dataset.header.dims[2],
-			cols: dataset.header.dims[1],
-			fov: [
-				dataset.header.dims[1] * dataset.header.pixDims[1],
-				dataset.header.dims[1] * dataset.header.pixDims[1],
-				dataset.header.dims[2] * dataset.header.pixDims[2]
-			],
-			voxelRatio: dataset.header.pixDims[1] / dataset.header.pixDims[2],
-			min,
-			max
-		});
-	}
+		this.volumes.push(newVolume);
 
-	changeSlice(id: string, slice: number): void {
-		const view = this.views.find((view) => view.id === id);
-		if (view) {
-			const maxSlice = view.header.dims[view.axis] - 1;
-			view.slice = Math.max(0, Math.min(maxSlice, slice));
+		if (this.volumes.length === 1) {
+			this.initViews(newVolume);
 		}
 	}
 
-	nextSlice(id: string): void {
-		const view = this.views.find((view) => view.id === id);
-		if (view) view.slice = Math.min(view.header.dims[view.axis] - 1, view.slice + 1);
+	private initViews(volume: Volume): void {
+		const { dims, pixDims } = volume.header;
+
+		this.views = [Axis.X, Axis.Y, Axis.Z].map((axis) => {
+			const slice = Math.floor(dims[axis] / 2);
+			const rows = axis === Axis.X ? dims[3] : axis === Axis.Y ? dims[3] : dims[2];
+			const cols = axis === Axis.X ? dims[2] : axis === Axis.Y ? dims[1] : dims[1];
+			const voxelRatio =
+				axis === Axis.X
+					? pixDims[2] / pixDims[3]
+					: axis === Axis.Y
+						? pixDims[1] / pixDims[3]
+						: pixDims[1] / pixDims[2];
+
+			return {
+				axis,
+				slice,
+				slices: dims[axis] - 1,
+				rows,
+				cols,
+				voxelRatio,
+				transform: zoomIdentity
+			};
+		});
 	}
 
-	previousSlice(id: string): void {
-		const view = this.views.find((view) => view.id === id);
-		if (view) view.slice = Math.max(0, view.slice - 1);
+	setActiveVolume(volumeId: string): void {
+		if (this.volumes.some((volume) => volume.id === volumeId)) {
+			this.volumes.forEach((volume) => {
+				volume.isActive = volume.id === volumeId;
+			});
+		}
 	}
 
-	reset() {
+	removeVolume(volumeId: string): void {
+		this.volumes = this.volumes.filter((volume) => volume.id !== volumeId);
+
+		if (this.volumes.length === 0) {
+			this.views = [];
+		}
+	}
+
+	reset(): void {
+		this.volumes = [];
 		this.views = [];
 	}
 
-	private computeMinAndMax(data: TypedArray): { min: number; max: number } {
-		let min = Infinity;
-		let max = -Infinity;
+	nextSlice(axis: number): void {
+		const view = this.views.find((view) => view.axis === axis);
 
-		for (let i = 0; i < data.length; i++) {
-			const value = data[i];
-			if (value < min) min = value;
-			if (value > max) max = value;
+		if (view) {
+			view.slice = Math.min(view.slices, view.slice + 1);
+		}
+	}
+
+	previousSlice(axis: number): void {
+		const view = this.views.find((view) => view.axis === axis);
+
+		if (view) {
+			view.slice = Math.max(0, view.slice - 1);
+		}
+	}
+
+	changeSlice(axis: number, slice: number): void {
+		const view = this.views.find((view) => view.axis === axis);
+
+		if (view) {
+			view.slice = Math.max(0, Math.min(view.slices, slice));
+		}
+	}
+
+	getSliceDataForView(axis: number, volumeID: string): TypedArray {
+		const view = this.views.find((view) => view.axis === axis);
+		const volume = this.volumes.find((volume) => volume.id === volumeID);
+
+		if (!view) {
+			throw new Error(`View with axis ${axis} not found.`);
 		}
 
-		if (min === max) {
-			min = 0;
-			max = 1;
+		if (!volume) {
+			throw new Error(`Volume with ID ${volumeID} not found.`);
 		}
 
-		return { min, max };
+		return extractSliceFromVolume(volume.header.dims, volume.data, view.axis, view.slice);
+	}
+
+	adjustBrightnessAndContrast(brightnessChange: number, contrastChange: number): void {
+		const volume = this.volumes.find((volume) => volume.isActive);
+
+		if (volume) {
+			volume.brightnessFactor = Math.max(
+				-1,
+				Math.min(1, volume.brightnessFactor + brightnessChange)
+			);
+			volume.contrastFactor = Math.max(0, Math.min(2, volume.contrastFactor + contrastChange));
+		}
+	}
+
+	resetBrightnessAndContrast(): void {
+		const volume = this.volumes.find((volume) => volume.isActive);
+
+		if (volume) {
+			volume.brightnessFactor = 0;
+			volume.contrastFactor = 1;
+		}
+	}
+
+	setTransform(axis: number, transform: ZoomTransform): void {
+		const view = this.views.find((view) => view.axis === axis);
+
+		if (view) {
+			view.transform = transform;
+		}
+	}
+
+	resetTransform(axis: number): void {
+		const view = this.views.find((view) => view.axis === axis);
+
+		if (view) {
+			view.transform = zoomIdentity;
+		}
 	}
 }
 

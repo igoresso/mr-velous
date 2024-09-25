@@ -1,16 +1,16 @@
-import type { Header, TypedArray } from '../types';
+import type { TypedArray } from '../types';
 
 export function extractSliceFromVolume(
-	header: Header,
+	dims: number[],
 	data: TypedArray,
 	axis: 1 | 2 | 3,
 	slice: number
 ): typeof data {
-	const nx = header.dims[1]; // X dimension
-	const ny = header.dims[2]; // Y dimension
-	const nz = header.dims[3]; // Z dimension
+	const nx = dims[1]; // X dimension
+	const ny = dims[2]; // Y dimension
+	const nz = dims[3]; // Z dimension
 
-	if (slice >= header.dims[axis]) {
+	if (slice >= dims[axis]) {
 		throw new Error(`Slice ${slice} is out of bounds for dim[${axis}]`);
 	}
 
