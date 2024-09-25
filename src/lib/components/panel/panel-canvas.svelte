@@ -111,8 +111,6 @@
 			ctx.stroke();
 		}
 	});
-
-	$inspect(imageWidth / view.cols, imageHeight / view.rows);
 </script>
 
 <canvas bind:this={canvas} {width} {height}></canvas>

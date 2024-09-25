@@ -26,8 +26,8 @@
 		const allowedExtensions = acceptedExtensions.split(',').map((ext) => ext.trim().toLowerCase());
 		const unsupportedFiles: string[] = [];
 		const filteredFiles = Array.from(files).filter((file) => {
-			const fileExtension = file.name.split('.').pop()?.toLowerCase() || '';
-			const isValid = allowedExtensions.includes(`.${fileExtension}`);
+			const lowerCaseName = file.name.toLowerCase();
+			const isValid = allowedExtensions.some((ext) => lowerCaseName.endsWith(ext));
 			if (!isValid) unsupportedFiles.push(file.name);
 			return isValid;
 		});
