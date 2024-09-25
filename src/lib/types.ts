@@ -32,7 +32,7 @@ export type Volume = Dataset & {
 
 export type View = {
 	axis: 1 | 2 | 3;
-	slice: number;
+	currentSlice: number;
 	slices: number;
 	rows: number;
 	cols: number;

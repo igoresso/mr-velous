@@ -20,7 +20,7 @@
 				}
 			}
 
-			toast.success(`File loaded successfully`, { description: file.name });
+			toast.success(`File loaded successfully`, { description: file.name, class: 'break-all' });
 		}
 	}
 
@@ -28,14 +28,13 @@
 		const files = event.detail;
 
 		files.forEach((file) => {
-			toast.error(`Unsupported filetype`, { description: `File: ${file}` });
+			console.log(file);
+			toast.error(`Unsupported filetype`, { description: `File: ${file}`, class: 'break-all' });
 		});
 	}
-
-	$inspect(viewerState);
 </script>
 
-{#if viewerState.views.length === 0}
+{#if viewerState.volumes.length === 0}
 	<div class="grid h-full place-content-center">
 		<Dropzone
 			acceptedExtensions=".nii, .nii.gz"

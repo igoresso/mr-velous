@@ -46,7 +46,7 @@ export class ViewerState {
 		const { dims, pixDims } = volume.header;
 
 		this.views = [Axis.X, Axis.Y, Axis.Z].map((axis) => {
-			const slice = Math.floor(dims[axis] / 2);
+			const currentSlice = Math.floor(dims[axis] / 2) - 1;
 			const rows = axis === Axis.X ? dims[3] : axis === Axis.Y ? dims[3] : dims[2];
 			const cols = axis === Axis.X ? dims[2] : axis === Axis.Y ? dims[1] : dims[1];
 			const voxelRatio =
@@ -58,7 +58,7 @@ export class ViewerState {
 
 			return {
 				axis,
-				slice,
+				currentSlice,
 				slices: dims[axis] - 1,
 				rows,
 				cols,
@@ -93,7 +93,7 @@ export class ViewerState {
 		const view = this.views.find((view) => view.axis === axis);
 
 		if (view) {
-			view.slice = Math.min(view.slices, view.slice + 1);
+			view.currentSlice = Math.min(view.slices, view.currentSlice + 1);
 		}
 	}
 
@@ -101,15 +101,15 @@ export class ViewerState {
 		const view = this.views.find((view) => view.axis === axis);
 
 		if (view) {
-			view.slice = Math.max(0, view.slice - 1);
+			view.currentSlice = Math.max(0, view.currentSlice - 1);
 		}
 	}
 
-	changeSlice(axis: number, slice: number): void {
+	changeSlice(axis: number, currentSlice: number): void {
 		const view = this.views.find((view) => view.axis === axis);
 
 		if (view) {
-			view.slice = Math.max(0, Math.min(view.slices, slice));
+			view.currentSlice = Math.max(0, Math.min(view.slices, currentSlice));
 		}
 	}
 
@@ -125,7 +125,7 @@ export class ViewerState {
 			throw new Error(`Volume with ID ${volumeID} not found.`);
 		}
 
-		return extractSliceFromVolume(volume.header.dims, volume.data, view.axis, view.slice);
+		return extractSliceFromVolume(volume.header.dims, volume.data, view.axis, view.currentSlice);
 	}
 
 	adjustBrightnessAndContrast(brightnessChange: number, contrastChange: number): void {

@@ -11,8 +11,8 @@
 
 	function handleSliceChange(axis: number, event: Event) {
 		const target = event.target as HTMLInputElement;
-		const slice = Number(target.value) - 1;
-		viewerState.changeSlice(axis, slice);
+		const currentSlice = Number(target.value) - 1;
+		viewerState.changeSlice(axis, currentSlice);
 	}
 </script>
 
@@ -70,7 +70,7 @@
 		<div class="flex justify-between space-x-2">
 			<Input
 				type="number"
-				value={viewerState.views[0].slice + 1}
+				value={viewerState.views[0].currentSlice + 1}
 				min={1}
 				max={viewerState.views[0].slices + 1}
 				oninput={(event) => handleSliceChange(1, event)}
@@ -78,7 +78,7 @@
 			<Separator orientation="vertical" />
 			<Input
 				type="number"
-				value={viewerState.views[1].slice + 1}
+				value={viewerState.views[1].currentSlice + 1}
 				min={1}
 				max={viewerState.views[1].slices + 1}
 				oninput={(event) => handleSliceChange(2, event)}
@@ -86,7 +86,7 @@
 			<Separator orientation="vertical" />
 			<Input
 				type="number"
-				value={viewerState.views[2].slice + 1}
+				value={viewerState.views[2].currentSlice + 1}
 				min={1}
 				max={viewerState.views[2].slices + 1}
 				oninput={(event) => handleSliceChange(3, event)}

@@ -3,23 +3,23 @@
 <script lang="ts">
 	import { getViewerState } from '$lib/viewer-state.svelte';
 	import { sliceDataToImageArray } from '$lib/helpers';
-	import { select } from 'd3-selection';
 	import { scaleLinear } from 'd3-scale';
-	import { zoom } from 'd3-zoom';
 	import type { View } from '$lib/types';
 
 	type Props = {
 		view: View;
 		width: number;
 		height: number;
-		canvas: HTMLCanvasElement;
+		canvas: HTMLCanvasElement | null;
 	};
 
-	let { view, width, height, canvas }: Props = $props();
+	let { view, width, height, canvas = $bindable() }: Props = $props();
 
 	let viewerState = getViewerState();
 
 	let volume = $derived(viewerState.volumes[0]);
+	let currentSlices = $derived(viewerState.views.map((view) => view.currentSlice));
+	let otherCurrentSlices = $derived(currentSlices.filter((_, i) => i !== view.axis - 1));
 
 	// Aspect ratio and image dimensions
 	let canvasAspectRatio = $derived(width / height);
@@ -29,11 +29,13 @@
 		imageAspectRatio > canvasAspectRatio ? width : height * imageAspectRatio
 	);
 	let paddingX = $derived((width - imageWidth) / 2);
+	let scalingFactorX = $derived(imageWidth / view.cols);
 
 	let imageHeight = $derived(
 		imageAspectRatio > canvasAspectRatio ? width / imageAspectRatio : height
 	);
 	let paddingY = $derived((height - imageHeight) / 2);
+	let scalingFactorY = $derived(imageHeight / view.rows);
 
 	// Position and scale
 	let xScaleBaseline = $derived(
@@ -71,30 +73,8 @@
 	let offscreenCanvas = document.createElement('canvas');
 	let offscreenCtx = offscreenCanvas.getContext('2d');
 
-	// Set up the zoom behavior
-	const zoomBehavior = zoom<HTMLCanvasElement, unknown>()
-		.extent([
-			[0, 0],
-			[width, height]
-		])
-		.scaleExtent([1, 1])
-		.filter((event) => {
-			return event.type !== 'dblclick' && event.button !== 1 && event.button !== 2;
-		})
-		.on('zoom', (event) => {
-			viewerState.setTransform(view.axis, event.transform);
-		});
-
-	// Apply the zoom behavior to the canvas element
 	$effect(() => {
-		select(canvas).call(zoomBehavior);
-		return () => {
-			select(canvas).on('.zoom', null);
-		};
-	});
-
-	$effect(() => {
-		if (!offscreenCanvas || !offscreenCtx) return;
+		if (!canvas || !offscreenCtx) return;
 
 		offscreenCanvas.width = view.cols;
 		offscreenCanvas.height = view.rows;
@@ -104,6 +84,9 @@
 		const ctx = canvas.getContext('2d');
 		if (ctx) {
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			ctx.fillStyle = 'black';
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+
 			ctx.save();
 
 			ctx.translate(xScale(0), yScale(0));
@@ -113,9 +96,23 @@
 			ctx.drawImage(offscreenCanvas, 0, 0, imageWidth, imageHeight);
 
 			ctx.restore();
+
+			// Draw vertical and horizontal lines for other views
+			ctx.beginPath();
+			ctx.moveTo(xScale(otherCurrentSlices[0] * scalingFactorX), 0);
+			ctx.lineTo(xScale(otherCurrentSlices[0] * scalingFactorX), height);
+			ctx.strokeStyle = 'red';
+			ctx.stroke();
+
+			ctx.beginPath();
+			ctx.moveTo(0, yScale(otherCurrentSlices[1] * scalingFactorY));
+			ctx.lineTo(width, yScale(otherCurrentSlices[1] * scalingFactorY));
+			ctx.strokeStyle = 'yellow';
+			ctx.stroke();
 		}
 	});
-	$inspect(imageData);
+
+	$inspect(imageWidth / view.cols, imageHeight / view.rows);
 </script>
 
 <canvas bind:this={canvas} {width} {height}></canvas>
