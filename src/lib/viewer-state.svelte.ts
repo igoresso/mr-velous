@@ -45,6 +45,12 @@ export class ViewerState {
 	private initViews(volume: Volume): void {
 		const { dims, pixDims } = volume.header;
 
+		const axisColors = {
+			[Axis.X]: 'red',
+			[Axis.Y]: 'green',
+			[Axis.Z]: 'blue'
+		};
+
 		this.views = [Axis.X, Axis.Y, Axis.Z].map((axis) => {
 			const currentSlice = Math.floor(dims[axis] / 2) - 1;
 			const rows = axis === Axis.X ? dims[3] : axis === Axis.Y ? dims[3] : dims[2];
@@ -63,6 +69,7 @@ export class ViewerState {
 				rows,
 				cols,
 				voxelRatio,
+				color: axisColors[axis],
 				transform: zoomIdentity
 			};
 		});

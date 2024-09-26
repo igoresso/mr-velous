@@ -1,35 +1,53 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-	import { Locate, Move, Fullscreen } from 'lucide-svelte';
+	import { Locate, Move, Fullscreen, Plus } from 'lucide-svelte';
+	import { getViewerState } from '$lib/viewer-state.svelte';
+	import { getPanelState } from './panel-state.svelte';
+	import Separator from '../ui/separator/separator.svelte';
+	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 	import { Toggle } from '$lib/components/ui/toggle';
 	import { Button } from '$lib/components/ui/button';
+	import type { View } from '$lib/types';
+	import type { Mode } from './index';
 
 	type Props = {
-		activeMode: 'cursor' | 'zoom';
+		view: View;
 	};
 
-	let { activeMode }: Props = $props();
+	let { view }: Props = $props();
 
-	const dispatch = createEventDispatcher();
+	const viewerState = getViewerState();
+	const panelState = getPanelState();
+
+	function handleModeChange(value: string | undefined) {
+		if (value) {
+			panelState.setActiveMode(value as Mode);
+		}
+	}
 </script>
 
-<Toggle
-	aria-label="toggle cursor interaction"
-	pressed={activeMode === 'cursor'}
-	onPressedChange={() => dispatch('modechange', { mode: 'cursor' })}
->
-	<Locate class="h-5 w-5" />
-</Toggle>
-<Toggle
-	aria-label="toggle zoom"
-	pressed={activeMode === 'zoom'}
-	onPressedChange={() => dispatch('modechange', { mode: 'zoom' })}
->
-	<Move class="h-5 w-5" />
-</Toggle>
+<ToggleGroup.Root type="single" value={panelState.activeMode} onValueChange={handleModeChange}>
+	<ToggleGroup.Item value="cursor" aria-label="toggle cursor interaction">
+		<Locate class="h-5 w-5" />
+	</ToggleGroup.Item>
+	<ToggleGroup.Item value="zoom" aria-label="toggle zoom">
+		<Move class="h-5 w-5" />
+	</ToggleGroup.Item>
+</ToggleGroup.Root>
 
-<Button variant="ghost" class="px-3" onclick={() => dispatch('resetview')}>
-	<Fullscreen class="h-5 w-5" />
-</Button>
+<Separator orientation="vertical" />
+
+<div>
+	<Toggle
+		aria-label="toggle cursor interaction"
+		pressed={panelState.crosshair}
+		onPressedChange={() => panelState.toggleCrosshair()}
+	>
+		<Plus class="h-5 w-5" />
+	</Toggle>
+
+	<Button variant="ghost" class="px-3" onclick={() => viewerState.resetTransform(view.axis)}>
+		<Fullscreen class="h-5 w-5" />
+	</Button>
+</div>

@@ -1,25 +1,32 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+	import { zoom } from 'd3-zoom';
+	import { select } from 'd3-selection';
 	import { getViewerState } from '$lib/viewer-state.svelte';
-	import { sliceDataToImageArray } from '$lib/helpers';
+	import { getPanelState } from './panel-state.svelte';
 	import { scaleLinear } from 'd3-scale';
+	import Content from './panel-content.svelte';
 	import type { View } from '$lib/types';
 
 	type Props = {
 		view: View;
 		width: number;
 		height: number;
-		canvas: HTMLCanvasElement | null;
 	};
 
-	let { view, width, height, canvas = $bindable() }: Props = $props();
+	let { view, width, height }: Props = $props();
 
-	let viewerState = getViewerState();
+	const viewerState = getViewerState();
+	const panelState = getPanelState();
 
-	let volume = $derived(viewerState.volumes[0]);
-	let currentSlices = $derived(viewerState.views.map((view) => view.currentSlice));
-	let otherCurrentSlices = $derived(currentSlices.filter((_, i) => i !== view.axis - 1));
+	let otherViews = $derived(
+		viewerState.views.filter((v) => v.axis !== view.axis).sort((a, b) => a.axis - b.axis)
+	);
+
+	// Canvas context
+	let canvas = $state<HTMLCanvasElement | null>(null);
+	let ctx = $derived(canvas ? canvas.getContext('2d') : null);
 
 	// Aspect ratio and image dimensions
 	let canvasAspectRatio = $derived(width / height);
@@ -52,65 +59,122 @@
 	);
 	let yScale = $derived(view.transform.rescaleY(yScaleBaseline));
 
-	// Image data
-	let imageData: ImageData = $derived.by(() => {
-		const sliceData = viewerState.getSliceDataForView(view.axis, volume.id);
+	// Mouse interaction
+	function handleScroll(event: WheelEvent) {
+		if (event.deltaY < 0) {
+			viewerState.previousSlice(view.axis);
+		} else {
+			viewerState.nextSlice(view.axis);
+		}
+	}
 
-		const imageArray = sliceDataToImageArray(
-			sliceData,
-			view.rows,
-			view.cols,
-			volume.min,
-			volume.max,
-			volume.brightnessFactor,
-			volume.contrastFactor,
-			volume.opacity
-		);
-		return new ImageData(imageArray, view.cols, view.rows);
-	});
+	function handleSliceChange(event: MouseEvent) {
+		if (event.button === 0) {
+			document.addEventListener('mousemove', handleLMBMove);
+			document.addEventListener('mouseup', handleMouseUp);
 
-	// Off-screen canvas for drawing the image
-	let offscreenCanvas = document.createElement('canvas');
-	let offscreenCtx = offscreenCanvas.getContext('2d');
+			const { sliceX, sliceY } = getSliceCoordinates(event);
+			viewerState.changeSlice(otherViews[0].axis, sliceX);
+			viewerState.changeSlice(otherViews[1].axis, sliceY);
+		}
+
+		if (event.button === 1 && event.detail === 2) {
+			viewerState.resetBrightnessAndContrast();
+		}
+	}
+
+	function handleLMBMove(event: MouseEvent) {
+		const { sliceX, sliceY } = getSliceCoordinates(event);
+		viewerState.changeSlice(otherViews[0].axis, sliceX);
+		viewerState.changeSlice(otherViews[1].axis, sliceY);
+	}
+
+	function handleRMBMove(event: MouseEvent) {
+		const brightnessChange = -event.movementY * 1e-2;
+		const contrastChange = event.movementX * 1e-2;
+
+		viewerState.adjustBrightnessAndContrast(brightnessChange, contrastChange);
+	}
+
+	function handleContrastChange(event: MouseEvent) {
+		if (event.button === 2) {
+			document.addEventListener('mousemove', handleRMBMove);
+			document.addEventListener('mouseup', handleMouseUp);
+		}
+	}
+
+	function handleMouseUp() {
+		document.removeEventListener('mousemove', handleRMBMove);
+		document.removeEventListener('mousemove', handleLMBMove);
+		document.removeEventListener('mouseup', handleMouseUp);
+	}
+
+	function getSliceCoordinates(event: MouseEvent) {
+		const sliceX = Math.round(xScale.invert(event.offsetX) / scalingFactorX);
+		const sliceY = Math.round(yScale.invert(event.offsetY) / scalingFactorY);
+		return { sliceX, sliceY };
+	}
+
+	const zoomBehavior = zoom<HTMLCanvasElement, unknown>()
+		.scaleExtent([0.5, 5])
+		.filter((event) => {
+			return event.type !== 'dblclick' && event.button !== 1 && event.button !== 2;
+		})
+		.on('zoom', (event) => {
+			viewerState.setTransform(view.axis, event.transform);
+		});
 
 	$effect(() => {
-		if (!canvas || !offscreenCtx) return;
-
-		offscreenCanvas.width = view.cols;
-		offscreenCanvas.height = view.rows;
-
-		offscreenCtx.putImageData(imageData, 0, 0);
-
-		const ctx = canvas.getContext('2d');
-		if (ctx) {
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			ctx.fillStyle = 'black';
-			ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-			ctx.save();
-
-			ctx.translate(xScale(0), yScale(0));
-			ctx.scale(view.transform.k, view.transform.k);
-			ctx.scale(1, -1);
-			ctx.imageSmoothingEnabled = false;
-			ctx.drawImage(offscreenCanvas, 0, 0, imageWidth, imageHeight);
-
-			ctx.restore();
-
-			// Draw vertical and horizontal lines for other views
-			ctx.beginPath();
-			ctx.moveTo(xScale(otherCurrentSlices[0] * scalingFactorX), 0);
-			ctx.lineTo(xScale(otherCurrentSlices[0] * scalingFactorX), height);
-			ctx.strokeStyle = 'red';
-			ctx.stroke();
-
-			ctx.beginPath();
-			ctx.moveTo(0, yScale(otherCurrentSlices[1] * scalingFactorY));
-			ctx.lineTo(width, yScale(otherCurrentSlices[1] * scalingFactorY));
-			ctx.strokeStyle = 'yellow';
-			ctx.stroke();
-		}
+		if (!canvas || panelState.activeMode !== 'cursor') return;
 	});
+
+	$effect(() => {
+		if (!canvas || panelState.activeMode !== 'zoom') return;
+
+		canvas.removeEventListener('wheel', handleScroll);
+
+		select(canvas).call(zoomBehavior);
+
+		return () => {
+			if (!canvas) return;
+			select(canvas).on('.zoom', null);
+		};
+	});
+
+	$effect(() => {
+		if (!canvas || panelState.activeMode !== 'cursor') return;
+
+		select(canvas).on('.zoom', null);
+
+		canvas.addEventListener('wheel', handleScroll);
+		canvas.addEventListener('mousedown', handleSliceChange);
+		canvas.addEventListener('mousedown', handleContrastChange);
+
+		return () => {
+			if (!canvas) return;
+			canvas.removeEventListener('wheel', handleScroll);
+			canvas.removeEventListener('mousedown', handleSliceChange);
+			canvas.addEventListener('mousedown', handleContrastChange);
+		};
+	});
+
+	$effect(() => {
+		if (!canvas) return;
+
+		canvas.addEventListener('mousedown', handleContrastChange);
+		canvas.addEventListener('contextmenu', (e) => e.preventDefault());
+
+		return () => {
+			if (!canvas) return;
+			canvas.addEventListener('mousedown', handleContrastChange);
+			canvas.removeEventListener('contextmenu', (e) => e.preventDefault());
+		};
+	});
+	$inspect(ctx);
 </script>
 
-<canvas bind:this={canvas} {width} {height}></canvas>
+<canvas bind:this={canvas} {width} {height}>
+	{#if ctx}
+		<Content {ctx} {width} {height} {xScale} {yScale} {imageWidth} {imageHeight} {view} />
+	{/if}
+</canvas>

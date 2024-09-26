@@ -37,5 +37,6 @@ export type View = {
 	rows: number;
 	cols: number;
 	voxelRatio: number;
+	color: string;
 	transform: ZoomTransform;
 };
