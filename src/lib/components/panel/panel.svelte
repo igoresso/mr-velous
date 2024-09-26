@@ -19,13 +19,18 @@
 	let height = $state(0);
 </script>
 
-<div
-	class={`flex flex-col overflow-clip rounded-xl border-2 border-neutral-800 dark:border-neutral-800`}
->
-	<div class="flex justify-end space-x-2 px-4 py-2">
+<div class="flex h-full flex-col space-y-4 p-4">
+	<div class="absolote bg- inset-x-0 flex justify-end space-x-2 px-4">
 		<Controls {view} />
 	</div>
-	<div class="grow bg-black" bind:clientWidth={width} bind:clientHeight={height}>
-		<Canvas {view} {width} {height} />
+	<div class="relative grow">
+		<div
+			style={`border-color: ${view.color};`}
+			class="absolute inset-0 overflow-clip rounded-xl border-2 bg-black"
+			bind:clientWidth={width}
+			bind:clientHeight={height}
+		>
+			<Canvas {view} {width} {height} />
+		</div>
 	</div>
 </div>

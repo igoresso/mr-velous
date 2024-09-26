@@ -170,10 +170,9 @@
 			canvas.removeEventListener('contextmenu', (e) => e.preventDefault());
 		};
 	});
-	$inspect(ctx);
 </script>
 
-<canvas bind:this={canvas} {width} {height}>
+<canvas class="block" bind:this={canvas} {width} {height}>
 	{#if ctx}
 		<Content {ctx} {width} {height} {xScale} {yScale} {imageWidth} {imageHeight} {view} />
 	{/if}

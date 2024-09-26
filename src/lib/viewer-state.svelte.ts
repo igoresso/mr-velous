@@ -46,9 +46,9 @@ export class ViewerState {
 		const { dims, pixDims } = volume.header;
 
 		const axisColors = {
-			[Axis.X]: 'red',
-			[Axis.Y]: 'green',
-			[Axis.Z]: 'blue'
+			[Axis.X]: '#f87171',
+			[Axis.Y]: '#4ade80',
+			[Axis.Z]: '#60a5fa'
 		};
 
 		this.views = [Axis.X, Axis.Y, Axis.Z].map((axis) => {

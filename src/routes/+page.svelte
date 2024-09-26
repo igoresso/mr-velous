@@ -2,9 +2,11 @@
 
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
+	import * as Resizable from '$lib/components/ui/resizable';
 	import { Dropzone } from '$lib/components/dropzone';
 	import { Panel } from '$lib/components/panel';
 	import { getViewerState } from '$lib/viewer-state.svelte';
+	import PanelCanvas from '$lib/components/panel/panel-canvas.svelte';
 
 	const viewerState = getViewerState();
 
@@ -44,9 +46,24 @@
 		/>
 	</div>
 {:else}
-	<div class="grid h-full grid-cols-2 gap-3">
-		{#each viewerState.views as view}
+	<Resizable.PaneGroup direction="horizontal">
+		<Resizable.Pane defaultSize={62} collapsible>
+			<Panel view={viewerState.views[0]} />
+		</Resizable.Pane>
+		<Resizable.Handle withHandle />
+		<Resizable.Pane defaultSize={38}>
+			<Resizable.PaneGroup direction="vertical">
+				<Resizable.Pane defaultSize={62} collapsible>
+					<Panel view={viewerState.views[1]} />
+				</Resizable.Pane>
+				<Resizable.Handle withHandle />
+				<Resizable.Pane defaultSize={38} collapsible>
+					<Panel view={viewerState.views[2]} />
+				</Resizable.Pane>
+			</Resizable.PaneGroup>
+		</Resizable.Pane>
+	</Resizable.PaneGroup>
+	<!-- {#each viewerState.views as view}
 			<Panel {view} />
-		{/each}
-	</div>
+		{/each} -->
 {/if}

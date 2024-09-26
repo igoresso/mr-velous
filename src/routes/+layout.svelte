@@ -50,7 +50,7 @@
 	<div class="flex h-full">
 		<Rail {tiles} activeTile={isToolbarVisible && activeTile} />
 
-		<div class="w-72 border-r-2" class:hidden={!isToolbarVisible}>
+		<div class="w-72 shrink-0 border-r-2" class:hidden={!isToolbarVisible}>
 			<header class="border-b-2 p-3">
 				<h1 class="text-center text-xl font-bold">MR.VELOUS</h1>
 			</header>
@@ -60,7 +60,7 @@
 			</aside>
 		</div>
 
-		<main class="grow p-3">
+		<main class="grow">
 			{@render children()}
 		</main>
 	</div>
