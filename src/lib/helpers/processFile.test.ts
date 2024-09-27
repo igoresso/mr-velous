@@ -82,7 +82,7 @@ describe('processFile', () => {
 
 		(readFileAsArrayBuffer as Mock).mockRejectedValue(mockError);
 
-		await expect(processFile(mockFile)).rejects.toThrow('Failed to process file');
+		await expect(processFile(mockFile)).rejects.toThrow('Failed to read file');
 
 		expect(readFileAsArrayBuffer).toHaveBeenCalledWith(mockFile);
 		expect(parseArrayBufferAsNIFTI).not.toHaveBeenCalled();
@@ -96,7 +96,7 @@ describe('processFile', () => {
 		(readFileAsArrayBuffer as Mock).mockResolvedValue(mockArrayBuffer);
 		(parseArrayBufferAsNIFTI as Mock).mockRejectedValue(mockError);
 
-		await expect(processFile(mockFile)).rejects.toThrow('Failed to process file');
+		await expect(processFile(mockFile)).rejects.toThrow('Invalid NIFTI file');
 
 		expect(readFileAsArrayBuffer).toHaveBeenCalledWith(mockFile);
 		expect(parseArrayBufferAsNIFTI).toHaveBeenCalledWith(mockArrayBuffer);

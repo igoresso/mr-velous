@@ -7,7 +7,7 @@
 		variant?: Variant;
 		size?: Size;
 	};
-	type $$Events = TogglePrimitive.Events;
+	// type $$Events = TogglePrimitive.Events;
 
 	let className: $$Props['class'] = undefined;
 	export let variant: $$Props['variant'] = 'default';

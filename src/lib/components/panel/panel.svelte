@@ -1,7 +1,6 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
-	import { getViewerState } from '$lib/viewer-state.svelte';
 	import { setPanelState } from './panel-state.svelte';
 	import Canvas from './panel-canvas.svelte';
 	import Controls from './panel-controls.svelte';

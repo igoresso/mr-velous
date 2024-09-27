@@ -2,10 +2,9 @@
 	import { DropdownMenu as DropdownMenuPrimitive } from 'bits-ui';
 	import { Check } from 'lucide-svelte';
 	import { cn } from '$lib/utils.js';
-	import type { L } from 'vitest/dist/chunks/reporters.WnPwkmgA.js';
 
 	type $$Props = DropdownMenuPrimitive.CheckboxItemProps;
-	type $$Events = DropdownMenuPrimitive.CheckboxItemEvents;
+	// type $$Events = DropdownMenuPrimitive.CheckboxItemEvents;
 
 	let className: $$Props['class'] = undefined;
 	export let checked: $$Props['checked'] = undefined;

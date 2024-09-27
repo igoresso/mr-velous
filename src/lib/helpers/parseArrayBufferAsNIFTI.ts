@@ -7,7 +7,7 @@ export async function parseArrayBufferAsNIFTI(arrayBuffer: ArrayBuffer): Promise
 	}
 
 	if (!nifti.isNIFTI(arrayBuffer)) {
-		throw new Error('Invalid NIFTI file.');
+		throw new Error('Invalid NIFTI file');
 	}
 
 	const niftiHeader = nifti.readHeader(arrayBuffer) as Dataset['header'];
@@ -27,7 +27,7 @@ export async function parseArrayBufferAsNIFTI(arrayBuffer: ArrayBuffer): Promise
 
 	const TypedArrayConstructor = dataTypeMap[niftiHeader.datatypeCode];
 	if (!TypedArrayConstructor) {
-		throw new Error('Unsupported NIFTI datatype.');
+		throw new Error('Unsupported NIFTI datatype');
 	}
 
 	const niftiTypedData = new TypedArrayConstructor(niftiData);

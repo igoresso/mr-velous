@@ -89,7 +89,7 @@ describe('parseArrayBufferAsNIFTI', () => {
 		(nifti.isCompressed as Mock).mockReturnValue(false);
 		(nifti.isNIFTI as Mock).mockReturnValue(false);
 
-		await expect(parseArrayBufferAsNIFTI(arrayBuffer)).rejects.toThrow('Invalid NIFTI file.');
+		await expect(parseArrayBufferAsNIFTI(arrayBuffer)).rejects.toThrow('Invalid NIFTI file');
 
 		expect(nifti.isCompressed).toHaveBeenCalledWith(arrayBuffer);
 		expect(nifti.isNIFTI).toHaveBeenCalledWith(arrayBuffer);
@@ -107,7 +107,7 @@ describe('parseArrayBufferAsNIFTI', () => {
 		(nifti.readHeader as Mock).mockReturnValue(mockHeader);
 
 		await expect(parseArrayBufferAsNIFTI(arrayBuffer)).rejects.toThrow(
-			'Unsupported NIFTI datatype.'
+			'Unsupported NIFTI datatype'
 		);
 
 		expect(nifti.isCompressed).toHaveBeenCalledWith(arrayBuffer);

@@ -5,7 +5,7 @@
 	import type { toggleVariants } from '$lib/components/ui/toggle/index.js';
 	import { cn } from '$lib/utils.js';
 
-	type T = $$Generic<'single' | 'multiple'>;
+	type T = 'single' | 'multiple';
 	type $$Props = ToggleGroupPrimitive.Props<T> & VariantProps<typeof toggleVariants>;
 
 	let className: string | undefined | null = undefined;

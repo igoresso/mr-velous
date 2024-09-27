@@ -45,7 +45,10 @@
 </script>
 
 {#if width > 384}
-	<Select.Root selected={axes.get(view.axis)} onSelectedChange={(s) => handleAxisChange(s.value)}>
+	<Select.Root
+		selected={axes.get(view.axis)}
+		onSelectedChange={(s) => s && handleAxisChange(s.value)}
+	>
 		<Select.Trigger class="mr-auto w-32" aria-label="Select axis">
 			<Axis3D class="mr-2 h-5 w-5" />
 			<Select.Value placeholder="Axis" />

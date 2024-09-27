@@ -2,18 +2,20 @@
 
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
+	import { processFile } from '$lib/helpers';
 	import * as Resizable from '$lib/components/ui/resizable';
 	import { Dropzone } from '$lib/components/dropzone';
 	import { Panel } from '$lib/components/panel';
 	import { getViewerState } from '$lib/viewer-state.svelte';
-	import PanelCanvas from '$lib/components/panel/panel-canvas.svelte';
 
 	const viewerState = getViewerState();
 
 	async function handleFiles(event: CustomEvent<FileList>) {
 		for (const file of event.detail) {
 			try {
-				viewerState.addVolume(file);
+				const dataset = await processFile(file);
+				viewerState.addVolume(file.name, dataset);
+				toast.success(`File loaded successfully`, { description: file.name, class: 'break-all' });
 			} catch (error) {
 				if (error instanceof Error) {
 					toast.error(`Error adding file`, { description: error.message });
@@ -21,8 +23,6 @@
 					toast.error(`Error adding file`, { description: 'An unknown error occurred.' });
 				}
 			}
-
-			toast.success(`File loaded successfully`, { description: file.name, class: 'break-all' });
 		}
 	}
 

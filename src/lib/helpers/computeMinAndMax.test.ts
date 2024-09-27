@@ -48,7 +48,7 @@ describe('computeMinAndMax', () => {
 
 	it('should throw an error for empty arrays', () => {
 		const data: Uint8Array = new Uint8Array([]);
-		expect(() => computeMinAndMax(data)).toThrow('The input array is empty.');
+		expect(() => computeMinAndMax(data)).toThrow('The input array is empty');
 	});
 
 	it('should work with Int32Array containing both negative and positive integers', () => {

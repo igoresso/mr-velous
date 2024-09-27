@@ -8,6 +8,10 @@ export async function processFile(file: File): Promise<Dataset> {
 		const dataset = await parseArrayBufferAsNIFTI(arrayBuffer);
 		return dataset;
 	} catch (error) {
-		throw new Error(`Failed to process file`, { cause: error });
+		if (error instanceof Error) {
+			throw new Error(error.message);
+		} else {
+			throw new Error(`Failed to process file`, { cause: error });
+		}
 	}
 }

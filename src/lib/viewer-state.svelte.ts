@@ -1,6 +1,6 @@
 import { getContext, setContext } from 'svelte';
 import { zoomIdentity } from 'd3-zoom';
-import { processFile, computeMinAndMax, extractSliceFromVolume } from '$lib/helpers';
+import { computeMinAndMax, extractSliceFromVolume } from '$lib/helpers';
 import type { ZoomTransform } from 'd3-zoom';
 import type { TypedArray, Dataset, View, Volume } from '$lib/types';
 
@@ -14,8 +14,7 @@ export class ViewerState {
 	volumes = $state<Volume[]>([]);
 	views = $state<View[]>([]);
 
-	async addVolume(file: File): Promise<void> {
-		const dataset: Dataset = await processFile(file);
+	addVolume(fileName: string, dataset: Dataset): void {
 		const { min, max } = computeMinAndMax(dataset.data);
 
 		this.volumes.forEach((volume) => {
@@ -24,7 +23,7 @@ export class ViewerState {
 
 		const newVolume: Volume = {
 			id: crypto.randomUUID(),
-			fileName: file.name,
+			fileName: fileName,
 			...dataset,
 			min,
 			max,

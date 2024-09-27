@@ -3,6 +3,7 @@
 <script lang="ts">
 	import { getViewerState } from '$lib/viewer-state.svelte';
 	import { X } from 'lucide-svelte';
+	import { Demo } from '$lib/components/demo';
 	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
 	import { Input } from '$lib/components/ui/input/index.js';
@@ -17,16 +18,20 @@
 </script>
 
 {#if viewerState.views.length === 0}
-	<h2 class="text-lg font-medium">
-		MR Viewer with Enhanced Layout and Optimised User Satisfaction
-	</h2>
+	<div class="flex flex-col space-y-2">
+		<h2 class="text-lg font-medium">
+			MR Viewer with Enhanced Layout and Optimised User Satisfaction
+		</h2>
 
-	<Separator />
+		<Separator />
 
-	<p class="text-md font-thin">
-		Explore medical images with ease and a touch of elegance. Enjoy a delightful experience as more
-		features are on the way!
-	</p>
+		<p class="text-md font-thin">
+			Explore medical images with ease and a touch of elegance. Enjoy a delightful experience as
+			more features are on the way!
+		</p>
+	</div>
+
+	<Demo />
 {:else}
 	{#each viewerState.volumes as volume}
 		<div class="flex items-center justify-between space-x-4 rounded-md border px-4 py-3">
