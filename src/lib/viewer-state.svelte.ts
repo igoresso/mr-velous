@@ -91,6 +91,17 @@ export class ViewerState {
 		}
 	}
 
+	swapViews(current: number, target: number): void {
+		const idxCurrent = this.views.findIndex((view) => view.axis === current);
+		const idxTarget = this.views.findIndex((view) => view.axis === target);
+
+		if (idxCurrent !== -1 && idxTarget !== -1) {
+			const curreView = this.views[idxCurrent];
+			this.views[idxCurrent] = this.views[idxTarget];
+			this.views[idxTarget] = curreView;
+		}
+	}
+
 	reset(): void {
 		this.volumes = [];
 		this.views = [];

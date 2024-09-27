@@ -63,7 +63,4 @@
 			</Resizable.PaneGroup>
 		</Resizable.Pane>
 	</Resizable.PaneGroup>
-	<!-- {#each viewerState.views as view}
-			<Panel {view} />
-		{/each} -->
 {/if}

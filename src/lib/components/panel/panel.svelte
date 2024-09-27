@@ -20,8 +20,8 @@
 </script>
 
 <div class="flex h-full flex-col space-y-4 p-4">
-	<div class="absolote bg- inset-x-0 flex justify-end space-x-2 px-4">
-		<Controls {view} />
+	<div class="flex justify-end space-x-2 overflow-clip px-1">
+		<Controls {view} {width} />
 	</div>
 	<div class="relative grow">
 		<div
