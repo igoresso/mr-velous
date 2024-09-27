@@ -16,6 +16,8 @@
 		const fileName = 'pineaple.nii.gz';
 		const url = `${base}/${fileName}`;
 
+		isLoading = true;
+
 		try {
 			const dataset = await loadFileFromURL(url);
 			viewerState.addVolume(fileName, dataset);
