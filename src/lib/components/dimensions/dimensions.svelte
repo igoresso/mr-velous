@@ -21,7 +21,9 @@
 		<div class="flex items-center justify-between">
 			{#each viewerState.views as view, i}
 				{#if i !== 0}
-					<Separator orientation="vertical" class="h-5" />
+					<div class="h-5">
+						<Separator orientation="vertical" />
+					</div>
 				{/if}
 				<div class="flex flex-col space-y-1.5">
 					<Label for={`axis-${view.axis}`}>Axis {view.axis}</Label>

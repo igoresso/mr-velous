@@ -172,7 +172,14 @@
 	});
 </script>
 
-<canvas class="block" bind:this={canvas} {width} {height}>
+<canvas
+	class="block"
+	class:cursor-crosshair={panelState.activeMode === 'cursor'}
+	class:cursor-move={panelState.activeMode === 'zoom'}
+	bind:this={canvas}
+	{width}
+	{height}
+>
 	{#if ctx}
 		<Content {ctx} {width} {height} {xScale} {yScale} {imageWidth} {imageHeight} {view} />
 	{/if}

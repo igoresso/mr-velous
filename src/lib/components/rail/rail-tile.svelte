@@ -13,7 +13,7 @@
 	let isActive = $derived(activeTile === tile.name);
 
 	function getClasses(tile: Tile) {
-		const base = 'block p-3.5';
+		const base = 'block p-3.5 transition-colors';
 		const interactivity = `${tile.isDisabled ? 'opacity-40' : 'hover:bg-neutral-100 active:bg-neutral-300 dark:hover:bg-neutral-900 dark:active:bg-neutral-700'}`;
 		const accessibility = 'outline-none focus:ring-2 ring-ring ring-inset';
 		return `${base} ${tile.class} ${isActive ? 'bg-neutral-200 dark:bg-neutral-800 cursor-default' : interactivity} ${accessibility}`;

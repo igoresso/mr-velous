@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
+	import { slide } from 'svelte/transition';
+	import { quintOut } from 'svelte/easing';
 	import { setViewerState, getViewerState } from '$lib/viewer-state.svelte';
 	import { ModeWatcher, toggleMode } from 'mode-watcher';
 	import { Menu, Info, SlidersHorizontal, Moon, Sun, HelpCircle, Github } from 'lucide-svelte';
@@ -40,6 +42,7 @@
 			name: 'Information',
 			icon: Info,
 			onClick: (): void => {
+				isToolbarVisible = true;
 				viewerState.activeTile = 'Information';
 			}
 		},
@@ -47,6 +50,7 @@
 			name: 'Settings',
 			icon: SlidersHorizontal,
 			onClick: (): void => {
+				isToolbarVisible = true;
 				viewerState.activeTile = 'Settings';
 			},
 			isDisabled: viewerState.views.length === 0
@@ -66,21 +70,28 @@
 <div class="flex h-full">
 	<Rail {tiles} activeTile={isToolbarVisible && viewerState.activeTile} />
 
-	<div class="flex w-72 shrink-0 flex-col border-r-2" class:hidden={!isToolbarVisible}>
-		<header class="border-b-2 p-3">
-			<h1 class="text-center text-xl font-bold">MR.VELOUS</h1>
-		</header>
+	{#if isToolbarVisible}
+		<div
+			class="shrink-0 border-r-2"
+			transition:slide={{ duration: 500, easing: quintOut, axis: 'x' }}
+		>
+			<div class="flex h-full w-72 flex-col">
+				<header class="border-b-2 p-3">
+					<h1 class="text-center text-xl font-bold">MR.VELOUS</h1>
+				</header>
 
-		<aside class="flex grow flex-col space-y-5 px-5 py-3">
-			{#if viewerState.activeTile === 'Information'}
-				<Information />
-			{:else if viewerState.activeTile === 'Settings'}
-				<Layers />
-				<Dimensions />
-				<Adjustments />
-			{/if}
-		</aside>
-	</div>
+				<aside class="flex grow flex-col space-y-5 px-5 py-3">
+					{#if viewerState.activeTile === 'Information'}
+						<Information />
+					{:else if viewerState.activeTile === 'Settings'}
+						<Layers />
+						<Dimensions />
+						<Adjustments />
+					{/if}
+				</aside>
+			</div>
+		</div>
+	{/if}
 
 	<main class="grow">
 		{@render children()}
