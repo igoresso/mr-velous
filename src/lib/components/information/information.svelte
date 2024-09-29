@@ -33,21 +33,6 @@
 
 	<Demo />
 {:else}
-	{#each viewerState.volumes as volume}
-		<div class="flex items-center justify-between space-x-4 rounded-md border px-4 py-3">
-			<span class="truncate font-mono text-sm">{volume.fileName}</span>
-			<Button
-				variant="ghost"
-				size="sm"
-				class="p-2"
-				onclick={() => viewerState.removeVolume(volume.id)}
-			>
-				<X size="16" />
-				<span class="sr-only">Remove volume</span>
-			</Button>
-		</div>
-	{/each}
-
 	<div class="flex flex-col space-y-2">
 		<h2 class="text-lg font-semibold">Dimensions</h2>
 		<div class="flex justify-between">

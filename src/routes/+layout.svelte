@@ -6,6 +6,7 @@
 	import { Toaster } from '$lib/components/ui/sonner';
 	import { Rail } from '$lib/components/rail';
 	import { Information } from '$lib/components/information';
+	import { Layers } from '$lib/components/layers';
 
 	import '../app.css';
 
@@ -55,7 +56,8 @@
 				<h1 class="text-center text-xl font-bold">MR.VELOUS</h1>
 			</header>
 
-			<aside class="flex flex-col space-y-4 px-5 py-3">
+			<aside class="flex flex-col space-y-5 px-5 py-3">
+				<Layers />
 				<Information />
 			</aside>
 		</div>

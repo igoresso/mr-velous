@@ -82,6 +82,14 @@ export class ViewerState {
 		}
 	}
 
+	toggleVisibility(volumeId: string): void {
+		const volume = this.volumes.find((volume) => volume.id === volumeId);
+
+		if (volume) {
+			volume.isVisible = !volume.isVisible;
+		}
+	}
+
 	removeVolume(volumeId: string): void {
 		this.volumes = this.volumes.filter((volume) => volume.id !== volumeId);
 

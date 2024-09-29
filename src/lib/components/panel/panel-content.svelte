@@ -66,8 +66,10 @@
 		offscreenCanvas.width = view.cols;
 		offscreenCanvas.height = view.rows;
 
-		for (const volume of viewerState.volumes) {
-			const imageData = createImageData(volume);
+		for (let i = viewerState.volumes.length - 1; i >= 0; i--) {
+			if (!viewerState.volumes[i].isVisible) continue;
+
+			const imageData = createImageData(viewerState.volumes[i]);
 			offscreenCtx.putImageData(imageData, 0, 0);
 			ctx.drawImage(offscreenCanvas, 0, 0, imageWidth, imageHeight);
 		}
