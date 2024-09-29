@@ -7,6 +7,7 @@
 	import { Rail } from '$lib/components/rail';
 	import { Information } from '$lib/components/information';
 	import { Layers } from '$lib/components/layers';
+	import { Adjustments } from '$lib/components/adjustments';
 
 	import '../app.css';
 
@@ -26,7 +27,7 @@
 		}
 	});
 
-	let tiles = [
+	const tiles = [
 		{ name: 'Toggle toolbar', icon: Menu, onClick: () => (isToolbarVisible = !isToolbarVisible) },
 		{ name: 'Information', icon: Info, onClick: () => (activeTile = 'Information') },
 		{
@@ -59,6 +60,7 @@
 			<aside class="flex flex-col space-y-5 px-5 py-3">
 				<Layers />
 				<Information />
+				<Adjustments />
 			</aside>
 		</div>
 

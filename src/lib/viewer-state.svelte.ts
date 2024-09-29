@@ -74,6 +74,10 @@ export class ViewerState {
 		});
 	}
 
+	getActiveVolume(): Volume | undefined {
+		return this.volumes.find((volume) => volume.isActive);
+	}
+
 	setActiveVolume(volumeId: string): void {
 		if (this.volumes.some((volume) => volume.id === volumeId)) {
 			this.volumes.forEach((volume) => {
@@ -151,6 +155,30 @@ export class ViewerState {
 		}
 
 		return extractSliceFromVolume(volume.header.dims, volume.data, view.axis, view.currentSlice);
+	}
+
+	setOpacity(opacity: number): void {
+		const volume = this.volumes.find((volume) => volume.isActive);
+
+		if (volume) {
+			volume.opacity = Math.max(0, Math.min(1, opacity));
+		}
+	}
+
+	setBrightness(brightness: number): void {
+		const volume = this.volumes.find((volume) => volume.isActive);
+
+		if (volume) {
+			volume.brightnessFactor = Math.max(-1, Math.min(1, brightness));
+		}
+	}
+
+	setContrast(contrast: number): void {
+		const volume = this.volumes.find((volume) => volume.isActive);
+
+		if (volume) {
+			volume.contrastFactor = Math.max(0, Math.min(2, contrast));
+		}
 	}
 
 	adjustBrightnessAndContrast(brightnessChange: number, contrastChange: number): void {

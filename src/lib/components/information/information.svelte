@@ -2,9 +2,7 @@
 
 <script lang="ts">
 	import { getViewerState } from '$lib/viewer-state.svelte';
-	import { X } from 'lucide-svelte';
 	import { Demo } from '$lib/components/demo';
-	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
 	import { Input } from '$lib/components/ui/input/index.js';
 

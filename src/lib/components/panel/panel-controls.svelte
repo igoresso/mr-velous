@@ -29,7 +29,11 @@
 		[3, { value: 3, label: 'Axis 3' }]
 	]);
 
-	function handleModeChange(value: string | undefined) {
+	function handleModeChange(value: string | string[] | undefined) {
+		if (Array.isArray(value)) {
+			value = value[0];
+		}
+
 		if (value) {
 			panelState.setActiveMode(value as Mode);
 		}
@@ -40,8 +44,6 @@
 			viewerState.swapViews(view.axis, value);
 		}
 	}
-
-	$inspect({ axes, view, panelState, viewerState });
 </script>
 
 {#if width > 384}
