@@ -66,12 +66,12 @@
 <div class="flex h-full">
 	<Rail {tiles} activeTile={isToolbarVisible && viewerState.activeTile} />
 
-	<div class="w-72 shrink-0 border-r-2" class:hidden={!isToolbarVisible}>
+	<div class="flex w-72 shrink-0 flex-col border-r-2" class:hidden={!isToolbarVisible}>
 		<header class="border-b-2 p-3">
 			<h1 class="text-center text-xl font-bold">MR.VELOUS</h1>
 		</header>
 
-		<aside class="flex flex-col space-y-5 px-5 py-3">
+		<aside class="flex grow flex-col space-y-5 px-5 py-3">
 			{#if viewerState.activeTile === 'Information'}
 				<Information />
 			{:else if viewerState.activeTile === 'Settings'}

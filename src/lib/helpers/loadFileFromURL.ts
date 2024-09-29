@@ -22,7 +22,7 @@ export async function loadFileFromURL(url: string): Promise<Dataset> {
 			if (error.name === 'AbortError') {
 				throw new Error('Request timed out');
 			}
-			throw new Error(`Failed to process file: ${error.message}`);
+			throw new Error(error.message);
 		} else {
 			throw new Error('Failed to process file', { cause: error });
 		}

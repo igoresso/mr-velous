@@ -1,9 +1,11 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
+	import { Lock } from 'lucide-svelte';
 	import { getViewerState } from '$lib/viewer-state.svelte';
 	import { Demo } from '$lib/components/demo';
 	import { Separator } from '$lib/components/ui/separator';
+	import * as Alert from '$lib/components/ui/alert';
 
 	const viewerState = getViewerState();
 </script>
@@ -24,3 +26,11 @@
 {#if viewerState.views.length === 0}
 	<Demo />
 {/if}
+
+<Alert.Root class="!mt-auto" variant="destructive">
+	<Lock class="h-4 w-4" />
+	<Alert.Title>Privacy First</Alert.Title>
+	<Alert.Description
+		>Everything runs locally — your data never leaves your device.</Alert.Description
+	>
+</Alert.Root>
