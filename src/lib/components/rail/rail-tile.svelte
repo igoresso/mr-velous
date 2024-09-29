@@ -26,12 +26,7 @@
 {/snippet}
 
 {#if tile.href === undefined}
-	<button
-		class={getClasses(tile)}
-		type="button"
-		onclick={tile.onClick}
-		disabled={tile.isDisabled || isActive}
-	>
+	<button class={getClasses(tile)} type="button" onclick={tile.onClick} disabled={tile.isDisabled}>
 		{@render content(tile)}
 	</button>
 {:else}

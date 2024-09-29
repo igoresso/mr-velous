@@ -13,6 +13,7 @@ enum Axis {
 export class ViewerState {
 	volumes = $state<Volume[]>([]);
 	views = $state<View[]>([]);
+	activeTile = $state<string>('Information');
 
 	addVolume(fileName: string, dataset: Dataset): void {
 		const { min, max } = computeMinAndMax(dataset.data);
@@ -72,6 +73,8 @@ export class ViewerState {
 				transform: zoomIdentity
 			};
 		});
+
+		this.activeTile = 'Settings';
 	}
 
 	getActiveVolume(): Volume | undefined {
@@ -99,6 +102,7 @@ export class ViewerState {
 
 		if (this.volumes.length === 0) {
 			this.views = [];
+			this.activeTile = 'Information';
 		}
 	}
 
@@ -116,6 +120,7 @@ export class ViewerState {
 	reset(): void {
 		this.volumes = [];
 		this.views = [];
+		this.activeTile = 'Information';
 	}
 
 	nextSlice(axis: number): void {
