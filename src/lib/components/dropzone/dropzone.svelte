@@ -93,9 +93,9 @@
 	aria-describedby="file-upload-instructions"
 >
 	<span class="mb-5"><FileUp size={48} aria-hidden="true" /></span>
-	<span id="file-upload-instructions" class="mb-1 text-center text-xl font-light">
+	<p id="file-upload-instructions" class="mb-1 text-center text-xl font-light">
 		<span class="font-semibold">Upload a file</span> or drag and drop
-	</span>
+	</p>
 
 	{#if acceptedExtensions}
 		<span class="italic text-muted-foreground">{acceptedExtensions}</span>

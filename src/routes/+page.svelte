@@ -41,7 +41,7 @@
 <svelte:window bind:innerWidth />
 
 {#if viewerState.volumes.length === 0}
-	<div class="grid h-full place-content-center">
+	<div class="grid h-full place-content-center p-5">
 		<Dropzone
 			acceptedExtensions=".nii, .nii.gz"
 			multiple={false}

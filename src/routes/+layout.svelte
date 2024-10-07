@@ -20,14 +20,10 @@
 	const viewerState = getViewerState();
 
 	let innerWidth = $state(0);
-	let isToolbarVisible = $state(true);
+	let isToolbarVisible = $state(false);
 
-	$effect(() => {
-		if (innerWidth < 1024) {
-			isToolbarVisible = false;
-		} else {
-			isToolbarVisible = true;
-		}
+	$effect.pre(() => {
+		isToolbarVisible = innerWidth >= 1024;
 	});
 
 	const tiles = $derived([
@@ -67,33 +63,35 @@
 <ModeWatcher track={false} defaultMode={'dark'} />
 <Toaster expand={true} richColors />
 
-<div class="flex h-full">
-	<Rail {tiles} activeTile={isToolbarVisible && viewerState.activeTile} />
+{#if innerWidth > 0}
+	<div class="flex h-full">
+		<Rail {tiles} activeTile={isToolbarVisible ? viewerState.activeTile : null} />
 
-	{#if isToolbarVisible}
-		<div
-			class="shrink-0 border-r-2"
-			transition:slide={{ duration: 500, easing: quintOut, axis: 'x' }}
-		>
-			<div class="flex h-full w-72 flex-col">
-				<header class="border-b-2 p-3">
-					<h1 class="text-center text-xl font-bold">MR.VELOUS</h1>
-				</header>
+		{#if isToolbarVisible}
+			<div
+				class="shrink-0 border-r-2"
+				transition:slide={{ duration: 500, easing: quintOut, axis: 'x' }}
+			>
+				<div class="flex h-full w-72 flex-col">
+					<header class="border-b-2 p-3">
+						<h1 class="text-center text-xl font-bold">MR.VELOUS</h1>
+					</header>
 
-				<aside class="flex grow flex-col space-y-5 px-5 py-3">
-					{#if viewerState.activeTile === 'Information'}
-						<Information />
-					{:else if viewerState.activeTile === 'Settings'}
-						<Layers />
-						<Dimensions />
-						<Adjustments />
-					{/if}
-				</aside>
+					<aside class="flex grow flex-col space-y-5 px-5 py-3">
+						{#if viewerState.activeTile === 'Information'}
+							<Information />
+						{:else if viewerState.activeTile === 'Settings'}
+							<Layers />
+							<Dimensions />
+							<Adjustments />
+						{/if}
+					</aside>
+				</div>
 			</div>
-		</div>
-	{/if}
+		{/if}
 
-	<main class="grow">
-		{@render children()}
-	</main>
-</div>
+		<main class="min-w-80 grow">
+			{@render children()}
+		</main>
+	</div>
+{/if}
