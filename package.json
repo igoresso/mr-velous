@@ -35,6 +35,7 @@
 		"lucide-svelte": "^0.445.0",
 		"mode-watcher": "^0.4.1",
 		"nifti-reader-js": "^0.6.8",
+		"paneforge": "^0.0.6",
 		"prettier": "^3.3.3",
 		"prettier-plugin-svelte": "^3.2.6",
 		"prettier-plugin-tailwindcss": "^0.6.6",
@@ -49,9 +50,5 @@
 		"vite": "^5.4.7",
 		"vitest": "^2.1.1"
 	},
-	"type": "module",
-	"dependencies": {
-		"paneforge": "^0.0.6",
-		"svelte-radix": "^1.1.1"
-	}
+	"type": "module"
 }

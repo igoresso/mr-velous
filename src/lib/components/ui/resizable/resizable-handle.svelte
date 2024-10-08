@@ -1,5 +1,5 @@
 <script lang="ts">
-	import DragHandleDots2 from 'svelte-radix/DragHandleDots2.svelte';
+	import { GripVertical } from 'lucide-svelte';
 	import * as ResizablePrimitive from 'paneforge';
 	import { cn } from '$lib/utils.js';
 
@@ -22,7 +22,7 @@
 >
 	{#if withHandle}
 		<div class="z-10 flex h-4 w-3 items-center justify-center rounded-sm border bg-border">
-			<DragHandleDots2 class="h-2.5 w-2.5" />
+			<GripVertical class="h-2.5 w-2.5" />
 		</div>
 	{/if}
 </ResizablePrimitive.PaneResizer>
