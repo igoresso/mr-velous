@@ -79,15 +79,15 @@
 		if (panelState.crosshair) {
 			// Horizontal line
 			ctx.beginPath();
-			ctx.moveTo(xScale(otherViews[0].currentSlice * scalingFactorX), yScale.range()[0]);
-			ctx.lineTo(xScale(otherViews[0].currentSlice * scalingFactorX), yScale.range()[1]);
+			ctx.moveTo(xScale((otherViews[0].currentSlice + 0.5) * scalingFactorX), yScale.range()[0]);
+			ctx.lineTo(xScale((otherViews[0].currentSlice + 0.5) * scalingFactorX), yScale.range()[1]);
 			ctx.strokeStyle = otherViews[0].color;
 			ctx.stroke();
 
 			// Vertical line
 			ctx.beginPath();
-			ctx.moveTo(xScale.range()[0], yScale(otherViews[1].currentSlice * scalingFactorY));
-			ctx.lineTo(xScale.range()[1], yScale(otherViews[1].currentSlice * scalingFactorY));
+			ctx.moveTo(xScale.range()[0], yScale((otherViews[1].currentSlice + 0.5) * scalingFactorY));
+			ctx.lineTo(xScale.range()[1], yScale((otherViews[1].currentSlice + 0.5) * scalingFactorY));
 			ctx.strokeStyle = otherViews[1].color;
 			ctx.stroke();
 		}

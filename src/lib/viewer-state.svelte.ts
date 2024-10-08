@@ -52,7 +52,7 @@ export class ViewerState {
 		};
 
 		this.views = [Axis.X, Axis.Y, Axis.Z].map((axis) => {
-			const currentSlice = Math.floor(dims[axis] / 2) - 1;
+			const currentSlice = Math.floor(dims[axis] / 2);
 			const rows = axis === Axis.X ? dims[3] : axis === Axis.Y ? dims[3] : dims[2];
 			const cols = axis === Axis.X ? dims[2] : axis === Axis.Y ? dims[1] : dims[1];
 			const voxelRatio =
