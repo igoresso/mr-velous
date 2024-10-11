@@ -26,7 +26,7 @@
 					</div>
 				{/if}
 				<div class="flex flex-col space-y-1.5">
-					<Label for={`axis-${view.axis}`}>Axis {view.axis}</Label>
+					<Label for={`axis-${view.axis}`}>Axis {view.axis + 1}</Label>
 					<Input
 						id={`axis-${view.axis}`}
 						type="number"
