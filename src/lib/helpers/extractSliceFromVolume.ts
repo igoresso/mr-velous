@@ -1,62 +1,39 @@
-import type { TypedArray } from '../types';
+import type { NumberTypedArray } from '../types';
 
 export function extractSliceFromVolume(
-	dims: number[],
-	data: TypedArray,
-	axis: 1 | 2 | 3,
+	size: number[],
+	data: NumberTypedArray,
+	axis: 0 | 1 | 2,
 	slice: number
 ): typeof data {
-	const nx = dims[1]; // X dimension
-	const ny = dims[2]; // Y dimension
-	const nz = dims[3]; // Z dimension
+	const [nx, ny] = size;
 
-	if (slice >= dims[axis]) {
-		throw new Error(`Slice ${slice} is out of bounds for dim[${axis}]`);
+	if (slice < 0 || slice >= size[axis]) {
+		throw new Error(`Slice ${slice} is out of bounds for dimension ${axis}`);
 	}
 
-	// Explicitly define the constructor type
-	type TypedArrayConstructor = {
-		new (length: number): typeof data;
-		new (elements: Iterable<number>): typeof data;
-	};
+	const strides = [1, nx, nx * ny];
+	const axes = [0, 1, 2].filter((a) => a !== axis);
 
-	// Cast data.constructor to the correct type
-	const TypedArray = data.constructor as TypedArrayConstructor;
+	const rows = size[axes[1]];
+	const cols = size[axes[0]];
 
-	switch (axis) {
-		case 1: {
-			// YZ plane at x = slice
-			const planeLength = ny * nz;
-			const plane = new TypedArray(planeLength);
-			let idx = 0;
-			for (let z = 0; z < nz; z++) {
-				for (let y = 0; y < ny; y++) {
-					const index = slice + y * nx + z * nx * ny;
-					plane[idx++] = data[index];
-				}
-			}
-			return plane;
+	const planeLength = rows * cols;
+	const TypedArrayConstructor = data.constructor as { new (length: number): NumberTypedArray };
+	const plane = new TypedArrayConstructor(planeLength);
+
+	let idx = 0;
+	const indices = [0, 0, 0];
+	indices[axis] = slice;
+
+	for (let i = 0; i < rows; i++) {
+		indices[axes[1]] = i;
+		for (let j = 0; j < cols; j++) {
+			indices[axes[0]] = j;
+			const index = indices[0] * strides[0] + indices[1] * strides[1] + indices[2] * strides[2];
+			plane[idx++] = data[index];
 		}
-		case 2: {
-			// XZ plane at y = slice
-			const planeLength = nx * nz;
-			const plane = new TypedArray(planeLength);
-			let idx = 0;
-			for (let z = 0; z < nz; z++) {
-				for (let x = 0; x < nx; x++) {
-					const index = x + slice * nx + z * nx * ny;
-					plane[idx++] = data[index];
-				}
-			}
-			return plane;
-		}
-		case 3: {
-			// XY plane at z = slice
-			const start = nx * ny * slice;
-			const end = start + nx * ny;
-			return data.slice(start, end);
-		}
-		default:
-			throw new Error(`Axis ${axis} can only be 1, 2, or 3`);
 	}
+
+	return plane;
 }

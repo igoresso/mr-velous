@@ -1,6 +1,6 @@
-import type { TypedArray } from '$lib/types';
+import type { NumberTypedArray } from '$lib/types';
 
-export function computeMinAndMax(data: TypedArray): { min: number; max: number } {
+export function computeMinAndMax(data: NumberTypedArray): { min: number; max: number } {
 	if (data.length === 0) {
 		throw new Error('The input array is empty');
 	}

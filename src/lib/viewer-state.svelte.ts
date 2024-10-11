@@ -1,13 +1,14 @@
 import { getContext, setContext } from 'svelte';
 import { zoomIdentity } from 'd3-zoom';
-import { computeMinAndMax, extractSliceFromVolume } from '$lib/helpers';
+import { isBigIntArray, computeMinAndMax, extractSliceFromVolume } from '$lib/helpers';
+import type { Image } from 'itk-wasm';
 import type { ZoomTransform } from 'd3-zoom';
-import type { TypedArray, Dataset, View, Volume } from '$lib/types';
+import type { NumberTypedArray, View, Volume } from '$lib/types';
 
 enum Axis {
-	X = 1,
-	Y = 2,
-	Z = 3
+	X = 0,
+	Y = 1,
+	Z = 2
 }
 
 export class ViewerState {
@@ -15,8 +16,16 @@ export class ViewerState {
 	views = $state<View[]>([]);
 	activeTile = $state<string>('Information');
 
-	addVolume(fileName: string, dataset: Dataset): void {
-		const { min, max } = computeMinAndMax(dataset.data);
+	addVolume(fileName: string, image: Image): void {
+		if (!image.data) {
+			throw new Error('The image data is null');
+		}
+
+		if (isBigIntArray(image.data)) {
+			throw new Error('BigInt arrays are not supported');
+		}
+
+		const { min, max } = computeMinAndMax(image.data as NumberTypedArray);
 
 		this.volumes.forEach((volume) => {
 			volume.isActive = false;
@@ -25,7 +34,8 @@ export class ViewerState {
 		const newVolume: Volume = {
 			id: crypto.randomUUID(),
 			fileName: fileName,
-			...dataset,
+			...image,
+			data: image.data as NumberTypedArray,
 			min,
 			max,
 			brightnessFactor: 0,
@@ -43,7 +53,7 @@ export class ViewerState {
 	}
 
 	private initViews(volume: Volume): void {
-		const { dims, pixDims } = volume.header;
+		const { size, spacing } = volume;
 
 		const axisColors = {
 			[Axis.X]: '#f87171',
@@ -52,20 +62,20 @@ export class ViewerState {
 		};
 
 		this.views = [Axis.X, Axis.Y, Axis.Z].map((axis) => {
-			const currentSlice = Math.floor(dims[axis] / 2);
-			const rows = axis === Axis.X ? dims[3] : axis === Axis.Y ? dims[3] : dims[2];
-			const cols = axis === Axis.X ? dims[2] : axis === Axis.Y ? dims[1] : dims[1];
+			const currentSlice = Math.floor(size[axis] / 2);
+			const rows = axis === Axis.X ? size[2] : axis === Axis.Y ? size[2] : size[1];
+			const cols = axis === Axis.X ? size[1] : axis === Axis.Y ? size[0] : size[0];
 			const voxelRatio =
 				axis === Axis.X
-					? pixDims[2] / pixDims[3]
+					? spacing[1] / spacing[2]
 					: axis === Axis.Y
-						? pixDims[1] / pixDims[3]
-						: pixDims[1] / pixDims[2];
+						? spacing[0] / spacing[2]
+						: spacing[0] / spacing[1];
 
 			return {
 				axis,
 				currentSlice,
-				slices: dims[axis] - 1,
+				slices: size[axis] - 1,
 				rows,
 				cols,
 				voxelRatio,
@@ -147,7 +157,7 @@ export class ViewerState {
 		}
 	}
 
-	getSliceDataForView(axis: number, volumeID: string): TypedArray {
+	getSliceDataForView(axis: number, volumeID: string): NumberTypedArray | null {
 		const view = this.views.find((view) => view.axis === axis);
 		const volume = this.volumes.find((volume) => volume.id === volumeID);
 
@@ -159,7 +169,11 @@ export class ViewerState {
 			throw new Error(`Volume with ID ${volumeID} not found.`);
 		}
 
-		return extractSliceFromVolume(volume.header.dims, volume.data, view.axis, view.currentSlice);
+		if (!volume.data) {
+			return null;
+		}
+
+		return extractSliceFromVolume(volume.size, volume.data, view.axis, view.currentSlice);
 	}
 
 	setOpacity(opacity: number): void {

@@ -1,7 +1,7 @@
-import type { TypedArray } from '$lib/types';
+import type { NumberTypedArray } from '$lib/types';
 
 export function sliceDataToImageArray(
-	sliceData: TypedArray,
+	sliceData: NumberTypedArray,
 	rows: number,
 	cols: number,
 	min: number,

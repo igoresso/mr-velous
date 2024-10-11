@@ -7,10 +7,23 @@
 	import { Button } from '$lib/components/ui/button';
 	import { base } from '$app/paths';
 	import { getViewerState } from '$lib/viewer-state.svelte';
+	import type { niftiReadImage as NiftiReadImageType } from '@itk-wasm/image-io';
+
+	let niftiReadImage: typeof NiftiReadImageType;
 
 	const viewerState = getViewerState();
 
 	let isLoading = $state(false);
+
+	async function loadImageReaders() {
+		const { setPipelinesBaseUrl, ...module } = await import('@itk-wasm/image-io');
+		setPipelinesBaseUrl(`${base}/pipelines`);
+		niftiReadImage = module.niftiReadImage;
+	}
+
+	$effect(() => {
+		loadImageReaders();
+	});
 
 	async function loadDemo() {
 		const fileName = 'pineaple.nii.gz';
@@ -19,8 +32,10 @@
 		isLoading = true;
 
 		try {
-			const dataset = await loadFileFromURL(url);
-			viewerState.addVolume(fileName, dataset);
+			const blob = await loadFileFromURL(url);
+			const file = new File([blob], fileName);
+			const { image } = await niftiReadImage(file);
+			viewerState.addVolume(fileName, image);
 			toast.success(`File loaded successfully`, { description: fileName });
 		} catch (error) {
 			if (error instanceof Error) {

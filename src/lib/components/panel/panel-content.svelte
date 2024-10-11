@@ -32,6 +32,9 @@
 
 	function createImageData(volume: Volume): ImageData {
 		const sliceData = viewerState.getSliceDataForView(view.axis, volume.id);
+
+		if (!sliceData) return new ImageData(view.cols, view.rows);
+
 		const imageArray = sliceDataToImageArray(
 			sliceData,
 			view.rows,

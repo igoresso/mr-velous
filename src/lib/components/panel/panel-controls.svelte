@@ -24,9 +24,9 @@
 	const panelState = getPanelState();
 
 	const axes = new Map([
-		[1, { value: 1, label: 'Axis 1' }],
-		[2, { value: 2, label: 'Axis 2' }],
-		[3, { value: 3, label: 'Axis 3' }]
+		[0, { value: 0, label: 'Axis 1' }],
+		[1, { value: 1, label: 'Axis 2' }],
+		[2, { value: 2, label: 'Axis 3' }]
 	]);
 
 	function handleModeChange(value: string | string[] | undefined) {

@@ -2,21 +2,34 @@
 
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
-	import { processFile } from '$lib/helpers';
 	import * as Resizable from '$lib/components/ui/resizable';
 	import { Dropzone } from '$lib/components/dropzone';
 	import { Panel } from '$lib/components/panel';
+	import { base } from '$app/paths';
 	import { getViewerState } from '$lib/viewer-state.svelte';
+	import type { niftiReadImage as NiftiReadImageType } from '@itk-wasm/image-io';
+
+	let niftiReadImage: typeof NiftiReadImageType;
 
 	const viewerState = getViewerState();
 
 	let innerWidth = $state(0);
 
+	async function loadImageReaders() {
+		const { setPipelinesBaseUrl, ...module } = await import('@itk-wasm/image-io');
+		setPipelinesBaseUrl(`${base}/pipelines`);
+		niftiReadImage = module.niftiReadImage;
+	}
+
+	$effect(() => {
+		loadImageReaders();
+	});
+
 	async function handleFiles(event: CustomEvent<FileList>) {
 		for (const file of event.detail) {
 			try {
-				const dataset = await processFile(file);
-				viewerState.addVolume(file.name, dataset);
+				const { image } = await niftiReadImage(file);
+				viewerState.addVolume(file.name, image);
 				toast.success(`File loaded successfully`, { description: file.name, class: 'break-all' });
 			} catch (error) {
 				if (error instanceof Error) {
@@ -32,7 +45,6 @@
 		const files = event.detail;
 
 		files.forEach((file) => {
-			console.log(file);
 			toast.error(`Unsupported filetype`, { description: `File: ${file}`, class: 'break-all' });
 		});
 	}
