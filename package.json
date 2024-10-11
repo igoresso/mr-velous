@@ -1,7 +1,13 @@
 {
 	"name": "mr-velous",
-	"version": "0.0.1",
+	"description": "MR Viewer with Enhanced Layout and Optimised User Satisfaction",
+	"version": "0.3.0",
 	"private": true,
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/igoresso/mr-velous/issues"
+	},
+	"homepage": "https://igoresso.github.io/mr-velous/",
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
