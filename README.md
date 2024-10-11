@@ -3,20 +3,22 @@
 ![Deployment: gh-pages](https://github.com/igoresso/mr-velous/actions/workflows/deploy.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Welcome to **MR.VELOUS**! This hobby project is all about exploring medical images with style and a smile. One of the project's key goals is to explore the possibilities of **Svelte 5**, utilizing its innovative features to create cleaner, more efficient code and a seamless user experience.
+Welcome to **MR.VELOUS**! This passion project is dedicated to exploring medical images with both style and ease. One of the main goals is to tap into the potential of **Svelte 5**, leveraging its cutting-edge features to craft cleaner, more efficient code and deliver a seamless user experience.
 
 ## 🤔 What's in the Name?
 
-**MR.VELOUS** stands for **"MR Viewer with Enhanced Layout and Optimised User Satisfaction."** The name is a playful take on "marvelous," embodying the goal of crafting a viewer that’s not just functional but a joy to use.
+**MR.VELOUS** stands for **"MR Viewer with Enhanced Layout and Optimized User Satisfaction."** The name playfully nods to "marvelous," capturing the spirit of creating a viewer that’s not only functional but also enjoyable to use.
 
 ## 🛠️ Features
 
-- **NIfTI Image Support**: Open and explore medical images in the NIfTI format.
-- **Enhanced Layout**: A visually pleasing and user-friendly interface—because exploring medical images should be delightful, not dull.
+- **NIfTI Image Support**: Effortlessly open and explore medical images in the NIfTI format.
+- **Enhanced Layout**: A clean, visually appealing, and intuitive interface—because exploring medical images should be engaging, not tedious.
+- **Powered by ITK WebAssembly**: Fast and efficient image processing thanks to ITK WebAssembly, ensuring smooth performance in the browser.
 
 ## 📝 TODO
 
-- **Customizable Viewing**: Allow users to adjust and modify how images are displayed.
-- **DICOM Support**: Extend compatibility to include DICOM format.
+- **Customizable Viewing**: Empower users with options to adjust and personalize the image display settings.
+- **DICOM Support**: Expand compatibility to include the widely-used DICOM format.
+- **Progressive Web App (PWA)**: Enable PWA features to allow users to install and use MR.VELOUS offline.
 
 **MR.VELOUS** is a passion project, and working on it is an absolute blast. Feedback and suggestions are the sprinkles on the ice cream 🍦, so feel free to share your thoughts!
