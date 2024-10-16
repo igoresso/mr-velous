@@ -2,11 +2,11 @@
 
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
+	import { getViewerState } from '$lib/viewer-state.svelte';
 	import { LoaderCircle, Telescope } from 'lucide-svelte';
+	import { base } from '$app/paths';
 	import { loadFileFromURL } from '$lib/helpers';
 	import { Button } from '$lib/components/ui/button';
-	import { base } from '$app/paths';
-	import { getViewerState } from '$lib/viewer-state.svelte';
 	import type { niftiReadImage as NiftiReadImageType } from '@itk-wasm/image-io';
 
 	let niftiReadImage: typeof NiftiReadImageType;

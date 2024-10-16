@@ -4,7 +4,7 @@
 	import { Axis3D, Locate, Move, Fullscreen, Plus, Ellipsis } from 'lucide-svelte';
 	import { getViewerState } from '$lib/viewer-state.svelte';
 	import { getPanelState } from './panel-state.svelte';
-	import Separator from '../ui/separator/separator.svelte';
+	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import * as Select from '$lib/components/ui/select';
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';

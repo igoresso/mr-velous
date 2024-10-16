@@ -10,12 +10,12 @@
 	import { setDialogState, getDialogState } from '$lib/dialog-state.svelte';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import * as Dialog from '$lib/components/ui/dialog';
-	import { Rail } from '$lib/components/rail';
-	import { About } from '$lib/components/about';
-	import { Information } from '$lib/components/information';
-	import { Layers } from '$lib/components/layers';
-	import { Dimensions } from '$lib/components/dimensions';
-	import { Adjustments } from '$lib/components/adjustments';
+	import { Rail } from '$lib/components/custom/rail';
+	import { About } from '$lib/components/custom/about';
+	import { Information } from '$lib/components/custom/information';
+	import { Layers } from '$lib/components/custom/layers';
+	import { Dimensions } from '$lib/components/custom/dimensions';
+	import { Adjustments } from '$lib/components/custom/adjustments';
 
 	import '../app.css';
 
@@ -62,7 +62,7 @@
 		{ name: 'Toggle theme', icon: Sun, class: 'mt-auto dark:hidden', onClick: toggleMode },
 		{ name: 'Toggle theme', icon: Moon, class: 'mt-auto hidden dark:block', onClick: toggleMode },
 		{
-			name: 'Help',
+			name: 'About',
 			icon: HelpCircle,
 			isDialog: true,
 			onClick: (): void => {

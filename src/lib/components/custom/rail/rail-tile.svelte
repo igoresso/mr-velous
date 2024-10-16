@@ -2,7 +2,7 @@
 
 <script lang="ts">
 	import { Button } from 'bits-ui';
-	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 	import type { Tile } from './index.ts';
 
 	type Props = {

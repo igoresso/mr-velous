@@ -3,7 +3,7 @@
 <script lang="ts">
 	import { Lock } from 'lucide-svelte';
 	import { getViewerState } from '$lib/viewer-state.svelte';
-	import { Demo } from '$lib/components/demo';
+	import { Demo } from '$lib/components/custom/demo';
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Alert from '$lib/components/ui/alert';
 

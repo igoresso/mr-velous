@@ -4,8 +4,8 @@
 	import { getViewerState } from '$lib/viewer-state.svelte';
 	import { getPanelState } from './panel-state.svelte';
 	import { sliceDataToImageArray } from '$lib/helpers';
-	import type { View, Volume } from '$lib/types';
 	import type { ScaleLinear } from 'd3-scale';
+	import type { View, Volume } from '$lib/types';
 
 	type Props = {
 		ctx: CanvasRenderingContext2D;

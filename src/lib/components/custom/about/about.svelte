@@ -2,7 +2,7 @@
 
 <script lang="ts">
 	import * as Dialog from '$lib/components/ui/dialog';
-	import Badge from '../ui/badge/badge.svelte';
+	import Badge from '$lib/components/ui/badge/badge.svelte';
 </script>
 
 <Dialog.Header>
