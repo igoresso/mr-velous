@@ -1,12 +1,17 @@
+<svelte:options runes={true} />
+
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import { setViewerState, getViewerState } from '$lib/viewer-state.svelte';
 	import { ModeWatcher, toggleMode } from 'mode-watcher';
 	import { Menu, Info, SlidersHorizontal, Moon, Sun, HelpCircle, Github } from 'lucide-svelte';
+	import { setViewerState, getViewerState } from '$lib/viewer-state.svelte';
+	import { setDialogState, getDialogState } from '$lib/dialog-state.svelte';
 	import { Toaster } from '$lib/components/ui/sonner';
+	import * as Dialog from '$lib/components/ui/dialog';
 	import { Rail } from '$lib/components/rail';
+	import { About } from '$lib/components/about';
 	import { Information } from '$lib/components/information';
 	import { Layers } from '$lib/components/layers';
 	import { Dimensions } from '$lib/components/dimensions';
@@ -18,6 +23,9 @@
 
 	setViewerState();
 	const viewerState = getViewerState();
+
+	setDialogState();
+	const dialogState = getDialogState();
 
 	let innerWidth = $state(0);
 	let isToolbarVisible = $state(false);
@@ -53,7 +61,14 @@
 		},
 		{ name: 'Toggle theme', icon: Sun, class: 'mt-auto dark:hidden', onClick: toggleMode },
 		{ name: 'Toggle theme', icon: Moon, class: 'mt-auto hidden dark:block', onClick: toggleMode },
-		{ name: 'Help', icon: HelpCircle, isDisabled: true },
+		{
+			name: 'Help',
+			icon: HelpCircle,
+			isDialog: true,
+			onClick: (): void => {
+				dialogState.openDialog(About);
+			}
+		},
 		{ name: 'GitHub link', icon: Github, href: 'https://github.com/igoresso/mr-velous' }
 	]);
 </script>
@@ -95,3 +110,11 @@
 		</main>
 	</div>
 {/if}
+
+<Dialog.Root bind:open={dialogState.isOpen}>
+	<Dialog.Content>
+		{#if dialogState.content}
+			<dialogState.content />
+		{/if}
+	</Dialog.Content>
+</Dialog.Root>
