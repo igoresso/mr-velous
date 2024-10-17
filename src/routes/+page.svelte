@@ -2,11 +2,11 @@
 
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
-	import * as Resizable from '$lib/components/ui/resizable';
-	import { Dropzone } from '$lib/components/dropzone';
-	import { Panel } from '$lib/components/panel';
-	import { base } from '$app/paths';
 	import { getViewerState } from '$lib/viewer-state.svelte';
+	import { base } from '$app/paths';
+	import * as Resizable from '$lib/components/ui/resizable';
+	import { Dropzone } from '$lib/components/custom/dropzone';
+	import { Panel } from '$lib/components/custom/panel';
 	import type { niftiReadImage as NiftiReadImageType } from '@itk-wasm/image-io';
 
 	let niftiReadImage: typeof NiftiReadImageType;

@@ -27,7 +27,7 @@
 
 	async function loadDemo() {
 		const fileName = 'pineaple.nii.gz';
-		const url = `${base}/${fileName}`;
+		const url = `${base}/demo/${fileName}`;
 
 		isLoading = true;
 
