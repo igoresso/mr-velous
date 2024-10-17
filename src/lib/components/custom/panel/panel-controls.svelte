@@ -7,7 +7,8 @@
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import * as Select from '$lib/components/ui/select';
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Toggle } from '$lib/components/ui/toggle';
 	import { Button } from '$lib/components/ui/button';
 	import type { View } from '$lib/types';
@@ -30,6 +31,8 @@
 	]);
 
 	function handleModeChange(value: string | string[] | undefined) {
+		console.log(value);
+
 		if (Array.isArray(value)) {
 			value = value[0];
 		}
@@ -63,33 +66,68 @@
 	</Select.Root>
 
 	<ToggleGroup.Root type="single" value={panelState.activeMode} onValueChange={handleModeChange}>
-		<ToggleGroup.Item value="cursor" aria-label="Toggle cursor">
-			<Locate class="h-5 w-5" />
-		</ToggleGroup.Item>
-		<ToggleGroup.Item value="zoom" aria-label="Toggle zoom/move">
-			<Move class="h-5 w-5" />
-		</ToggleGroup.Item>
+		<Tooltip.Root>
+			<Tooltip.Trigger asChild let:builder>
+				<span use:builder.action {...builder}>
+					<ToggleGroup.Item value="cursor" aria-label="Toggle cursor">
+						<Locate class="h-5 w-5" />
+					</ToggleGroup.Item>
+				</span>
+			</Tooltip.Trigger>
+			<Tooltip.Content side="bottom">
+				<span>Cursor</span>
+			</Tooltip.Content>
+		</Tooltip.Root>
+		<Tooltip.Root>
+			<Tooltip.Trigger asChild let:builder>
+				<span use:builder.action {...builder}>
+					<ToggleGroup.Item value="zoom" aria-label="Toggle move/zoom">
+						<Move class="h-5 w-5" />
+					</ToggleGroup.Item>
+				</span>
+			</Tooltip.Trigger>
+			<Tooltip.Content side="bottom">
+				<span>Move/zoom</span>
+			</Tooltip.Content>
+		</Tooltip.Root>
 	</ToggleGroup.Root>
 
 	<Separator orientation="vertical" />
 
 	<div class="flex space-x-1">
-		<Toggle
-			aria-label="Toggle crosshair"
-			pressed={panelState.crosshair}
-			onPressedChange={() => panelState.toggleCrosshair()}
-		>
-			<Plus class="h-5 w-5" />
-		</Toggle>
+		<Tooltip.Root>
+			<Tooltip.Trigger asChild let:builder>
+				<span use:builder.action {...builder}>
+					<Toggle
+						aria-label="Toggle crosshair"
+						pressed={panelState.crosshair}
+						onPressedChange={() => panelState.toggleCrosshair()}
+					>
+						<Plus class="h-5 w-5" />
+					</Toggle>
+				</span>
+			</Tooltip.Trigger>
+			<Tooltip.Content side="bottom">
+				<span>Toggle crosshair</span>
+			</Tooltip.Content>
+		</Tooltip.Root>
 
-		<Button
-			variant="ghost"
-			class="px-3"
-			onclick={() => viewerState.resetTransform(view.axis)}
-			aria-label="Reset view"
-		>
-			<Fullscreen class="h-5 w-5" />
-		</Button>
+		<Tooltip.Root>
+			<Tooltip.Trigger asChild let:builder>
+				<Button
+					builders={[builder]}
+					variant="ghost"
+					class="px-3"
+					onclick={() => viewerState.resetTransform(view.axis)}
+					aria-label="Reset view"
+				>
+					<Fullscreen class="h-5 w-5" />
+				</Button>
+			</Tooltip.Trigger>
+			<Tooltip.Content side="bottom">
+				<span>Reset view</span>
+			</Tooltip.Content>
+		</Tooltip.Root>
 	</div>
 {:else}
 	<DropdownMenu.Root>
