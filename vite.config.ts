@@ -10,6 +10,14 @@ export default defineConfig({
 				{
 					src: 'node_modules/@itk-wasm/image-io/dist/pipelines/nifti-read-image.{js,wasm,wasm.zst}',
 					dest: 'pipelines'
+				},
+				{
+					src: 'node_modules/@itk-wasm/dicom/dist/pipelines/read-image-dicom-file-series.{js,wasm,wasm.zst}',
+					dest: 'pipelines'
+				},
+				{
+					src: 'node_modules/@itk-wasm/dicom/dist/pipelines/read-dicom-tags.{js,wasm,wasm.zst}',
+					dest: 'pipelines'
 				}
 			]
 		})

@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@itk-wasm/dicom':
+        specifier: ^7.2.2
+        version: 7.2.2
       '@itk-wasm/image-io':
         specifier: ^1.3.0
         version: 1.3.0
@@ -351,6 +354,9 @@ packages:
   '@itk-wasm/dam@1.1.1':
     resolution: {integrity: sha512-7+9L3lrLMKF4y6B6qjs8GqfbpxT0waOJUM14NdMNEA6M+BoBS8fdHREhQHo2s7QMA5O7I+Jv7m+dyqlisGnbdQ==}
     hasBin: true
+
+  '@itk-wasm/dicom@7.2.2':
+    resolution: {integrity: sha512-887q98F7RObFFfZTNAOaLnG8fpWHopllptsJ2CHAc6+OhOtz+Lf8S0X/HWfrSeziIII4unMtlFL36yZmgPIbxw==}
 
   '@itk-wasm/image-io@1.3.0':
     resolution: {integrity: sha512-EacjXsMi7sqgyvRetWvX+JHMXlzd00832LQcKlyn+rPs02hdAhjkcxPtIhmtrMLUUgYpuNRoin9aLDGEMNFmog==}
@@ -2589,6 +2595,12 @@ snapshots:
       files-from-path: 1.0.4
       ipfs-car: 1.2.0
       tar: 6.2.1
+    transitivePeerDependencies:
+      - debug
+
+  '@itk-wasm/dicom@7.2.2':
+    dependencies:
+      itk-wasm: 1.0.0-b.179
     transitivePeerDependencies:
       - debug
 
