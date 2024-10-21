@@ -34,7 +34,7 @@
 						min={1}
 						max={view.slices + 1}
 						class="font-mono text-sm"
-						oninput={(event) => handleSliceChange(1, event)}
+						oninput={(event) => handleSliceChange(view.axis, event)}
 					/>
 					<span class="pl-3 text-xs text-muted-foreground">1 - {view.slices + 1}</span>
 				</div>
