@@ -102,8 +102,6 @@
 				}
 			}
 
-			console.log(filteredCount);
-
 			if (filteredCount > 0) {
 				toast.warning('Multiple studies detected', {
 					description: 'Only files from the same study will be loaded'
@@ -147,8 +145,6 @@
 			}
 		});
 	}
-
-	$inspect(viewerState.volumes);
 </script>
 
 <div class="grid h-full place-content-center p-5">
