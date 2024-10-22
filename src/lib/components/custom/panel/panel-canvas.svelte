@@ -87,10 +87,6 @@
 			viewerState.changeSlice(otherViews[0].axis, sliceX);
 			viewerState.changeSlice(otherViews[1].axis, sliceY);
 		}
-
-		if (event.button === 1 && event.detail === 2) {
-			viewerState.resetBrightnessAndContrast();
-		}
 	}
 
 	function handleLMBMove(event: MouseEvent) {
@@ -123,10 +119,64 @@
 		}
 	}
 
+	function resetBrightnessAndContrast(event: MouseEvent) {
+		if (event.button === 1 && event.detail === 2) {
+			viewerState.resetBrightnessAndContrast();
+		}
+	}
+
 	function handleMouseUp() {
 		document.removeEventListener('mousemove', handleRMBMove);
 		document.removeEventListener('mousemove', handleLMBMove);
 		document.removeEventListener('mouseup', handleMouseUp);
+	}
+
+	// Touch events
+	function handleTouchStart(event: TouchEvent) {
+		if (!canvas) return;
+
+		event.preventDefault();
+
+		const touch = event.touches[0];
+
+		document.addEventListener('touchmove', handleTouchMove, { passive: false });
+		document.addEventListener('touchend', handleTouchEnd);
+
+		const rect = canvas.getBoundingClientRect();
+		let offsetX = touch.clientX - rect.left;
+		let offsetY = touch.clientY - rect.top;
+
+		offsetX = Math.max(0, Math.min(offsetX, rect.width));
+		offsetY = Math.max(0, Math.min(offsetY, rect.height));
+
+		const { sliceX, sliceY } = getSliceCoordinates(offsetX, offsetY);
+
+		viewerState.changeSlice(otherViews[0].axis, sliceX);
+		viewerState.changeSlice(otherViews[1].axis, sliceY);
+	}
+
+	function handleTouchMove(event: TouchEvent) {
+		event.preventDefault();
+
+		if (!canvas) return;
+		const touch = event.touches[0];
+
+		const rect = canvas.getBoundingClientRect();
+		let offsetX = touch.clientX - rect.left;
+		let offsetY = touch.clientY - rect.top;
+
+		offsetX = Math.max(0, Math.min(offsetX, rect.width));
+		offsetY = Math.max(0, Math.min(offsetY, rect.height));
+
+		const { sliceX, sliceY } = getSliceCoordinates(offsetX, offsetY);
+
+		viewerState.changeSlice(otherViews[0].axis, sliceX);
+		viewerState.changeSlice(otherViews[1].axis, sliceY);
+	}
+
+	function handleTouchEnd() {
+		document.removeEventListener('touchmove', handleTouchMove);
+		document.removeEventListener('touchend', handleTouchEnd);
 	}
 
 	function getSliceCoordinates(posX: number, posY: number) {
@@ -163,38 +213,44 @@
 	});
 
 	$effect(() => {
-		if (!canvas || panelState.activeMode !== 'cursor') return;
-
-		select(canvas).on('.zoom', null);
-
-		canvas.addEventListener('wheel', handleScroll);
-		canvas.addEventListener('mousedown', handleSliceChange);
-		canvas.addEventListener('mousedown', handleContrastChange);
-
-		return () => {
-			if (!canvas) return;
-			canvas.removeEventListener('wheel', handleScroll);
-			canvas.removeEventListener('mousedown', handleSliceChange);
-			canvas.addEventListener('mousedown', handleContrastChange);
-		};
-	});
-
-	$effect(() => {
 		if (!canvas) return;
 
 		canvas.addEventListener('mousedown', handleContrastChange);
+		canvas.addEventListener('mousedown', resetBrightnessAndContrast);
+
+		if (panelState.activeMode === 'cursor') {
+			select(canvas).on('.zoom', null);
+
+			canvas.addEventListener('wheel', handleScroll);
+			canvas.addEventListener('mousedown', handleSliceChange);
+			canvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+		} else if (panelState.activeMode === 'zoom') {
+			canvas.removeEventListener('wheel', handleScroll);
+			canvas.removeEventListener('mousedown', handleSliceChange);
+			canvas.removeEventListener('touchstart', handleTouchStart);
+
+			select(canvas).call(zoomBehavior);
+		}
+
 		canvas.addEventListener('contextmenu', (e) => e.preventDefault());
 
 		return () => {
 			if (!canvas) return;
-			canvas.addEventListener('mousedown', handleContrastChange);
+
+			canvas.removeEventListener('wheel', handleScroll);
+			canvas.removeEventListener('mousedown', handleSliceChange);
+			canvas.removeEventListener('mousedown', handleContrastChange);
+			canvas.removeEventListener('mousedown', resetBrightnessAndContrast);
+			canvas.removeEventListener('touchstart', handleTouchStart);
 			canvas.removeEventListener('contextmenu', (e) => e.preventDefault());
+
+			select(canvas).on('.zoom', null);
 		};
 	});
 </script>
 
 <canvas
-	class="block"
+	class="block touch-none"
 	class:cursor-crosshair={panelState.activeMode === 'cursor'}
 	class:cursor-move={panelState.activeMode === 'zoom'}
 	bind:this={canvas}
