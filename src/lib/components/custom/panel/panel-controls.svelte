@@ -31,8 +31,6 @@
 	]);
 
 	function handleModeChange(value: string | string[] | undefined) {
-		console.log(value);
-
 		if (Array.isArray(value)) {
 			value = value[0];
 		}

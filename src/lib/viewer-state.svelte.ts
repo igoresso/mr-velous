@@ -1,6 +1,11 @@
 import { getContext, setContext } from 'svelte';
 import { zoomIdentity } from 'd3-zoom';
-import { isBigIntArray, computeMinAndMax, extractSliceFromVolume } from '$lib/helpers';
+import {
+	isBigIntArray,
+	computeMinAndMax,
+	extractSliceFromVolume,
+	vectorToMatrix
+} from '$lib/helpers';
 import type { Image } from 'itk-wasm';
 import type { ZoomTransform } from 'd3-zoom';
 import type { NumberTypedArray, View, Volume } from '$lib/types';
@@ -26,11 +31,6 @@ export class ViewerState {
 		}
 
 		const { min, max } = computeMinAndMax(image.data as NumberTypedArray);
-
-		this.volumes.forEach((volume) => {
-			volume.isActive = false;
-		});
-
 		const newVolume: Volume = {
 			id: crypto.randomUUID(),
 			fileName: fileName,
@@ -45,6 +45,7 @@ export class ViewerState {
 			isVisible: true
 		};
 
+		this.deactivateAllVolumes();
 		this.volumes.push(newVolume);
 
 		if (this.volumes.length === 1) {
@@ -52,39 +53,118 @@ export class ViewerState {
 		}
 	}
 
+	private deactivateAllVolumes(): void {
+		this.volumes.forEach((volume) => (volume.isActive = false));
+	}
+
 	private initViews(volume: Volume): void {
 		const { size, spacing } = volume;
-
 		const axisColors = {
 			[Axis.X]: '#f87171',
 			[Axis.Y]: '#4ade80',
 			[Axis.Z]: '#60a5fa'
 		};
 
-		this.views = [Axis.X, Axis.Y, Axis.Z].map((axis) => {
-			const currentSlice = Math.floor(size[axis] / 2);
-			const rows = axis === Axis.X ? size[2] : axis === Axis.Y ? size[2] : size[1];
-			const cols = axis === Axis.X ? size[1] : axis === Axis.Y ? size[0] : size[0];
-			const voxelRatio =
-				axis === Axis.X
-					? spacing[1] / spacing[2]
-					: axis === Axis.Y
-						? spacing[0] / spacing[2]
-						: spacing[0] / spacing[1];
+		const matrix = vectorToMatrix(volume.direction);
 
-			return {
-				axis,
-				currentSlice,
-				slices: size[axis] - 1,
-				rows,
-				cols,
-				voxelRatio,
-				color: axisColors[axis],
-				transform: zoomIdentity
-			};
-		});
+		this.views = [Axis.X, Axis.Y, Axis.Z].map((axis) =>
+			this.createView(axis, size, spacing, matrix, axisColors)
+		);
 
 		this.activeTile = 'Settings';
+	}
+
+	private createView(
+		axis: Axis,
+		size: number[],
+		spacing: number[],
+		matrix: number[][],
+		axisColors: { [key in Axis]: string }
+	): View {
+		const currentSlice = Math.floor(size[axis] / 2);
+
+		const { rows, cols, voxelRatio } = this.calculateViewDimensions(axis, size, spacing);
+
+		const plane = this.getDominantAxis(matrix[axis]);
+		const planeDirections = this.getPlaneDirections(matrix, axis);
+		const planeVectors = this.getPlaneVectors(matrix, axis);
+
+		const transpose = this.shouldTranspose(plane, planeDirections);
+
+		if (transpose) {
+			planeDirections.reverse();
+			planeVectors.reverse();
+		}
+
+		const flipX = planeVectors[0][planeDirections[0]] < 0;
+		const flipY =
+			planeDirections[1] === Axis.Z
+				? planeVectors[1][planeDirections[1]] > 0
+				: planeVectors[1][planeDirections[1]] < 0;
+
+		return {
+			axis,
+			currentSlice,
+			slices: size[axis] - 1,
+			rows,
+			cols,
+			voxelRatio,
+			color: axisColors[axis],
+			transform: zoomIdentity,
+			flipX,
+			flipY,
+			transpose
+		};
+	}
+
+	private calculateViewDimensions(
+		axis: Axis,
+		size: number[],
+		spacing: number[]
+	): { rows: number; cols: number; voxelRatio: number } {
+		switch (axis) {
+			case Axis.X:
+				return {
+					rows: size[2],
+					cols: size[1],
+					voxelRatio: spacing[1] / spacing[2]
+				};
+			case Axis.Y:
+				return {
+					rows: size[2],
+					cols: size[0],
+					voxelRatio: spacing[0] / spacing[2]
+				};
+			case Axis.Z:
+				return {
+					rows: size[1],
+					cols: size[0],
+					voxelRatio: spacing[0] / spacing[1]
+				};
+		}
+	}
+
+	private getDominantAxis(vector: number[]): number {
+		return vector.reduce(
+			(iMax, val, i, arr) => (Math.abs(val) > Math.abs(arr[iMax]) ? i : iMax),
+			0
+		);
+	}
+
+	private getPlaneDirections(matrix: number[][], axis: Axis): number[] {
+		return matrix.filter((_, i) => i !== axis).map((row) => this.getDominantAxis(row));
+	}
+
+	private getPlaneVectors(matrix: number[][], axis: Axis): number[][] {
+		return matrix.filter((_, i) => i !== axis);
+	}
+
+	private shouldTranspose(plane: number, planeDirections: number[]): boolean {
+		return (
+			(plane === Axis.X && planeDirections[0] === Axis.Z) ||
+			(plane === Axis.Y && planeDirections[0] === Axis.Z) ||
+			(plane === Axis.Z && planeDirections[0] === Axis.Y)
+		);
 	}
 
 	getActiveVolume(): Volume | undefined {
@@ -111,8 +191,7 @@ export class ViewerState {
 		this.volumes = this.volumes.filter((volume) => volume.id !== volumeId);
 
 		if (this.volumes.length === 0) {
-			this.views = [];
-			this.activeTile = 'Information';
+			this.reset();
 		}
 	}
 
@@ -121,9 +200,9 @@ export class ViewerState {
 		const idxTarget = this.views.findIndex((view) => view.axis === target);
 
 		if (idxCurrent !== -1 && idxTarget !== -1) {
-			const curreView = this.views[idxCurrent];
+			const currentView = this.views[idxCurrent];
 			this.views[idxCurrent] = this.views[idxTarget];
-			this.views[idxTarget] = curreView;
+			this.views[idxTarget] = currentView;
 		}
 	}
 
@@ -177,7 +256,7 @@ export class ViewerState {
 	}
 
 	setOpacity(opacity: number): void {
-		const volume = this.volumes.find((volume) => volume.isActive);
+		const volume = this.getActiveVolume();
 
 		if (volume) {
 			volume.opacity = Math.max(0, Math.min(1, opacity));
@@ -185,7 +264,7 @@ export class ViewerState {
 	}
 
 	setBrightness(brightness: number): void {
-		const volume = this.volumes.find((volume) => volume.isActive);
+		const volume = this.getActiveVolume();
 
 		if (volume) {
 			volume.brightnessFactor = Math.max(-1, Math.min(1, brightness));
@@ -193,7 +272,7 @@ export class ViewerState {
 	}
 
 	setContrast(contrast: number): void {
-		const volume = this.volumes.find((volume) => volume.isActive);
+		const volume = this.getActiveVolume();
 
 		if (volume) {
 			volume.contrastFactor = Math.max(0, Math.min(2, contrast));
@@ -201,7 +280,7 @@ export class ViewerState {
 	}
 
 	adjustBrightnessAndContrast(brightnessChange: number, contrastChange: number): void {
-		const volume = this.volumes.find((volume) => volume.isActive);
+		const volume = this.getActiveVolume();
 
 		if (volume) {
 			volume.brightnessFactor = Math.max(
@@ -213,7 +292,7 @@ export class ViewerState {
 	}
 
 	resetBrightnessAndContrast(): void {
-		const volume = this.volumes.find((volume) => volume.isActive);
+		const volume = this.getActiveVolume();
 
 		if (volume) {
 			volume.brightnessFactor = 0;

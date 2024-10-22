@@ -20,41 +20,51 @@
 	const viewerState = getViewerState();
 	const panelState = getPanelState();
 
-	let otherViews = $derived(
-		viewerState.views.filter((v) => v.axis !== view.axis).sort((a, b) => a.axis - b.axis)
-	);
+	let otherViews = $derived.by(() => {
+		const [viewX, viewY] = viewerState.views
+			.filter((v) => v.axis !== view.axis)
+			.sort((a, b) => a.axis - b.axis);
+
+		return view.transpose ? [viewY, viewX] : [viewX, viewY];
+	});
 
 	// Canvas context
 	let canvas = $state<HTMLCanvasElement | null>(null);
 	let ctx = $derived(canvas ? canvas.getContext('2d') : null);
 
-	// Aspect ratio and image dimensions
+	// Image dimensions
+	let imageCols = view.transpose ? view.rows : view.cols;
+	let imageRows = view.transpose ? view.cols : view.rows;
+	let voxelRatio = view.transpose ? 1 / view.voxelRatio : view.voxelRatio;
+
+	let imageAspectRatio = $derived((imageCols / imageRows) * voxelRatio);
 	let canvasAspectRatio = $derived(width / height);
-	let imageAspectRatio = $derived((view.cols / view.rows) * view.voxelRatio);
 
 	let imageWidth = $derived(
 		imageAspectRatio > canvasAspectRatio ? width : height * imageAspectRatio
 	);
 	let paddingX = $derived((width - imageWidth) / 2);
-	let scalingFactorX = $derived(imageWidth / view.cols);
+	let scalingFactorX = $derived(imageWidth / imageCols);
 
 	let imageHeight = $derived(
 		imageAspectRatio > canvasAspectRatio ? width / imageAspectRatio : height
 	);
 	let paddingY = $derived((height - imageHeight) / 2);
-	let scalingFactorY = $derived(imageHeight / view.rows);
+	let scalingFactorY = $derived(imageHeight / imageRows);
 
 	// Position and scale
 	let xScaleBaseline = $derived(
 		scaleLinear()
-			.domain([-paddingX, imageWidth + paddingX])
+			.domain(view.flipX ? [imageWidth + paddingX, -paddingX] : [-paddingX, imageWidth + paddingX])
 			.range([0, width])
 	);
 	let xScale = $derived(view.transform.rescaleX(xScaleBaseline));
 
 	let yScaleBaseline = $derived(
 		scaleLinear()
-			.domain([imageHeight + paddingY, -paddingY])
+			.domain(
+				view.flipY ? [imageHeight + paddingY, -paddingY] : [-paddingY, imageHeight + paddingY]
+			)
 			.range([0, height])
 	);
 	let yScale = $derived(view.transform.rescaleY(yScaleBaseline));
@@ -62,9 +72,9 @@
 	// Mouse interaction
 	function handleScroll(event: WheelEvent) {
 		if (event.deltaY < 0) {
-			viewerState.previousSlice(view.axis);
-		} else {
 			viewerState.nextSlice(view.axis);
+		} else {
+			viewerState.previousSlice(view.axis);
 		}
 	}
 
@@ -73,7 +83,7 @@
 			document.addEventListener('mousemove', handleLMBMove);
 			document.addEventListener('mouseup', handleMouseUp);
 
-			const { sliceX, sliceY } = getSliceCoordinates(event);
+			const { sliceX, sliceY } = getSliceCoordinates(event.offsetX, event.offsetY);
 			viewerState.changeSlice(otherViews[0].axis, sliceX);
 			viewerState.changeSlice(otherViews[1].axis, sliceY);
 		}
@@ -84,7 +94,17 @@
 	}
 
 	function handleLMBMove(event: MouseEvent) {
-		const { sliceX, sliceY } = getSliceCoordinates(event);
+		if (!canvas) return;
+
+		const rect = canvas.getBoundingClientRect();
+		let offsetX = event.clientX - rect.left;
+		let offsetY = event.clientY - rect.top;
+
+		offsetX = Math.max(0, Math.min(offsetX, rect.width));
+		offsetY = Math.max(0, Math.min(offsetY, rect.height));
+
+		const { sliceX, sliceY } = getSliceCoordinates(offsetX, offsetY);
+
 		viewerState.changeSlice(otherViews[0].axis, sliceX);
 		viewerState.changeSlice(otherViews[1].axis, sliceY);
 	}
@@ -109,9 +129,10 @@
 		document.removeEventListener('mouseup', handleMouseUp);
 	}
 
-	function getSliceCoordinates(event: MouseEvent) {
-		const sliceX = Math.round(xScale.invert(event.offsetX) / scalingFactorX);
-		const sliceY = Math.round(yScale.invert(event.offsetY) / scalingFactorY);
+	function getSliceCoordinates(posX: number, posY: number) {
+		const sliceX = Math.floor(xScale.invert(posX) / scalingFactorX);
+		const sliceY = Math.floor(yScale.invert(posY) / scalingFactorY);
+
 		return { sliceX, sliceY };
 	}
 

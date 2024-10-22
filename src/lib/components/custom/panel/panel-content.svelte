@@ -23,12 +23,20 @@
 	const viewerState = getViewerState();
 	const panelState = getPanelState();
 
-	let otherViews = $derived(
-		viewerState.views.filter((v) => v.axis !== view.axis).sort((a, b) => a.axis - b.axis)
-	);
+	let otherViews = $derived.by(() => {
+		const [viewX, viewY] = viewerState.views
+			.filter((v) => v.axis !== view.axis)
+			.sort((a, b) => a.axis - b.axis);
 
-	let scalingFactorX = $derived(imageWidth / view.cols);
-	let scalingFactorY = $derived(imageHeight / view.rows);
+		return view.transpose ? [viewY, viewX] : [viewX, viewY];
+	});
+
+	let scalingFactorX = $derived(view.transpose ? imageWidth / view.rows : imageWidth / view.cols);
+	let scalingFactorY = $derived(view.transpose ? imageHeight / view.cols : imageHeight / view.rows);
+
+	// Off-screen canvas for drawing images
+	const offscreenCanvas = document.createElement('canvas');
+	const offscreenCtx = offscreenCanvas.getContext('2d');
 
 	function createImageData(volume: Volume): ImageData {
 		const sliceData = viewerState.getSliceDataForView(view.axis, volume.id);
@@ -49,12 +57,29 @@
 		return new ImageData(imageArray, view.cols, view.rows);
 	}
 
-	// Off-screen canvas for drawing images
-	let offscreenCanvas = document.createElement('canvas');
-	let offscreenCtx = offscreenCanvas.getContext('2d');
+	function drawCrosshairs() {
+		const [viewX, viewY] = otherViews;
+
+		const crosshairX = (viewX.currentSlice + 0.5) * scalingFactorX;
+		const crosshairY = (viewY.currentSlice + 0.5) * scalingFactorY;
+
+		// Horizontal line
+		ctx.beginPath();
+		ctx.moveTo(xScale(crosshairX), yScale.range()[0]);
+		ctx.lineTo(xScale(crosshairX), yScale.range()[1]);
+		ctx.strokeStyle = viewX.color;
+		ctx.stroke();
+
+		// Vertical line
+		ctx.beginPath();
+		ctx.moveTo(xScale.range()[0], yScale(crosshairY));
+		ctx.lineTo(xScale.range()[1], yScale(crosshairY));
+		ctx.strokeStyle = viewY.color;
+		ctx.stroke();
+	}
 
 	$effect(() => {
-		if (!offscreenCtx) return;
+		if (!ctx || !offscreenCtx) return;
 
 		// Clear canvas
 		ctx.clearRect(0, 0, width, height);
@@ -63,7 +88,12 @@
 		ctx.save();
 		ctx.translate(xScale(0), yScale(0));
 		ctx.scale(view.transform.k, view.transform.k);
-		ctx.scale(1, -1);
+		ctx.scale(view.flipX ? -1 : 1, view.flipY ? -1 : 1);
+		if (view.transpose) {
+			ctx.scale(-1, 1);
+			ctx.rotate(Math.PI / 2);
+		}
+
 		ctx.imageSmoothingEnabled = false;
 
 		offscreenCanvas.width = view.cols;
@@ -74,25 +104,18 @@
 
 			const imageData = createImageData(viewerState.volumes[i]);
 			offscreenCtx.putImageData(imageData, 0, 0);
-			ctx.drawImage(offscreenCanvas, 0, 0, imageWidth, imageHeight);
+
+			if (view.transpose) {
+				ctx.drawImage(offscreenCanvas, 0, 0, imageHeight, imageWidth);
+			} else {
+				ctx.drawImage(offscreenCanvas, 0, 0, imageWidth, imageHeight);
+			}
 		}
 
 		ctx.restore();
 
 		if (panelState.crosshair) {
-			// Horizontal line
-			ctx.beginPath();
-			ctx.moveTo(xScale((otherViews[0].currentSlice + 0.5) * scalingFactorX), yScale.range()[0]);
-			ctx.lineTo(xScale((otherViews[0].currentSlice + 0.5) * scalingFactorX), yScale.range()[1]);
-			ctx.strokeStyle = otherViews[0].color;
-			ctx.stroke();
-
-			// Vertical line
-			ctx.beginPath();
-			ctx.moveTo(xScale.range()[0], yScale((otherViews[1].currentSlice + 0.5) * scalingFactorY));
-			ctx.lineTo(xScale.range()[1], yScale((otherViews[1].currentSlice + 0.5) * scalingFactorY));
-			ctx.strokeStyle = otherViews[1].color;
-			ctx.stroke();
+			drawCrosshairs();
 		}
 	});
 </script>

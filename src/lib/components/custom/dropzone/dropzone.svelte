@@ -228,14 +228,13 @@
 	<input
 		class={`absolute inset-0 opacity-0 ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
 		type="file"
-		{multiple}
 		accept={acceptedExtensions}
+		{multiple}
 		aria-label="File input"
 		onchange={handleFiles}
 		ondrop={handleFiles}
 		ondragover={handleDragOver}
 		ondragleave={handleDragLeave}
-		webkitdirectory={acceptFolders}
 		disabled={isDisabled}
 	/>
 </div>

@@ -38,4 +38,7 @@ export type View = {
 	voxelRatio: number;
 	color: string;
 	transform: ZoomTransform;
+	flipX: boolean;
+	flipY: boolean;
+	transpose: boolean;
 };
