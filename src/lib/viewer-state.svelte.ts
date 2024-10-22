@@ -15,6 +15,7 @@ enum Axis {
 	Y = 1,
 	Z = 2
 }
+const planeNames = ['SAGITTAL', 'CORONAL', 'AXIAL'];
 
 export class ViewerState {
 	volumes = $state<Volume[]>([]);
@@ -104,6 +105,7 @@ export class ViewerState {
 
 		return {
 			axis,
+			plane: planeNames[plane] as 'AXIAL' | 'CORONAL' | 'SAGITTAL',
 			currentSlice,
 			slices: size[axis] - 1,
 			rows,

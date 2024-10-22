@@ -31,6 +31,7 @@ export type Volume = Image & {
 
 export type View = {
 	axis: 0 | 1 | 2;
+	plane: 'AXIAL' | 'CORONAL' | 'SAGITTAL';
 	currentSlice: number;
 	slices: number;
 	rows: number;

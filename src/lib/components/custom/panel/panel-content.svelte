@@ -65,6 +65,7 @@
 
 		// Horizontal line
 		ctx.beginPath();
+		ctx.lineWidth = 1;
 		ctx.moveTo(xScale(crosshairX), yScale.range()[0]);
 		ctx.lineTo(xScale(crosshairX), yScale.range()[1]);
 		ctx.strokeStyle = viewX.color;
@@ -72,10 +73,52 @@
 
 		// Vertical line
 		ctx.beginPath();
+		ctx.lineWidth = 1;
 		ctx.moveTo(xScale.range()[0], yScale(crosshairY));
 		ctx.lineTo(xScale.range()[1], yScale(crosshairY));
 		ctx.strokeStyle = viewY.color;
 		ctx.stroke();
+	}
+
+	function drawDirections() {
+		const offset = 7.5;
+		const top = view.plane === 'AXIAL' ? 'A' : 'S';
+		const bottom = view.plane === 'AXIAL' ? 'P' : 'I';
+		const left = view.plane === 'SAGITTAL' ? 'A' : 'R';
+		const right = view.plane === 'SAGITTAL' ? 'P' : 'L';
+
+		ctx.save();
+
+		ctx.font = '1rem sans-serif';
+		ctx.fillStyle = 'white';
+		ctx.strokeStyle = 'black';
+		ctx.shadowColor = 'black';
+		ctx.shadowBlur = 5;
+		ctx.globalAlpha = 0.75;
+		ctx.lineWidth = 2;
+
+		ctx.textAlign = 'center';
+		ctx.textBaseline = 'top';
+		ctx.strokeText(top, width / 2, offset);
+		ctx.fillText(top, width / 2, offset);
+
+		ctx.textAlign = 'center';
+		ctx.textBaseline = 'bottom';
+		ctx.shadowBlur = 5;
+		ctx.strokeText(bottom, width / 2, height - offset);
+		ctx.fillText(bottom, width / 2, height - offset);
+
+		ctx.textAlign = 'left';
+		ctx.textBaseline = 'middle';
+		ctx.strokeText(left, offset, height / 2);
+		ctx.fillText(left, offset, height / 2);
+
+		ctx.textAlign = 'right';
+		ctx.textBaseline = 'middle';
+		ctx.strokeText(right, width - offset, height / 2);
+		ctx.fillText(right, width - offset, height / 2);
+
+		ctx.restore();
 	}
 
 	$effect(() => {
@@ -117,5 +160,7 @@
 		if (panelState.crosshair) {
 			drawCrosshairs();
 		}
+
+		drawDirections();
 	});
 </script>
