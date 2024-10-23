@@ -9,10 +9,15 @@ const modeToCursor = new Map<Mode, Cursor>([
 export class PanelState {
 	activeMode = $state<Mode>('cursor');
 	crosshair = $state(true);
+	directions = $state(true);
 	cursor = $derived(modeToCursor.get(this.activeMode));
 
 	toggleCrosshair(): void {
 		this.crosshair = !this.crosshair;
+	}
+
+	toggleDirections(): void {
+		this.directions = !this.directions;
 	}
 
 	setActiveMode(mode: Mode): void {

@@ -7,8 +7,6 @@ declare let self: ServiceWorkerGlobalScope;
 
 import { build, files, version } from '$service-worker';
 
-console.log(build);
-
 const filesToInclude = files.filter((file) => file.startsWith('/examples/'));
 
 const CACHE = `cache-${version}`;

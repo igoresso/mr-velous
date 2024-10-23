@@ -1,7 +1,7 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
-	import { Axis3D, Locate, Move, Fullscreen, Plus, Ellipsis } from 'lucide-svelte';
+	import { Axis3D, Locate, Move, Fullscreen, Plus, Ellipsis, Compass } from 'lucide-svelte';
 	import { getViewerState } from '$lib/viewer-state.svelte';
 	import { getPanelState } from './panel-state.svelte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
@@ -47,7 +47,7 @@
 	}
 </script>
 
-{#if width > 384}
+{#if width > 400}
 	<Select.Root
 		selected={axes.get(view.axis)}
 		onSelectedChange={(s) => s && handleAxisChange(s.value)}
@@ -112,6 +112,23 @@
 
 		<Tooltip.Root>
 			<Tooltip.Trigger asChild let:builder>
+				<span use:builder.action {...builder}>
+					<Toggle
+						aria-label="Toggle directions"
+						pressed={panelState.directions}
+						onPressedChange={() => panelState.toggleDirections()}
+					>
+						<Compass class="h-5 w-5" />
+					</Toggle>
+				</span>
+			</Tooltip.Trigger>
+			<Tooltip.Content side="bottom">
+				<span>Toggle directions</span>
+			</Tooltip.Content>
+		</Tooltip.Root>
+
+		<Tooltip.Root>
+			<Tooltip.Trigger asChild let:builder>
 				<Button
 					builders={[builder]}
 					variant="ghost"
@@ -157,6 +174,10 @@
 				<DropdownMenu.Item onclick={() => panelState.toggleCrosshair()}>
 					<Plus class="mr-2 h-4 w-4" />
 					Toggle crosshair
+				</DropdownMenu.Item>
+				<DropdownMenu.Item onclick={() => panelState.toggleDirections()}>
+					<Compass class="mr-2 h-4 w-4" />
+					Toggle directions
 				</DropdownMenu.Item>
 				<DropdownMenu.Item onclick={() => viewerState.resetTransform(view.axis)}>
 					<Fullscreen class="mr-2 h-4 w-4" />

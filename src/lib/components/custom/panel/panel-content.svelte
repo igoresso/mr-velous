@@ -161,6 +161,8 @@
 			drawCrosshairs();
 		}
 
-		drawDirections();
+		if (panelState.directions) {
+			drawDirections();
+		}
 	});
 </script>
