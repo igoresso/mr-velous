@@ -4,30 +4,34 @@
 	import { toast } from 'svelte-sonner';
 	import { getViewerState } from '$lib/viewer-state.svelte';
 	import { LoaderCircle, Telescope } from 'lucide-svelte';
+	import { browser } from '$app/environment';
 	import { base } from '$app/paths';
 	import { loadFileFromURL } from '$lib/helpers';
 	import { Button } from '$lib/components/ui/button';
-	import type { niftiReadImage as NiftiReadImageType } from '@itk-wasm/image-io';
+	import type {
+		niftiReadImage as NiftiReadImageType,
+		setPipelinesBaseUrl as setPipelinesBaseUrlType
+	} from '@itk-wasm/image-io';
 
+	let setPipelinesBaseUrl: typeof setPipelinesBaseUrlType;
 	let niftiReadImage: typeof NiftiReadImageType;
+
+	if (browser) {
+		import('@itk-wasm/image-io').then((module) => {
+			({ niftiReadImage, setPipelinesBaseUrl } = module);
+			setPipelinesBaseUrl(`${base}/pipelines`);
+		});
+	}
 
 	const viewerState = getViewerState();
 
 	let isLoading = $state(false);
 
-	async function loadImageReaders() {
-		const { setPipelinesBaseUrl, ...module } = await import('@itk-wasm/image-io');
-		setPipelinesBaseUrl(`${base}/pipelines`);
-		niftiReadImage = module.niftiReadImage;
-	}
-
-	$effect(() => {
-		loadImageReaders();
-	});
-
 	async function loadDemo() {
+		if (!browser) return;
+
 		const fileName = 'pineaple.nii.gz';
-		const url = `${base}/demo/${fileName}`;
+		const url = `${base}/examples/${fileName}`;
 
 		isLoading = true;
 

@@ -3,40 +3,41 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
 	import { getViewerState } from '$lib/viewer-state.svelte';
+	import { browser } from '$app/environment';
 	import { base } from '$app/paths';
 	import { Dropzone } from '$lib/components/custom/dropzone';
-	import type { niftiReadImage as NiftiReadImageType } from '@itk-wasm/image-io';
+	import type {
+		niftiReadImage as NiftiReadImageType,
+		setPipelinesBaseUrl as setPipelinesBaseUrlType
+	} from '@itk-wasm/image-io';
 	import type {
 		readImageDicomFileSeries as readImageDicomFileSeriesType,
 		readDicomTags as readDicomTagsType
 	} from '@itk-wasm/dicom';
 
+	let setPipelinesBaseUrl: typeof setPipelinesBaseUrlType;
 	let niftiReadImage: typeof NiftiReadImageType;
 	let readImageDicomFileSeries: typeof readImageDicomFileSeriesType;
 	let readDicomTags: typeof readDicomTagsType;
+
+	if (browser) {
+		import('@itk-wasm/image-io').then((module) => {
+			({ niftiReadImage, setPipelinesBaseUrl } = module);
+			setPipelinesBaseUrl(`${base}/pipelines`);
+		});
+
+		import('@itk-wasm/dicom').then((module) => {
+			({ readImageDicomFileSeries, readDicomTags } = module);
+		});
+	}
 
 	const viewerState = getViewerState();
 
 	let isLoading = $state(false);
 
-	async function loadImageReaders() {
-		const { setPipelinesBaseUrl, ...module } = await import('@itk-wasm/image-io');
-		setPipelinesBaseUrl(`${base}/pipelines`);
-		niftiReadImage = module.niftiReadImage;
-	}
-
-	async function loadDicomReader() {
-		const module = await import('@itk-wasm/dicom');
-		readImageDicomFileSeries = module.readImageDicomFileSeries;
-		readDicomTags = module.readDicomTags;
-	}
-
-	$effect(() => {
-		loadImageReaders();
-		loadDicomReader();
-	});
-
 	async function handleFiles(event: CustomEvent<File[]>) {
+		if (!browser) return;
+
 		const files = event.detail;
 
 		if (!files || files.length === 0) {
