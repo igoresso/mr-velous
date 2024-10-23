@@ -14,10 +14,10 @@ Welcome to **MR.VELOUS**! This passion project is dedicated to exploring medical
 - **NIfTI and DICOM Support**: Effortlessly open and explore common medical image formats.
 - **Enhanced Layout**: A clean, visually appealing, and intuitive interface—because exploring medical images should be engaging, not tedious.
 - **Powered by ITK WebAssembly**: Fast and efficient image processing thanks to ITK WebAssembly, ensuring smooth performance in the browser.
+- **Progressive Web App (PWA)**: MR.VELOUS can be used as a standalone app.
 
 ## 📝 TODO
 
 - **Customizable Viewing**: Empower users with options to adjust and personalize the image display settings.
-- **Progressive Web App (PWA)**: Enable PWA features to allow users to install and use MR.VELOUS offline.
 
 **MR.VELOUS** is a passion project, and working on it is an absolute blast. Feedback and suggestions are the sprinkles on the ice cream 🍦, so feel free to share your thoughts!
