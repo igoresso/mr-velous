@@ -198,13 +198,16 @@ export class ViewerState {
 	}
 
 	swapViews(current: number, target: number): void {
+		console.log('swapViews', current, target);
 		const idxCurrent = this.views.findIndex((view) => view.axis === current);
 		const idxTarget = this.views.findIndex((view) => view.axis === target);
 
 		if (idxCurrent !== -1 && idxTarget !== -1) {
-			const currentView = this.views[idxCurrent];
-			this.views[idxCurrent] = this.views[idxTarget];
-			this.views[idxTarget] = currentView;
+			const newViews = [...this.views];
+
+			[newViews[idxCurrent], newViews[idxTarget]] = [newViews[idxTarget], newViews[idxCurrent]];
+
+			this.views = newViews;
 		}
 	}
 
