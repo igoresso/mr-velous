@@ -33,9 +33,9 @@
 	let ctx = $derived(canvas ? canvas.getContext('2d') : null);
 
 	// Image dimensions
-	let imageCols = view.transpose ? view.rows : view.cols;
-	let imageRows = view.transpose ? view.cols : view.rows;
-	let voxelRatio = view.transpose ? 1 / view.voxelRatio : view.voxelRatio;
+	let imageCols = $derived(view.transpose ? view.rows : view.cols);
+	let imageRows = $derived(view.transpose ? view.cols : view.rows);
+	let voxelRatio = $derived(view.transpose ? 1 / view.voxelRatio : view.voxelRatio);
 
 	let imageAspectRatio = $derived((imageCols / imageRows) * voxelRatio);
 	let canvasAspectRatio = $derived(width / height);

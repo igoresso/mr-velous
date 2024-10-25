@@ -15,6 +15,7 @@ enum Axis {
 	Y = 1,
 	Z = 2
 }
+
 const planeNames = ['SAGITTAL', 'CORONAL', 'AXIAL'];
 
 export class ViewerState {
@@ -198,7 +199,6 @@ export class ViewerState {
 	}
 
 	swapViews(current: number, target: number): void {
-		console.log('swapViews', current, target);
 		const idxCurrent = this.views.findIndex((view) => view.axis === current);
 		const idxTarget = this.views.findIndex((view) => view.axis === target);
 

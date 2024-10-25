@@ -51,7 +51,6 @@
 	<Select.Root
 		selected={axes.get(view.axis)}
 		onSelectedChange={(s) => s && handleAxisChange(s.value)}
-		disabled
 	>
 		<Select.Trigger class="mr-auto w-32" aria-label="Select axis">
 			<Axis3D class="mr-2 h-5 w-5" />
