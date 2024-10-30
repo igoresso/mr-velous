@@ -8,6 +8,7 @@
 	import { Menu, Info, SlidersHorizontal, Moon, Sun, HelpCircle, Github } from 'lucide-svelte';
 	import { setViewerState, getViewerState } from '$lib/viewer-state.svelte';
 	import { setDialogState, getDialogState } from '$lib/dialog-state.svelte';
+	import { TooltipProvider } from '$lib/components/ui/tooltip';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Rail } from '$lib/components/custom/rail';
@@ -77,40 +78,40 @@
 
 <ModeWatcher track={false} defaultMode={'dark'} />
 <Toaster expand={true} richColors />
+<TooltipProvider>
+	{#if innerWidth > 0}
+		<div class="flex h-full">
+			<Rail {tiles} activeTile={isToolbarVisible ? viewerState.activeTile : null} />
 
-{#if innerWidth > 0}
-	<div class="flex h-full">
-		<Rail {tiles} activeTile={isToolbarVisible ? viewerState.activeTile : null} />
+			{#if isToolbarVisible}
+				<div
+					class="shrink-0 border-r-2"
+					transition:slide={{ duration: 500, easing: quintOut, axis: 'x' }}
+				>
+					<div class="flex h-full w-72 flex-col">
+						<header class="border-b-2 p-3">
+							<h1 class="text-center text-xl font-bold">MR.VELOUS</h1>
+						</header>
 
-		{#if isToolbarVisible}
-			<div
-				class="shrink-0 border-r-2"
-				transition:slide={{ duration: 500, easing: quintOut, axis: 'x' }}
-			>
-				<div class="flex h-full w-72 flex-col">
-					<header class="border-b-2 p-3">
-						<h1 class="text-center text-xl font-bold">MR.VELOUS</h1>
-					</header>
-
-					<aside class="flex grow flex-col space-y-5 px-5 py-3">
-						{#if viewerState.activeTile === 'Information'}
-							<Information />
-						{:else if viewerState.activeTile === 'Settings'}
-							<Layers />
-							<Dimensions />
-							<Adjustments />
-						{/if}
-					</aside>
+						<aside class="flex grow flex-col space-y-5 px-5 py-3">
+							{#if viewerState.activeTile === 'Information'}
+								<Information />
+							{:else if viewerState.activeTile === 'Settings'}
+								<Layers />
+								<Dimensions />
+								<Adjustments />
+							{/if}
+						</aside>
+					</div>
 				</div>
-			</div>
-		{/if}
+			{/if}
 
-		<main class="min-w-80 grow">
-			{@render children()}
-		</main>
-	</div>
-{/if}
-
+			<main class="min-w-80 grow">
+				{@render children()}
+			</main>
+		</div>
+	{/if}
+</TooltipProvider>
 <Dialog.Root bind:open={dialogState.isOpen}>
 	<Dialog.Content>
 		{#if dialogState.content}
