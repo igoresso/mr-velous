@@ -51,7 +51,7 @@
 		"lucide-svelte": "^0.454.0",
 		"mode-watcher": "^0.4.1",
 		"npm-run-all": "^4.1.5",
-		"paneforge": "^0.0.6",
+		"paneforge": "1.0.0-next.1",
 		"prettier": "^3.3.3",
 		"prettier-plugin-svelte": "^3.2.7",
 		"prettier-plugin-tailwindcss": "^0.6.8",
