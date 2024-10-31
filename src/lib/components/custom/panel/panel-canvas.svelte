@@ -208,7 +208,6 @@
 	});
 
 	$effect(() => {
-		console.log('view transform effect');
 		if (canvas) {
 			select(canvas).call(zoomBehavior.transform, view.transform);
 		}
