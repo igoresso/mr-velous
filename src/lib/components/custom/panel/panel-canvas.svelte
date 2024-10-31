@@ -51,14 +51,12 @@
 	let scalingFactorY = $derived(imageHeight / imageRows);
 
 	// Position and scale
-	let transform = $derived(view.transform);
-
 	let xScaleBaseline = $derived(
 		scaleLinear()
 			.domain(view.flipX ? [imageWidth + paddingX, -paddingX] : [-paddingX, imageWidth + paddingX])
 			.range([0, width])
 	);
-	let xScale = $derived(transform.rescaleX(xScaleBaseline));
+	let xScale = $derived(view.transform.rescaleX(xScaleBaseline));
 
 	let yScaleBaseline = $derived(
 		scaleLinear()
@@ -67,7 +65,7 @@
 			)
 			.range([0, height])
 	);
-	let yScale = $derived(transform.rescaleY(yScaleBaseline));
+	let yScale = $derived(view.transform.rescaleY(yScaleBaseline));
 
 	// Mouse interaction
 	function handleScroll(event: WheelEvent) {
@@ -196,20 +194,24 @@
 		});
 
 	$effect(() => {
-		if (!canvas || panelState.activeMode !== 'cursor') return;
-	});
-
-	$effect(() => {
 		if (!canvas || panelState.activeMode !== 'zoom') return;
 
 		canvas.removeEventListener('wheel', handleScroll);
 
 		select(canvas).call(zoomBehavior);
+		console.log('zoom effect');
 
 		return () => {
 			if (!canvas) return;
 			select(canvas).on('.zoom', null);
 		};
+	});
+
+	$effect(() => {
+		console.log('view transform effect');
+		if (canvas) {
+			select(canvas).call(zoomBehavior.transform, view.transform);
+		}
 	});
 
 	$effect(() => {
@@ -247,9 +249,6 @@
 			select(canvas).on('.zoom', null);
 		};
 	});
-
-	$inspect('transform', view.transform);
-	$inspect('xScale', xScale.domain());
 </script>
 
 <canvas
