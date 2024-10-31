@@ -1,5 +1,3 @@
-<svelte:options runes={true} />
-
 <script lang="ts">
 	import Tile from './rail-tile.svelte';
 	import type { Tile as TileType } from './index.ts';

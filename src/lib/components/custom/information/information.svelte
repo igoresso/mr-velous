@@ -1,5 +1,3 @@
-<svelte:options runes={true} />
-
 <script lang="ts">
 	import { Lock } from 'lucide-svelte';
 	import { getViewerState } from '$lib/viewer-state.svelte';
@@ -29,7 +27,7 @@
 
 <Alert.Root class="!mt-auto" variant="destructive">
 	<Lock class="h-4 w-4" />
-	<Alert.Title>Privacy First</Alert.Title>
+	<Alert.Title level={3}>Privacy First</Alert.Title>
 	<Alert.Description
 		>Everything runs locally — your data never leaves your device.</Alert.Description
 	>

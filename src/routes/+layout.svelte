@@ -5,7 +5,16 @@
 	import { slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import { ModeWatcher, toggleMode } from 'mode-watcher';
-	import { Menu, Info, SlidersHorizontal, Moon, Sun, HelpCircle, Github } from 'lucide-svelte';
+	import {
+		PanelLeftOpen,
+		PanelLeftClose,
+		Info,
+		SlidersHorizontal,
+		Moon,
+		Sun,
+		HelpCircle,
+		Github
+	} from 'lucide-svelte';
 	import { setViewerState, getViewerState } from '$lib/viewer-state.svelte';
 	import { setDialogState, getDialogState } from '$lib/dialog-state.svelte';
 	import { Toaster } from '$lib/components/ui/sonner';
@@ -29,25 +38,34 @@
 	const dialogState = getDialogState();
 
 	let innerWidth = $state(0);
-	let isToolbarVisible = $state(false);
+	let isSidebarVisible = $state(false);
 
 	$effect.pre(() => {
-		isToolbarVisible = innerWidth >= 1024;
+		isSidebarVisible = innerWidth >= 1024;
 	});
 
 	const tiles = $derived([
 		{
-			name: 'Toggle toolbar',
-			icon: Menu,
+			name: 'Open sidebar',
+			icon: PanelLeftOpen,
+			class: isSidebarVisible ? 'hidden' : '',
 			onClick: (): void => {
-				isToolbarVisible = !isToolbarVisible;
+				isSidebarVisible = !isSidebarVisible;
+			}
+		},
+		{
+			name: 'Close sidebar',
+			icon: PanelLeftClose,
+			class: isSidebarVisible ? '' : 'hidden',
+			onClick: (): void => {
+				isSidebarVisible = !isSidebarVisible;
 			}
 		},
 		{
 			name: 'Information',
 			icon: Info,
 			onClick: (): void => {
-				isToolbarVisible = true;
+				isSidebarVisible = true;
 				viewerState.activeTile = 'Information';
 			}
 		},
@@ -55,7 +73,7 @@
 			name: 'Settings',
 			icon: SlidersHorizontal,
 			onClick: (): void => {
-				isToolbarVisible = true;
+				isSidebarVisible = true;
 				viewerState.activeTile = 'Settings';
 			},
 			isDisabled: viewerState.views.length === 0
@@ -83,9 +101,9 @@
 <TooltipProvider>
 	{#if innerWidth > 0}
 		<div class="flex h-full">
-			<Rail {tiles} activeTile={isToolbarVisible ? viewerState.activeTile : null} />
+			<Rail {tiles} activeTile={isSidebarVisible ? viewerState.activeTile : null} />
 
-			{#if isToolbarVisible}
+			{#if isSidebarVisible}
 				<div
 					class="shrink-0 border-r-2"
 					transition:slide={{ duration: 500, easing: quintOut, axis: 'x' }}

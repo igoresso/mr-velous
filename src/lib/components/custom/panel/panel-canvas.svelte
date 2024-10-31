@@ -1,5 +1,3 @@
-<svelte:options runes={true} />
-
 <script lang="ts">
 	import { zoom } from 'd3-zoom';
 	import { select } from 'd3-selection';
@@ -53,12 +51,14 @@
 	let scalingFactorY = $derived(imageHeight / imageRows);
 
 	// Position and scale
+	let transform = $derived(view.transform);
+
 	let xScaleBaseline = $derived(
 		scaleLinear()
 			.domain(view.flipX ? [imageWidth + paddingX, -paddingX] : [-paddingX, imageWidth + paddingX])
 			.range([0, width])
 	);
-	let xScale = $derived(view.transform.rescaleX(xScaleBaseline));
+	let xScale = $derived(transform.rescaleX(xScaleBaseline));
 
 	let yScaleBaseline = $derived(
 		scaleLinear()
@@ -67,7 +67,7 @@
 			)
 			.range([0, height])
 	);
-	let yScale = $derived(view.transform.rescaleY(yScaleBaseline));
+	let yScale = $derived(transform.rescaleY(yScaleBaseline));
 
 	// Mouse interaction
 	function handleScroll(event: WheelEvent) {
@@ -247,6 +247,9 @@
 			select(canvas).on('.zoom', null);
 		};
 	});
+
+	$inspect('transform', view.transform);
+	$inspect('xScale', xScale.domain());
 </script>
 
 <canvas

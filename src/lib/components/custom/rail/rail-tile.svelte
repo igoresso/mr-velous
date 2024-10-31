@@ -1,5 +1,3 @@
-<svelte:options runes={true} />
-
 <script lang="ts">
 	import { Button } from 'bits-ui';
 	import * as Tooltip from '$lib/components/ui/tooltip';
@@ -16,7 +14,7 @@
 	let isActive = $derived(activeTile === tile.name);
 
 	function getClasses(tile: Tile) {
-		const base = 'block p-3.5 transition-colors outline-none focus:ring-2 ring-ring ring-inset';
+		const base = 'block p-3.5 transition-colors outline-none focus:ring-1 ring-ring ring-inset';
 		const interactivity = tile.isDisabled
 			? 'opacity-40 cursor-default'
 			: 'hover:bg-neutral-100 active:bg-neutral-300 dark:hover:bg-neutral-900 dark:active:bg-neutral-700';

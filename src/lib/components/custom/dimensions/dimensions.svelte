@@ -1,5 +1,3 @@
-<svelte:options runes={true} />
-
 <script lang="ts">
 	import { getViewerState } from '$lib/viewer-state.svelte';
 	import { Label } from '$lib/components/ui/label';
@@ -7,6 +5,8 @@
 	import { Separator } from '$lib/components/ui/separator';
 
 	const viewerState = getViewerState();
+
+	let viewsSorted = viewerState.views.toSorted((a, b) => a.axis - b.axis);
 
 	function handleSliceChange(axis: number, event: Event) {
 		const target = event.target as HTMLInputElement;
@@ -19,7 +19,7 @@
 	<section class="flex flex-col space-y-4">
 		<h2 class="text-lg font-semibold">Dimensions</h2>
 		<div class="flex items-center justify-between">
-			{#each viewerState.views as view, i}
+			{#each viewsSorted as view, i}
 				{#if i !== 0}
 					<div class="h-5">
 						<Separator orientation="vertical" />

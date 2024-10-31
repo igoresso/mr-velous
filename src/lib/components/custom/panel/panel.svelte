@@ -1,5 +1,3 @@
-<svelte:options runes={true} />
-
 <script lang="ts">
 	import { setPanelState } from './panel-state.svelte';
 	import Canvas from './panel-canvas.svelte';

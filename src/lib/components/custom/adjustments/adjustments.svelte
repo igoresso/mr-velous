@@ -1,5 +1,3 @@
-<svelte:options runes={true} />
-
 <script lang="ts">
 	import { getViewerState } from '$lib/viewer-state.svelte';
 	import { RotateCcw } from 'lucide-svelte';
@@ -18,11 +16,12 @@
 			<h2 class="text-lg font-semibold">Adjustments</h2>
 			<Button
 				variant="ghost"
+				size="sm"
 				class="p-2"
 				aria-label="Reset adjustments"
 				onclick={() => viewerState.resetBrightnessAndContrast()}
 			>
-				<RotateCcw class="h-5 w-5" />
+				<RotateCcw class="size-4" />
 			</Button>
 		</div>
 

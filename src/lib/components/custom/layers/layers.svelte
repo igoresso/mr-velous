@@ -1,5 +1,3 @@
-<svelte:options runes={true} />
-
 <script lang="ts">
 	import { getViewerState } from '$lib/viewer-state.svelte';
 	import { Eye, EyeOff, X } from 'lucide-svelte';
@@ -36,7 +34,7 @@
 						class="p-2"
 						onclick={() => viewerState.removeVolume(volume.id)}
 					>
-						<X class="h-4 w-4" />
+						<X class="size-4" />
 						<span class="sr-only">Remove volume</span>
 					</Button>
 				</li>

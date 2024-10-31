@@ -1,5 +1,3 @@
-<svelte:options runes={true} />
-
 <script lang="ts">
 	import { Axis3D, Locate, Move, Fullscreen, Plus, Ellipsis, Compass } from 'lucide-svelte';
 	import { getViewerState } from '$lib/viewer-state.svelte';

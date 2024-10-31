@@ -1,5 +1,3 @@
-<svelte:options runes={true} />
-
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
 	import { getViewerState } from '$lib/viewer-state.svelte';
@@ -53,7 +51,7 @@
 	}
 </script>
 
-<Button onclick={loadDemo} disabled={isLoading}>
+<Button class="ring-offset-2" onclick={loadDemo} disabled={isLoading}>
 	{#if isLoading}
 		<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
 	{:else}

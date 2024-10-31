@@ -1,5 +1,3 @@
-<svelte:options runes={true} />
-
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
 	import { getViewerState } from '$lib/viewer-state.svelte';
