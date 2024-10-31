@@ -8,9 +8,9 @@
 	import { Menu, Info, SlidersHorizontal, Moon, Sun, HelpCircle, Github } from 'lucide-svelte';
 	import { setViewerState, getViewerState } from '$lib/viewer-state.svelte';
 	import { setDialogState, getDialogState } from '$lib/dialog-state.svelte';
-	import { TooltipProvider } from '$lib/components/ui/tooltip';
 	import { Toaster } from '$lib/components/ui/sonner';
-	import * as Dialog from '$lib/components/ui/dialog';
+	import { TooltipProvider } from '$lib/components/ui/tooltip/index.js';
+	import { Dialog, DialogContent } from '$lib/components/ui/dialog';
 	import { Rail } from '$lib/components/custom/rail';
 	import { About } from '$lib/components/custom/about';
 	import { Information } from '$lib/components/custom/information';
@@ -72,12 +72,16 @@
 		},
 		{ name: 'GitHub link', icon: Github, href: 'https://github.com/igoresso/mr-velous' }
 	]);
+
+	$inspect(isToolbarVisible);
 </script>
 
 <svelte:window bind:innerWidth />
 
 <ModeWatcher track={false} defaultMode={'dark'} />
+
 <Toaster expand={true} richColors />
+
 <TooltipProvider>
 	{#if innerWidth > 0}
 		<div class="flex h-full">
@@ -112,10 +116,11 @@
 		</div>
 	{/if}
 </TooltipProvider>
-<Dialog.Root bind:open={dialogState.isOpen}>
-	<Dialog.Content>
+
+<Dialog bind:open={dialogState.isOpen}>
+	<DialogContent>
 		{#if dialogState.content}
 			<dialogState.content />
 		{/if}
-	</Dialog.Content>
-</Dialog.Root>
+	</DialogContent>
+</Dialog>

@@ -4,6 +4,7 @@
 	import { Button } from 'bits-ui';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import type { Tile } from './index.ts';
+	import { cn } from '$lib/utils.js';
 
 	type Props = {
 		tile: Tile;
@@ -17,7 +18,7 @@
 	function getClasses(tile: Tile) {
 		const base = 'block p-3.5 transition-colors outline-none focus:ring-2 ring-ring ring-inset';
 		const interactivity = tile.isDisabled
-			? 'opacity-40'
+			? 'opacity-40 cursor-default'
 			: 'hover:bg-neutral-100 active:bg-neutral-300 dark:hover:bg-neutral-900 dark:active:bg-neutral-700';
 		const activeState = isActive
 			? 'bg-neutral-200 dark:bg-neutral-800 cursor-default'
@@ -27,17 +28,19 @@
 </script>
 
 <Tooltip.Root>
-	<Tooltip.Trigger asChild let:builder>
-		<Button.Root
-			builders={[builder]}
-			class={getClasses(tile)}
-			disabled={tile.isDisabled}
-			href={tile.href}
-			onclick={tile.onClick}
-		>
-			<tile.icon />
-			<span class="sr-only">{tile.name}</span>
-		</Button.Root>
+	<Tooltip.Trigger>
+		{#snippet child({ props })}
+			<Button.Root
+				{...props}
+				class={cn(getClasses(tile))}
+				href={tile.href}
+				onclick={tile.onClick}
+				disabled={tile.isDisabled || isActive}
+			>
+				<tile.icon />
+				<span class="sr-only">{tile.name}</span>
+			</Button.Root>
+		{/snippet}
 	</Tooltip.Trigger>
 	{#if !tile.isDisabled && !isActive}
 		<Tooltip.Content side="right">
