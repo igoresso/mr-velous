@@ -19,7 +19,7 @@
 </script>
 
 <div class="flex h-full flex-col space-y-4 p-4">
-	<div class="flex justify-end space-x-2 overflow-clip px-1">
+	<div class="flex justify-end space-x-3">
 		<Controls {view} {width} />
 	</div>
 	<div class="relative grow">

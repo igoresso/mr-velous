@@ -24,11 +24,11 @@
 	const viewerState = getViewerState();
 	const panelState = getPanelState();
 
-	const axes = new Map([
-		[0, { value: 0, label: 'Axis 1' }],
-		[1, { value: 1, label: 'Axis 2' }],
-		[2, { value: 2, label: 'Axis 3' }]
-	]);
+	const axes = [
+		{ value: '0', label: 'Axis 1' },
+		{ value: '1', label: 'Axis 2' },
+		{ value: '2', label: 'Axis 3' }
+	];
 
 	function handleModeChange(value: string | string[] | undefined) {
 		if (Array.isArray(value)) {
@@ -40,21 +40,24 @@
 		}
 	}
 
-	function handleAxisChange(value: number | undefined) {
+	function handleAxisChange(value: string | undefined) {
 		if (value !== undefined) {
-			viewerState.swapViews(view.axis, value);
+			viewerState.swapViews(view.axis, Number(value));
 		}
 	}
 </script>
 
 {#if width > 400}
 	<Select.Root
-		selected={axes.get(view.axis)}
-		onSelectedChange={(s) => s && handleAxisChange(s.value)}
+		type="single"
+		items={axes}
+		value={view.axis.toString()}
+		onValueChange={(axis) => axis && handleAxisChange(axis)}
+		controlledValue
 	>
 		<Select.Trigger class="mr-auto w-32" aria-label="Select axis">
-			<Axis3D class="mr-2 h-5 w-5" />
-			<Select.Value placeholder="Axis" />
+			<Axis3D class="mr-1 h-5 w-5" />
+			{axes[view.axis].label}
 		</Select.Trigger>
 		<Select.Content>
 			{#each axes.values() as axis}
@@ -63,29 +66,34 @@
 		</Select.Content>
 	</Select.Root>
 
-	<ToggleGroup.Root type="single" value={panelState.activeMode} onValueChange={handleModeChange}>
+	<ToggleGroup.Root
+		type="single"
+		value={panelState.activeMode}
+		onValueChange={handleModeChange}
+		controlledValue
+	>
 		<Tooltip.Root>
-			<Tooltip.Trigger asChild let:builder>
-				<span use:builder.action {...builder}>
-					<ToggleGroup.Item value="cursor" aria-label="Toggle cursor">
-						<Locate class="h-5 w-5" />
+			<Tooltip.Trigger>
+				{#snippet child({ props })}
+					<ToggleGroup.Item {...props} value="zoom" aria-label="Toggle move/zoom">
+						<Move class="size-4" />
 					</ToggleGroup.Item>
-				</span>
-			</Tooltip.Trigger>
-			<Tooltip.Content side="bottom">
-				<span>Cursor</span>
-			</Tooltip.Content>
-		</Tooltip.Root>
-		<Tooltip.Root>
-			<Tooltip.Trigger asChild let:builder>
-				<span use:builder.action {...builder}>
-					<ToggleGroup.Item value="zoom" aria-label="Toggle move/zoom">
-						<Move class="h-5 w-5" />
-					</ToggleGroup.Item>
-				</span>
+				{/snippet}
 			</Tooltip.Trigger>
 			<Tooltip.Content side="bottom">
 				<span>Move/zoom</span>
+			</Tooltip.Content>
+		</Tooltip.Root>
+		<Tooltip.Root>
+			<Tooltip.Trigger>
+				{#snippet child({ props })}
+					<ToggleGroup.Item {...props} value="cursor" aria-label="Toggle cursor">
+						<Locate class="size-4" />
+					</ToggleGroup.Item>
+				{/snippet}
+			</Tooltip.Trigger>
+			<Tooltip.Content side="bottom">
+				<span>Cursor</span>
 			</Tooltip.Content>
 		</Tooltip.Root>
 	</ToggleGroup.Root>
@@ -94,16 +102,17 @@
 
 	<div class="flex space-x-1">
 		<Tooltip.Root>
-			<Tooltip.Trigger asChild let:builder>
-				<span use:builder.action {...builder}>
+			<Tooltip.Trigger>
+				{#snippet child({ props })}
 					<Toggle
+						{...props}
 						aria-label="Toggle crosshair"
 						pressed={panelState.crosshair}
 						onPressedChange={() => panelState.toggleCrosshair()}
 					>
-						<Plus class="h-5 w-5" />
+						<Plus class="size-4" />
 					</Toggle>
-				</span>
+				{/snippet}
 			</Tooltip.Trigger>
 			<Tooltip.Content side="bottom">
 				<span>Toggle crosshair</span>
@@ -111,16 +120,17 @@
 		</Tooltip.Root>
 
 		<Tooltip.Root>
-			<Tooltip.Trigger asChild let:builder>
-				<span use:builder.action {...builder}>
+			<Tooltip.Trigger>
+				{#snippet child({ props })}
 					<Toggle
+						{...props}
 						aria-label="Toggle directions"
 						pressed={panelState.directions}
 						onPressedChange={() => panelState.toggleDirections()}
 					>
-						<Compass class="h-5 w-5" />
+						<Compass class="size-4" />
 					</Toggle>
-				</span>
+				{/snippet}
 			</Tooltip.Trigger>
 			<Tooltip.Content side="bottom">
 				<span>Toggle directions</span>
@@ -128,16 +138,18 @@
 		</Tooltip.Root>
 
 		<Tooltip.Root>
-			<Tooltip.Trigger asChild let:builder>
-				<Button
-					builders={[builder]}
-					variant="ghost"
-					class="px-3"
-					onclick={() => viewerState.resetTransform(view.axis)}
-					aria-label="Reset view"
-				>
-					<Fullscreen class="h-5 w-5" />
-				</Button>
+			<Tooltip.Trigger>
+				{#snippet child({ props })}
+					<Button
+						{...props}
+						variant="ghost"
+						class="px-3"
+						onclick={() => viewerState.resetTransform(view.axis)}
+						aria-label="Reset view"
+					>
+						<Fullscreen class="size-4" />
+					</Button>
+				{/snippet}
 			</Tooltip.Trigger>
 			<Tooltip.Content side="bottom">
 				<span>Reset view</span>
@@ -146,16 +158,21 @@
 	</div>
 {:else}
 	<DropdownMenu.Root>
-		<DropdownMenu.Trigger asChild let:builder>
-			<Button builders={[builder]} variant="ghost"><Ellipsis /></Button>
+		<DropdownMenu.Trigger aria-label="Open controls">
+			{#snippet child({ props })}
+				<Button {...props} variant="ghost">
+					<Ellipsis class="size-4" />
+				</Button>
+			{/snippet}
 		</DropdownMenu.Trigger>
-		<DropdownMenu.Content class="w-56">
+
+		<DropdownMenu.Content class="w-56" collisionPadding={28}>
 			<DropdownMenu.Sub>
 				<DropdownMenu.SubTrigger>Select axis</DropdownMenu.SubTrigger>
 				<DropdownMenu.SubContent>
 					{#each axes.values() as axis}
 						<DropdownMenu.CheckboxItem
-							checked={view.axis === axis.value}
+							checked={view.axis === Number(axis.value)}
 							onCheckedChange={() => handleAxisChange(axis.value)}
 							>{axis.label}</DropdownMenu.CheckboxItem
 						>

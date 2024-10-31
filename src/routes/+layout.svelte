@@ -72,8 +72,6 @@
 		},
 		{ name: 'GitHub link', icon: Github, href: 'https://github.com/igoresso/mr-velous' }
 	]);
-
-	$inspect(isToolbarVisible);
 </script>
 
 <svelte:window bind:innerWidth />
