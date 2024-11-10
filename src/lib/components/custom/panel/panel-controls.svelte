@@ -1,5 +1,14 @@
 <script lang="ts">
-	import { Axis3D, Locate, Move, Fullscreen, Plus, Ellipsis, Compass } from 'lucide-svelte';
+	import {
+		Axis3D,
+		Locate,
+		Move,
+		Fullscreen,
+		Plus,
+		Ellipsis,
+		Compass,
+		RotateCwSquare
+	} from 'lucide-svelte';
 	import { getViewerState } from '$lib/viewer-state.svelte';
 	import { getPanelState } from './panel-state.svelte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
@@ -45,24 +54,44 @@
 	}
 </script>
 
-{#if width > 400}
-	<Select.Root
-		type="single"
-		items={axes}
-		value={view.axis.toString()}
-		onValueChange={(axis) => axis && handleAxisChange(axis)}
-		controlledValue
-	>
-		<Select.Trigger class="mr-auto w-32" aria-label="Select axis">
-			<Axis3D class="mr-1 h-5 w-5" />
-			{axes[view.axis].label}
-		</Select.Trigger>
-		<Select.Content>
-			{#each axes.values() as axis}
-				<Select.Item value={axis.value} label={axis.label}>{axis.label}</Select.Item>
-			{/each}
-		</Select.Content>
-	</Select.Root>
+{#if width > 420}
+	<div class="mr-auto flex space-x-1">
+		<Select.Root
+			type="single"
+			items={axes}
+			value={view.axis.toString()}
+			onValueChange={(axis) => axis && handleAxisChange(axis)}
+			controlledValue
+		>
+			<Select.Trigger class="mr-auto w-28" aria-label="Select axis">
+				<Axis3D class="size-4" />
+				{axes[view.axis].label}
+			</Select.Trigger>
+			<Select.Content>
+				{#each axes.values() as axis}
+					<Select.Item value={axis.value} label={axis.label}>{axis.label}</Select.Item>
+				{/each}
+			</Select.Content>
+		</Select.Root>
+		<Tooltip.Root>
+			<Tooltip.Trigger>
+				{#snippet child({ props })}
+					<Button
+						{...props}
+						variant="outline"
+						class="px-3"
+						onclick={() => viewerState.rotateViews()}
+						aria-label="Rotate views"
+					>
+						<RotateCwSquare class="size-4" />
+					</Button>
+				{/snippet}
+			</Tooltip.Trigger>
+			<Tooltip.Content side="bottom">
+				<span>Rotate views</span>
+			</Tooltip.Content>
+		</Tooltip.Root>
+	</div>
 
 	<ToggleGroup.Root
 		type="single"

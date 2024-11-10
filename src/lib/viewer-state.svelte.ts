@@ -211,6 +211,12 @@ export class ViewerState {
 		}
 	}
 
+	rotateViews(): void {
+		if (this.views.length > 0) {
+			this.views = [this.views[this.views.length - 1], ...this.views.slice(0, -1)];
+		}
+	}
+
 	reset(): void {
 		this.volumes = [];
 		this.views = [];
