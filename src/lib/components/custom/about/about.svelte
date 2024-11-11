@@ -15,7 +15,7 @@
 </Dialog.Header>
 <p class="text-balance">
 	MR Viewer with Enhanced Layout and Optimized User Experience, or simply <span
-		class="bg-gradient-to-r from-pink-500 via-sky-500 to-emerald-500 bg-clip-text font-semibold text-transparent"
+		class="bg-gradient-to-r from-sky-500 via-fuchsia-500 to-amber-500 bg-clip-text font-semibold text-transparent"
 		>MR.VELOUS</span
 	>, is a free and open-source medical image viewer distributed under the MIT license. It is
 	designed for research, education, and non-clinical use. Built on the ITK-Wasm library, it
