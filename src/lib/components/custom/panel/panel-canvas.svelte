@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { zoom } from 'd3-zoom';
 	import { select } from 'd3-selection';
-	import { getViewerState } from '$lib/viewer-state.svelte';
+	import { getViewerState } from '$lib/stores/viewer.svelte';
 	import { getPanelState } from './panel-state.svelte';
 	import { scaleLinear } from 'd3-scale';
 	import Content from './panel-content.svelte';

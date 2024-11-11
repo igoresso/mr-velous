@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getViewerState } from '$lib/viewer-state.svelte';
+	import { getViewerState } from '$lib/stores/viewer.svelte';
 	import { RotateCcw } from 'lucide-svelte';
 	import { Slider } from '$lib/components/ui/slider';
 	import { Label } from '$lib/components/ui/label';

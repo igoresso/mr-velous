@@ -15,8 +15,8 @@
 		HelpCircle,
 		Github
 	} from 'lucide-svelte';
-	import { setViewerState, getViewerState } from '$lib/viewer-state.svelte';
-	import { setDialogState, getDialogState } from '$lib/dialog-state.svelte';
+	import { setViewerState, getViewerState } from '$lib/stores/viewer.svelte';
+	import { setDialogState, getDialogState } from '$lib/stores/dialog.svelte';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import { TooltipProvider } from '$lib/components/ui/tooltip/index.js';
 	import { Dialog, DialogContent } from '$lib/components/ui/dialog';

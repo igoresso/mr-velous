@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
-	import { getViewerState } from '$lib/viewer-state.svelte';
+	import { getViewerState } from '$lib/stores/viewer.svelte';
 	import { browser } from '$app/environment';
 	import { base } from '$app/paths';
 	import { Dropzone } from '$lib/components/custom/dropzone';

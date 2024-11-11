@@ -1,7 +1,7 @@
 <svelte:options runes={true} />
 
 <script lang="ts">
-	import { getViewerState } from '$lib/viewer-state.svelte';
+	import { getViewerState } from '$lib/stores/viewer.svelte';
 	import * as Resizable from '$lib/components/ui/resizable';
 	import { Loader } from '$lib/components/custom/loader';
 	import { Panel } from '$lib/components/custom/panel';

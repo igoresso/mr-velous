@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getViewerState } from '$lib/viewer-state.svelte';
+	import { getViewerState } from '$lib/stores/viewer.svelte';
 	import { getPanelState } from './panel-state.svelte';
 	import { sliceDataToImageArray } from '$lib/helpers';
 	import type { ScaleLinear } from 'd3-scale';

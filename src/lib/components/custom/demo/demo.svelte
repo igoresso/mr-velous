@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { toast } from 'svelte-sonner';
-	import { getViewerState } from '$lib/viewer-state.svelte';
+	import { getViewerState } from '$lib/stores/viewer.svelte';
 	import { LoaderCircle, Telescope } from 'lucide-svelte';
 	import { browser } from '$app/environment';
 	import { base } from '$app/paths';
