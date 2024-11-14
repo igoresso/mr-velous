@@ -5,7 +5,7 @@
 
 <Dialog.Header>
 	<Dialog.Title class="flex items-center space-x-3"
-		><h2>MR.VELOUS</h2>
+		><h2 class="text-2xl">MR.VELOUS</h2>
 		<Badge class="ml-2" variant="destructive">non-clinical use</Badge>
 	</Dialog.Title>
 	<Dialog.Description class="text-left">
