@@ -95,6 +95,8 @@
 
 	<ToggleGroup.Root
 		type="single"
+		variant="outline"
+		class="gap-0"
 		value={panelState.activeMode}
 		onValueChange={handleModeChange}
 		controlledValue
@@ -102,7 +104,12 @@
 		<Tooltip.Root>
 			<Tooltip.Trigger>
 				{#snippet child({ props })}
-					<ToggleGroup.Item {...props} value="zoom" aria-label="Toggle move/zoom">
+					<ToggleGroup.Item
+						{...props}
+						value="zoom"
+						class="rounded-r-none"
+						aria-label="Toggle move/zoom"
+					>
 						<Move class="size-4" />
 					</ToggleGroup.Item>
 				{/snippet}
@@ -114,7 +121,12 @@
 		<Tooltip.Root>
 			<Tooltip.Trigger>
 				{#snippet child({ props })}
-					<ToggleGroup.Item {...props} value="cursor" aria-label="Toggle cursor">
+					<ToggleGroup.Item
+						{...props}
+						value="cursor"
+						class="rounded-l-none"
+						aria-label="Toggle cursor"
+					>
 						<Locate class="size-4" />
 					</ToggleGroup.Item>
 				{/snippet}
@@ -163,26 +175,28 @@
 				<span>Toggle directions</span>
 			</Tooltip.Content>
 		</Tooltip.Root>
-
-		<Tooltip.Root>
-			<Tooltip.Trigger>
-				{#snippet child({ props })}
-					<Button
-						{...props}
-						variant="ghost"
-						class="px-3"
-						onclick={() => viewerState.resetTransform(view.axis)}
-						aria-label="Reset view"
-					>
-						<Fullscreen class="size-4" />
-					</Button>
-				{/snippet}
-			</Tooltip.Trigger>
-			<Tooltip.Content side="bottom">
-				<span>Reset view</span>
-			</Tooltip.Content>
-		</Tooltip.Root>
 	</div>
+
+	<Separator orientation="vertical" />
+
+	<Tooltip.Root>
+		<Tooltip.Trigger>
+			{#snippet child({ props })}
+				<Button
+					{...props}
+					variant="ghost"
+					class="px-3"
+					onclick={() => viewerState.resetTransform(view.axis)}
+					aria-label="Reset view"
+				>
+					<Fullscreen class="size-4" />
+				</Button>
+			{/snippet}
+		</Tooltip.Trigger>
+		<Tooltip.Content side="bottom">
+			<span>Reset view</span>
+		</Tooltip.Content>
+	</Tooltip.Root>
 {:else}
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger aria-label="Open controls">
