@@ -94,7 +94,7 @@
 
 <svelte:window bind:innerWidth />
 
-<ModeWatcher track={false} defaultMode={'dark'} />
+<ModeWatcher />
 
 <Toaster expand={true} richColors />
 
