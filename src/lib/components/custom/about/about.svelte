@@ -25,8 +25,9 @@
 
 <Dialog.Footer>
 	<p class="text-pretty">
-		The demo image is provided courtesy of the Melbourne Brain Centre Imaging Unit (<a
-			href="https://medicine.unimelb.edu.au/school-structure/medicine/research/mbciu">MBCIU</a
-		>).
+		The demo image is provided courtesy of the <a
+			href="https://medicine.unimelb.edu.au/school-structure/medicine/research/mbciu"
+			>Melbourne Brain Centre Imaging Unit (MBCIU)</a
+		> .
 	</p>
 </Dialog.Footer>
