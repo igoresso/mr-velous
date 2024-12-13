@@ -124,7 +124,7 @@
 					<ToggleGroup.Item
 						{...props}
 						value="cursor"
-						class="rounded-l-none"
+						class="border-l-none rounded-l-none"
 						aria-label="Toggle cursor"
 					>
 						<Locate class="size-4" />
