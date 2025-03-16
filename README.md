@@ -17,10 +17,10 @@ Welcome to **MR.VELOUS**! This passion project is dedicated to exploring medical
 - **Enhanced Layout**: A clean, visually appealing and intuitive interface - because exploring medical images should be engaging, not tedious.
 - **Powered by ITK WebAssembly**: Fast and efficient image processing, ensuring smooth performance in the browser.
 - **Progressive Web App (PWA)**: MR.VELOUS can be used as a standalone app.
+- **Multilayer Support**: Add image registration and multilayer support.
 
 ## 📝 TODO
 
-- **Multilayer Support**: Add image registration and multilayer support.
 - **Customizable Viewing**: Add settings to customize the image display.
 
 **MR.VELOUS** is a passion project, and working on it is an absolute blast. Feedback and suggestions are the sprinkles on the ice cream 🍦, so feel free to share your thoughts!

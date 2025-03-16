@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Lock } from 'lucide-svelte';
-	import { getViewerState } from '$lib/stores/viewer.svelte';
+	import { getViewerState } from '$lib/context/viewer.svelte';
 	import { Demo } from '$lib/components/custom/demo';
 	import { Separator } from '$lib/components/ui/separator';
 	import * as Alert from '$lib/components/ui/alert';

@@ -1,9 +1,7 @@
-<svelte:options runes={true} />
-
 <script lang="ts">
-	import { getViewerState } from '$lib/stores/viewer.svelte';
+	import { getViewerState } from '$lib/context/viewer.svelte';
 	import * as Resizable from '$lib/components/ui/resizable';
-	import { Loader } from '$lib/components/custom/loader';
+	import { Dropzone } from '$lib/components/custom/dropzone';
 	import { Panel } from '$lib/components/custom/panel';
 
 	const viewerState = getViewerState();
@@ -15,7 +13,7 @@
 
 {#if viewerState.volumes.length === 0}
 	<div class="grid h-full place-content-center p-5">
-		<Loader />
+		<Dropzone />
 	</div>
 {:else}
 	{#if innerWidth < 768}

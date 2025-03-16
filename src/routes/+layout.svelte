@@ -1,5 +1,3 @@
-<svelte:options runes={true} />
-
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { slide } from 'svelte/transition';
@@ -15,8 +13,9 @@
 		HelpCircle,
 		Github
 	} from 'lucide-svelte';
-	import { setViewerState, getViewerState } from '$lib/stores/viewer.svelte';
-	import { setDialogState, getDialogState } from '$lib/stores/dialog.svelte';
+	import { setViewerState } from '$lib/context/viewer.svelte';
+	import { setDialogState } from '$lib/context/dialog.svelte';
+	import { setLoaderState } from '$lib/context/loader.svelte';
 	import { Toaster } from '$lib/components/ui/sonner';
 	import { TooltipProvider } from '$lib/components/ui/tooltip/index.js';
 	import { Dialog, DialogContent } from '$lib/components/ui/dialog';
@@ -31,11 +30,11 @@
 
 	let { children }: { children: Snippet } = $props();
 
-	setViewerState();
-	const viewerState = getViewerState();
+	const viewer = setViewerState();
 
-	setDialogState();
-	const dialogState = getDialogState();
+	const dialog = setDialogState();
+
+	setLoaderState(viewer);
 
 	let innerWidth = $state(0);
 	let isSidebarVisible = $state(false);
@@ -66,7 +65,7 @@
 			icon: Info,
 			onClick: (): void => {
 				isSidebarVisible = true;
-				viewerState.activeTile = 'Information';
+				viewer.activeTile = 'Information';
 			}
 		},
 		{
@@ -74,9 +73,9 @@
 			icon: SlidersHorizontal,
 			onClick: (): void => {
 				isSidebarVisible = true;
-				viewerState.activeTile = 'Settings';
+				viewer.activeTile = 'Settings';
 			},
-			isDisabled: viewerState.views.length === 0
+			isDisabled: viewer.views.length === 0
 		},
 		{ name: 'Toggle theme', icon: Sun, class: 'mt-auto dark:hidden', onClick: toggleMode },
 		{ name: 'Toggle theme', icon: Moon, class: 'mt-auto hidden dark:block', onClick: toggleMode },
@@ -85,7 +84,7 @@
 			icon: HelpCircle,
 			isDialog: true,
 			onClick: (): void => {
-				dialogState.openDialog(About);
+				dialog.openDialog(About);
 			}
 		},
 		{ name: 'GitHub link', icon: Github, href: 'https://github.com/igoresso/mr-velous' }
@@ -101,7 +100,7 @@
 <TooltipProvider>
 	{#if innerWidth > 0}
 		<div class="flex h-full">
-			<Rail {tiles} activeTile={isSidebarVisible ? viewerState.activeTile : null} />
+			<Rail {tiles} activeTile={isSidebarVisible ? viewer.activeTile : null} />
 
 			{#if isSidebarVisible}
 				<div
@@ -114,12 +113,12 @@
 						</header>
 
 						<aside class="flex grow flex-col space-y-5 px-5 py-3">
-							{#if viewerState.activeTile === 'Information'}
+							{#if viewer.activeTile === 'Information'}
 								<Information />
-							{:else if viewerState.activeTile === 'Settings'}
-								<Layers />
-								<Dimensions />
+							{:else if viewer.activeTile === 'Settings'}
 								<Adjustments />
+								<Dimensions />
+								<Layers />
 							{/if}
 						</aside>
 					</div>
@@ -133,10 +132,10 @@
 	{/if}
 </TooltipProvider>
 
-<Dialog bind:open={dialogState.isOpen}>
+<Dialog bind:open={dialog.isOpen}>
 	<DialogContent>
-		{#if dialogState.content}
-			<dialogState.content />
+		{#if dialog.content}
+			<dialog.content />
 		{/if}
 	</DialogContent>
 </Dialog>

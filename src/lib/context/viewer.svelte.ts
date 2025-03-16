@@ -22,6 +22,7 @@ export class ViewerState {
 	volumes = $state<Volume[]>([]);
 	views = $state<View[]>([]);
 	activeTile = $state<string>('Information');
+	referenceImage: Image | null = null;
 
 	addVolume(fileName: string, image: Image): void {
 		if (!image.data) {
@@ -48,7 +49,7 @@ export class ViewerState {
 		};
 
 		this.deactivateAllVolumes();
-		this.volumes.push(newVolume);
+		this.volumes.unshift(newVolume);
 
 		if (this.volumes.length === 1) {
 			this.initViews(newVolume);
@@ -190,12 +191,17 @@ export class ViewerState {
 		}
 	}
 
-	removeVolume(volumeId: string): void {
-		this.volumes = this.volumes.filter((volume) => volume.id !== volumeId);
+	removeActiveVolume(): void {
+		if (this.volumes.length === 0) return;
 
-		if (this.volumes.length === 0) {
+		if (this.volumes.length === 1) {
 			this.reset();
+			return;
 		}
+
+		const activeIndex = this.volumes.findIndex((volume) => volume.isActive);
+		this.volumes = this.volumes.filter((volume) => !volume.isActive);
+		this.volumes[Math.min(activeIndex, this.volumes.length - 1)].isActive = true;
 	}
 
 	swapViews(current: number, target: number): void {

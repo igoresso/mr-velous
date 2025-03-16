@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { getViewerState } from '$lib/stores/viewer.svelte';
+	import { getViewerState } from '$lib/context/viewer.svelte';
 	import { Label } from '$lib/components/ui/label';
 	import { Input } from '$lib/components/ui/input';
 	import { Separator } from '$lib/components/ui/separator';

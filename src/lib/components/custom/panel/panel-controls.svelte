@@ -9,7 +9,7 @@
 		Compass,
 		RotateCwSquare
 	} from 'lucide-svelte';
-	import { getViewerState } from '$lib/stores/viewer.svelte';
+	import { getViewerState } from '$lib/context/viewer.svelte';
 	import { getPanelState } from './panel-state.svelte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
 	import * as Select from '$lib/components/ui/select';
