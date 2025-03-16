@@ -4,7 +4,7 @@ import { sveltekit } from '@sveltejs/kit/vite';
 export default defineConfig({
 	plugins: [sveltekit()],
 	optimizeDeps: {
-		exclude: ['itk-wasm', '@itk-wasm/image-io']
+		exclude: ['itk-wasm', '@itk-wasm/image-io', '@itk-wasm/dicom']
 	},
 	test: {
 		environment: 'jsdom',
