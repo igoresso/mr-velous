@@ -1,14 +1,7 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@layer base {
-	*,
-	::after,
-	::before,
-	::backdrop,
-	::file-selector-button {
-	}
-}
+@variant dark (&:is(.dark *));
 
 @layer base {
 	:root {
@@ -111,18 +104,6 @@
 	--color-sidebar-border: hsl(var(--sidebar-border));
 	--color-sidebar-ring: hsl(var(--sidebar-ring));
 
-	/* --color-neutral-50: hsl(var(--neutral-50));
-	--color-neutral-100: hsl(var(--neutral-100));
-	--color-neutral-200: hsl(var(--neutral-200));
-	--color-neutral-300: hsl(var(--neutral-300));
-	--color-neutral-400: hsl(var(--neutral-400));
-	--color-neutral-500: hsl(var(--neutral-500));
-	--color-neutral-600: hsl(var(--neutral-600));
-	--color-neutral-700: hsl(var(--neutral-700));
-	--color-neutral-800: hsl(var(--neutral-800));
-	--color-neutral-900: hsl(var(--neutral-900));
-	--color-neutral-950: hsl(var(--neutral-950)); */
-
 	/* Border */
 	--radius-xl: calc(var(--radius) + 4px);
 	--radius-lg: var(--radius);
@@ -174,5 +155,9 @@
 	}
 	body {
 		@apply bg-background text-foreground;
+	}
+	button:not(:disabled),
+	[role='button']:not(:disabled) {
+		cursor: pointer;
 	}
 }

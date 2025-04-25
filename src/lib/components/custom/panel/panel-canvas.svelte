@@ -199,7 +199,6 @@
 		canvas.removeEventListener('wheel', handleScroll);
 
 		select(canvas).call(zoomBehavior);
-		console.log('zoom effect');
 
 		return () => {
 			if (!canvas) return;

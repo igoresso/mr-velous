@@ -11,7 +11,7 @@
 </script>
 
 {#if activeVolume !== undefined}
-	<section class="flex flex-col space-y-4">
+	<section class="flex flex-col gap-4">
 		<div class="flex items-center justify-between">
 			<h2 class="text-lg font-semibold">Adjustments</h2>
 			<Button
@@ -25,7 +25,7 @@
 			</Button>
 		</div>
 
-		<div class="flex flex-col space-y-2">
+		<div class="flex flex-col gap-2">
 			<Label for="opacity">Opacity</Label>
 			<Slider
 				id="opacity"
@@ -41,7 +41,7 @@
 				<span class="font-mono text-xs">Visible</span>
 			</div>
 		</div>
-		<div class="flex flex-col space-y-2">
+		<div class="flex flex-col gap-2">
 			<Label for="brightness">Brightness</Label>
 			<Slider
 				id="brightness"
@@ -57,7 +57,7 @@
 				<span class="font-mono text-xs">Lighter</span>
 			</div>
 		</div>
-		<div class="flex flex-col space-y-2">
+		<div class="flex flex-col gap-2">
 			<Label for="contrast">Contrast</Label>
 			<Slider
 				id="contrast"

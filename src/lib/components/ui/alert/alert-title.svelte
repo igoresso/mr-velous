@@ -12,15 +12,13 @@
 	}: WithElementRef<HTMLAttributes<HTMLDivElement>> & {
 		level?: 1 | 2 | 3 | 4 | 5 | 6;
 	} = $props();
-
-	let tag = `h${level}` as const;
 </script>
 
-<svelte:element
-	this={tag}
+<div
 	bind:this={ref}
-	class={cn('mb-1 font-medium leading-none tracking-tight', className)}
+	aria-level={level}
+	class={cn('mb-1 leading-none font-medium tracking-tight', className)}
 	{...restProps}
 >
 	{@render children?.()}
-</svelte:element>
+</div>

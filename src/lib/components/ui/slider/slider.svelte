@@ -33,7 +33,10 @@
 		{#each thumbs as thumb (thumb)}
 			<SliderPrimitive.Thumb
 				index={thumb}
-				class="border-primary/50 bg-background focus-visible:ring-ring block size-4 rounded-full border shadow transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50"
+				class={cn(
+					'border-primary/50 bg-background focus-visible:ring-ring-3 block size-4 rounded-full border shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50',
+					orientation === 'horizontal' ? 'cursor-ew-resize' : 'cursor-ns-resize'
+				)}
 			/>
 		{/each}
 	{/snippet}

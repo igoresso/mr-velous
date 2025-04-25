@@ -16,16 +16,16 @@
 </script>
 
 {#if viewerState.volumes.length > 0}
-	<section class="flex flex-col space-y-4">
+	<section class="flex flex-col gap-4">
 		<h2 class="text-lg font-semibold">Dimensions</h2>
 		<div class="flex items-center justify-between">
-			{#each viewsSorted as view, i}
+			{#each viewsSorted as view, i (view.axis)}
 				{#if i !== 0}
 					<div class="h-5">
 						<Separator orientation="vertical" />
 					</div>
 				{/if}
-				<div class="flex flex-col space-y-1.5">
+				<div class="flex flex-col gap-1.5">
 					<Label for={`axis-${view.axis}`}>Axis {view.axis + 1}</Label>
 					<Input
 						id={`axis-${view.axis}`}
@@ -36,7 +36,7 @@
 						class="font-mono text-sm"
 						oninput={(event) => handleSliceChange(view.axis, event)}
 					/>
-					<span class="pl-3 text-xs text-muted-foreground">1 - {view.slices + 1}</span>
+					<span class="text-muted-foreground pl-3 text-xs">1 - {view.slices + 1}</span>
 				</div>
 			{/each}
 		</div>

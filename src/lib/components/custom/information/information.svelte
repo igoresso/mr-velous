@@ -8,7 +8,7 @@
 	const viewerState = getViewerState();
 </script>
 
-<div class="flex flex-col space-y-2">
+<div class="flex flex-col gap-2">
 	<h2 class="text-lg font-medium">
 		MR Viewer with Enhanced Layout and Optimised User Satisfaction
 	</h2>

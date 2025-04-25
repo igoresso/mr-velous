@@ -29,7 +29,7 @@
 				? 'dark:border-neutral-500 dark:bg-neutral-800'
 				: 'dark:border-neutral-700 dark:bg-neutral-900';
 		const hoverDark = 'dark:hover:border-neutral-500 dark:hover:bg-neutral-800';
-		const accessibility = 'focus-within:ring-4 ring-ring ring-offset-4 ring-offset-background';
+		const accessibility = 'focus-within:ring-4 ring-ring-3 ring-offset-4 ring-offset-background';
 		const disabled = loader.isLoading ? 'opacity-50' : '';
 
 		return `${base} ${light} ${hoverLight} ${dark} ${hoverDark} ${accessibility} ${disabled}`;
@@ -48,7 +48,7 @@
 		<span class="font-semibold">Upload files</span> or drag and drop
 	</p>
 
-	<span class="italic text-muted-foreground">{loader.acceptedExtensions}</span>
+	<span class="text-muted-foreground italic">{loader.acceptedExtensions}</span>
 
 	<input
 		class={`absolute inset-0 opacity-0 ${loader.isLoading ? 'cursor-not-allowed' : 'cursor-pointer'}`}

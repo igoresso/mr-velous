@@ -37,38 +37,40 @@
 		{ value: '2', label: 'Axis 3' }
 	];
 
-	function handleModeChange(value: string | string[] | undefined) {
-		if (Array.isArray(value)) {
-			value = value[0];
-		}
-
-		if (value) {
-			panelState.setActiveMode(value as Mode);
-		}
+	function getActiveAxis(): string {
+		return view.axis.toString();
 	}
 
-	function handleAxisChange(value: string | undefined) {
-		if (value !== undefined) {
-			viewerState.swapViews(view.axis, Number(value));
-		}
+	function setActiveAxis(axis: string): void {
+		viewerState.swapViews(view.axis, parseInt(axis));
+	}
+
+	function handleAxisChange(axis: string): void {
+		viewerState.swapViews(view.axis, parseInt(axis));
+	}
+
+	function getActiveMode(): Mode {
+		return panelState.activeMode;
+	}
+
+	function setActiveMode(mode: Mode): void {
+		panelState.setActiveMode(mode);
+	}
+
+	function handleModeChange(mode: string): void {
+		panelState.setActiveMode(mode as Mode);
 	}
 </script>
 
 {#if width > 420}
-	<div class="mr-auto flex space-x-1">
-		<Select.Root
-			type="single"
-			items={axes}
-			value={view.axis.toString()}
-			onValueChange={(axis) => axis && handleAxisChange(axis)}
-			controlledValue
-		>
+	<div class="mr-auto flex gap-1">
+		<Select.Root type="single" items={axes} bind:value={getActiveAxis, setActiveAxis}>
 			<Select.Trigger class="mr-auto w-28" aria-label="Select axis">
 				<Axis3D class="size-4" />
 				{axes[view.axis].label}
 			</Select.Trigger>
 			<Select.Content>
-				{#each axes.values() as axis}
+				{#each axes.values() as axis, i (i)}
 					<Select.Item value={axis.value} label={axis.label}>{axis.label}</Select.Item>
 				{/each}
 			</Select.Content>
@@ -97,9 +99,7 @@
 		type="single"
 		variant="outline"
 		class="gap-0"
-		value={panelState.activeMode}
-		onValueChange={handleModeChange}
-		controlledValue
+		bind:value={getActiveMode, setActiveMode}
 	>
 		<Tooltip.Root>
 			<Tooltip.Trigger>
@@ -107,7 +107,7 @@
 					<ToggleGroup.Item
 						{...props}
 						value="zoom"
-						class="rounded-r-none"
+						class="rounded-r-none border-r-0"
 						aria-label="Toggle move/zoom"
 					>
 						<Move class="size-4" />
@@ -124,7 +124,7 @@
 					<ToggleGroup.Item
 						{...props}
 						value="cursor"
-						class="border-l-none rounded-l-none"
+						class="rounded-l-none border-l-0"
 						aria-label="Toggle cursor"
 					>
 						<Locate class="size-4" />
@@ -139,7 +139,7 @@
 
 	<Separator orientation="vertical" />
 
-	<div class="flex space-x-1">
+	<div class="flex gap-1">
 		<Tooltip.Root>
 			<Tooltip.Trigger>
 				{#snippet child({ props })}
@@ -211,7 +211,7 @@
 			<DropdownMenu.Sub>
 				<DropdownMenu.SubTrigger>Select axis</DropdownMenu.SubTrigger>
 				<DropdownMenu.SubContent>
-					{#each axes.values() as axis}
+					{#each axes.values() as axis, i (i)}
 						<DropdownMenu.CheckboxItem
 							checked={view.axis === Number(axis.value)}
 							onCheckedChange={() => handleAxisChange(axis.value)}

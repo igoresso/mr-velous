@@ -13,7 +13,7 @@
 
 <nav class="h-full border-r-2">
 	<ul class="flex h-full flex-col">
-		{#each tiles as tile}
+		{#each tiles as tile, i (i)}
 			<li class="tile {tile.class}">
 				<Tile {tile} {activeTile} />
 			</li>

@@ -4,8 +4,8 @@
 </script>
 
 <Dialog.Header>
-	<Dialog.Title class="flex items-center space-x-3"
-		><h2 class="text-2xl">MR.VELOUS</h2>
+	<Dialog.Title class="flex items-center gap-4">
+		<h2 class="text-2xl">MR.VELOUS</h2>
 		<Badge class="ml-2" variant="destructive">non-clinical use</Badge>
 	</Dialog.Title>
 	<Dialog.Description class="text-left">
@@ -14,7 +14,8 @@
 	</Dialog.Description>
 </Dialog.Header>
 <p class="text-balance">
-	MR Viewer with Enhanced Layout and Optimized User Experience, or simply <span
+	MR Viewer with Enhanced Layout and Optimized User Experience, or simply
+	<span
 		class="bg-gradient-to-r from-sky-500 via-fuchsia-500 to-amber-500 bg-clip-text font-semibold text-transparent"
 		>MR.VELOUS</span
 	>, is a free and open-source medical image viewer distributed under the MIT license. It is

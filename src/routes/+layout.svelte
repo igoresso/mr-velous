@@ -112,7 +112,7 @@
 							<h1 class="text-center text-xl font-bold">MR.VELOUS</h1>
 						</header>
 
-						<aside class="flex grow flex-col space-y-5 px-5 py-3">
+						<aside class="flex grow flex-col gap-5 px-5 py-3">
 							{#if viewer.activeTile === 'Information'}
 								<Information />
 							{:else if viewer.activeTile === 'Settings'}

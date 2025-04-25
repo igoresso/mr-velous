@@ -12,8 +12,8 @@
 </script>
 
 {#if viewerState.volumes.length > 0}
-	<section class="flex flex-col space-y-2">
-		<div class="flex space-x-2">
+	<section class="flex flex-col gap-2">
+		<div class="flex gap-2">
 			<h2 class="grow text-lg font-semibold">Layers</h2>
 			<Button
 				variant="ghost"
@@ -46,8 +46,8 @@
 		</div>
 
 		<ul>
-			{#each viewerState.volumes as volume}
-				<li class="space-x- flex items-center py-1">
+			{#each viewerState.volumes as volume (volume.id)}
+				<li class="flex items-center gap-2 py-1">
 					<Button
 						variant="ghost"
 						size="sm"
@@ -64,7 +64,7 @@
 					<Button
 						variant="link"
 						size="sm"
-						class={`inline-block grow justify-start overflow-hidden truncate p-2 text-start font-mono text-sm ${volume.isActive && 'font-bold'}`}
+						class={`inline-block grow justify-start truncate overflow-hidden p-2 text-start font-mono text-sm ${volume.isActive && 'font-bold'}`}
 						onclick={() => viewerState.setActiveVolume(volume.id)}
 					>
 						{volume.fileName}
