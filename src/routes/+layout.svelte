@@ -26,7 +26,7 @@
 	import { Dimensions } from '$lib/components/custom/dimensions';
 	import { Adjustments } from '$lib/components/custom/adjustments';
 
-	import '../app.css';
+	import '../app.pcss';
 
 	let { children }: { children: Snippet } = $props();
 

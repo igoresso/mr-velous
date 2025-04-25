@@ -131,8 +131,6 @@ export class LoaderState {
 	}
 
 	private async loadFiles(files: File[]) {
-		console.log('Loading files:', files);
-
 		if (!browser) return;
 
 		if (!files || files.length === 0) {
@@ -362,20 +360,15 @@ export class LoaderState {
 			}
 		];
 
-		console.log('Inputs:', inputs);
-
 		const outputs: Array<PipelineOutput> = [
 			{
 				type: InterfaceTypes.Image
 			}
 		];
 
-		console.log('Outputs:', outputs);
-
 		const result = await runPipeline('resample-image-to-reference', args, outputs, inputs, {
 			webWorker: this.worker
 		});
-		console.log('Result:', result);
 
 		if (result.returnValue !== 0) {
 			throw new Error(result.stderr || 'Pipeline failed with non-zero return code');
