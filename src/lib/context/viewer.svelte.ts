@@ -204,6 +204,21 @@ export class ViewerState {
 		this.volumes[Math.min(activeIndex, this.volumes.length - 1)].isActive = true;
 	}
 
+	moveLayer(from: number, to: number): void {
+		if (from < 0 || from >= this.volumes.length) {
+			throw new Error('Original index is out of bounds');
+		}
+
+		if (to < 0 || to >= this.volumes.length) {
+			throw new Error('Target index is out of bounds');
+		}
+
+		if (from === to) return;
+
+		const volume = this.volumes.splice(from, 1)[0];
+		this.volumes.splice(to, 0, volume);
+	}
+
 	swapViews(current: number, target: number): void {
 		const idxCurrent = this.views.findIndex((view) => view.axis === current);
 		const idxTarget = this.views.findIndex((view) => view.axis === target);

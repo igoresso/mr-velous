@@ -4,8 +4,8 @@
 </script>
 
 <Dialog.Header>
-	<Dialog.Title class="flex items-center gap-4">
-		<h2 class="text-2xl">MR.VELOUS</h2>
+	<Dialog.Title class="flex items-center gap-1">
+		<h2 class="text-3xl">MR.VELOUS</h2>
 		<Badge class="ml-2" variant="destructive">non-clinical use</Badge>
 	</Dialog.Title>
 	<Dialog.Description class="text-left">

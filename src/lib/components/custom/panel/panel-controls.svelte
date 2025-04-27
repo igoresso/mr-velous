@@ -70,7 +70,7 @@
 				{axes[view.axis].label}
 			</Select.Trigger>
 			<Select.Content>
-				{#each axes.values() as axis, i (i)}
+				{#each axes.values() as axis (axis)}
 					<Select.Item value={axis.value} label={axis.label}>{axis.label}</Select.Item>
 				{/each}
 			</Select.Content>
@@ -211,7 +211,7 @@
 			<DropdownMenu.Sub>
 				<DropdownMenu.SubTrigger>Select axis</DropdownMenu.SubTrigger>
 				<DropdownMenu.SubContent>
-					{#each axes.values() as axis, i (i)}
+					{#each axes.values() as axis (axis)}
 						<DropdownMenu.CheckboxItem
 							checked={view.axis === Number(axis.value)}
 							onCheckedChange={() => handleAxisChange(axis.value)}

@@ -27,6 +27,7 @@
 	import { Adjustments } from '$lib/components/custom/adjustments';
 
 	import '../app.pcss';
+	import ScrollArea from '$lib/components/ui/scroll-area/scroll-area.svelte';
 
 	let { children }: { children: Snippet } = $props();
 
@@ -112,15 +113,17 @@
 							<h1 class="text-center text-xl font-bold">MR.VELOUS</h1>
 						</header>
 
-						<aside class="flex grow flex-col gap-5 px-5 py-3">
-							{#if viewer.activeTile === 'Information'}
-								<Information />
-							{:else if viewer.activeTile === 'Settings'}
-								<Adjustments />
-								<Dimensions />
-								<Layers />
-							{/if}
-						</aside>
+						<ScrollArea class="h-full">
+							<aside class="flex h-full grow flex-col gap-5 px-5 py-3">
+								{#if viewer.activeTile === 'Information'}
+									<Information />
+								{:else if viewer.activeTile === 'Settings'}
+									<Adjustments />
+									<Dimensions />
+									<Layers />
+								{/if}
+							</aside>
+						</ScrollArea>
 					</div>
 				</div>
 			{/if}

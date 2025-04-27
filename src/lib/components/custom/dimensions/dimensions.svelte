@@ -19,8 +19,8 @@
 	<section class="flex flex-col gap-4">
 		<h2 class="text-lg font-semibold">Dimensions</h2>
 		<div class="flex items-center justify-between">
-			{#each viewsSorted as view, i (view.axis)}
-				{#if i !== 0}
+			{#each viewsSorted as view, index (view)}
+				{#if index !== 0}
 					<div class="h-5">
 						<Separator orientation="vertical" />
 					</div>
