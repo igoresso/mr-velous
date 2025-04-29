@@ -7,10 +7,8 @@ declare let self: ServiceWorkerGlobalScope;
 
 import { build, files, version } from '$service-worker';
 
-const filesToInclude = files.filter((file) => !file.startsWith('/examples/'));
-
 const CACHE = `cache-${version}`;
-const ASSETS = [...build, ...filesToInclude];
+const ASSETS = [...build, ...files];
 
 self.addEventListener('install', (event) => {
 	async function addFilesToCache() {
