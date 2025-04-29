@@ -20,8 +20,11 @@ export class PanelState {
 		this.directions = !this.directions;
 	}
 
-	setActiveMode(mode: Mode): void {
-		this.activeMode = mode;
+	setActiveMode(mode: string): void {
+		if (!modeToCursor.has(mode as Mode)) {
+			return;
+		}
+		this.activeMode = mode as Mode;
 	}
 }
 

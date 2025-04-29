@@ -53,13 +53,15 @@
 		return panelState.activeMode;
 	}
 
-	function setActiveMode(mode: Mode): void {
+	function setActiveMode(mode: string): void {
 		panelState.setActiveMode(mode);
 	}
 
 	function handleModeChange(mode: string): void {
-		panelState.setActiveMode(mode as Mode);
+		panelState.setActiveMode(mode);
 	}
+
+	$inspect(panelState.activeMode, 'activeMode');
 </script>
 
 {#if width > 420}
