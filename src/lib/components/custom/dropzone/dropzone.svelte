@@ -1,18 +1,39 @@
 <script lang="ts">
+	import { scale } from 'svelte/transition';
+	import { cubicInOut } from 'svelte/easing';
+	import { getViewerState } from '$lib/context/viewer.svelte';
 	import { FileUp } from 'lucide-svelte';
 	import { getLoaderState } from '$lib/context/loader.svelte';
 
 	const loader = getLoaderState();
+	const viewerState = getViewerState();
 
-	let isDragOver = false;
+	let isDragOver = $state(false);
+	let dragCounter = 0;
 
-	function handleDragOver(event: DragEvent): void {
+	function handleDragEnter(event: DragEvent): void {
 		event.preventDefault();
+		dragCounter += 1;
 		isDragOver = true;
 	}
 
-	function handleDragLeave(): void {
+	function handleDragOver(event: DragEvent): void {
+		event.preventDefault();
+	}
+
+	function handleDragLeave(event: DragEvent): void {
+		event.preventDefault();
+		dragCounter -= 1;
+		if (dragCounter === 0) {
+			isDragOver = false;
+		}
+	}
+
+	function handleDrop(event: DragEvent): void {
+		event.preventDefault();
 		isDragOver = false;
+		dragCounter = 0;
+		loader.handleFiles(event);
 	}
 
 	function getClasses() {
@@ -37,28 +58,38 @@
 </script>
 
 <div
-	class={getClasses()}
+	class="transition-color absolute inset-0 z-10 grid h-full place-content-center p-5 duration-100 ease-in"
+	class:bg-background={isDragOver}
 	role="region"
 	aria-label="File upload area"
 	aria-describedby="file-upload-instructions"
-	ondrop={(event) => loader.handleFiles(event)}
+	ondragenter={handleDragEnter}
+	ondragover={handleDragOver}
+	ondragleave={handleDragLeave}
+	ondrop={handleDrop}
 >
-	<span class="mb-5"><FileUp size={48} aria-hidden="true" /></span>
-	<p id="file-upload-instructions" class="mb-1 text-center text-xl font-light">
-		<span class="font-semibold">Upload files</span> or drag and drop
-	</p>
+	{#if viewerState.volumes.length === 0 || isDragOver}
+		<div transition:scale={{ duration: 100, easing: cubicInOut }} class={getClasses()}>
+			<span class="mb-5"><FileUp size={48} aria-hidden="true" /></span>
+			<p id="file-upload-instructions" class="mb-1 text-center text-xl font-light">
+				{#if viewerState.volumes.length === 0}
+					<span class="font-semibold">Upload files</span> or drag and drop
+				{:else}
+					<span class="font-semibold">Drag and drop</span> more files
+				{/if}
+			</p>
 
-	<span class="text-muted-foreground italic">{loader.acceptedExtensions}</span>
+			<span class="text-muted-foreground italic">{loader.acceptedExtensions}</span>
 
-	<input
-		class={`absolute inset-0 opacity-0 ${loader.isLoading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
-		type="file"
-		accept={loader.acceptedExtensions}
-		multiple={loader.multiple}
-		aria-label="File input"
-		onchange={(event) => loader.handleFiles(event)}
-		ondragover={handleDragOver}
-		ondragleave={handleDragLeave}
-		disabled={loader.isLoading}
-	/>
+			<input
+				class={`absolute inset-0 opacity-0 ${loader.isLoading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+				type="file"
+				accept={loader.acceptedExtensions}
+				multiple={loader.multiple}
+				aria-label="File input"
+				onchange={(event) => loader.handleFiles(event)}
+				disabled={loader.isLoading}
+			/>
+		</div>
+	{/if}
 </div>

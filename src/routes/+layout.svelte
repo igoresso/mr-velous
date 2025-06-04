@@ -128,7 +128,7 @@
 				</div>
 			{/if}
 
-			<main class="min-w-80 grow">
+			<main class="relative min-w-80 grow overflow-hidden">
 				{@render children()}
 			</main>
 		</div>
