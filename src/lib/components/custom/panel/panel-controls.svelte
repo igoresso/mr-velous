@@ -60,8 +60,6 @@
 	function handleModeChange(mode: string): void {
 		panelState.setActiveMode(mode);
 	}
-
-	$inspect(panelState.activeMode, 'activeMode');
 </script>
 
 {#if width > 420}
