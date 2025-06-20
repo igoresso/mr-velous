@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Lock } from 'lucide-svelte';
+	import LockIcon from '@lucide/svelte/icons/lock';
 	import { getViewerState } from '$lib/context/viewer.svelte';
 	import { Demo } from '$lib/components/custom/demo';
 	import { Separator } from '$lib/components/ui/separator';
@@ -8,7 +8,7 @@
 	const viewerState = getViewerState();
 </script>
 
-<div class="flex flex-col gap-2">
+<div class="dshrink-0 flex flex-col gap-2">
 	<h2 class="text-lg font-medium">
 		MR Viewer with Enhanced Layout and Optimised User Satisfaction
 	</h2>
@@ -26,8 +26,8 @@
 {/if}
 
 <Alert.Root class="!mt-auto" variant="destructive">
-	<Lock class="h-4 w-4" />
-	<Alert.Title level={3}>Privacy First</Alert.Title>
+	<LockIcon class="h-4 w-4" />
+	<Alert.Title>Privacy First</Alert.Title>
 	<Alert.Description
 		>Everything runs locally — your data never leaves your device.</Alert.Description
 	>

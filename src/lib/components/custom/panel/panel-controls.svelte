@@ -1,14 +1,12 @@
 <script lang="ts">
-	import {
-		Axis3D,
-		Locate,
-		Move,
-		Fullscreen,
-		Plus,
-		Ellipsis,
-		Compass,
-		RotateCwSquare
-	} from 'lucide-svelte';
+	import Axis3DIcon from '@lucide/svelte/icons/axis-3d';
+	import LocateIcon from '@lucide/svelte/icons/locate';
+	import MoveIcon from '@lucide/svelte/icons/move';
+	import FullscreenIcon from '@lucide/svelte/icons/fullscreen';
+	import PlusIcon from '@lucide/svelte/icons/plus';
+	import EllipsisIcon from '@lucide/svelte/icons/ellipsis';
+	import CompassIcon from '@lucide/svelte/icons/compass';
+	import RotateCwSquareIcon from '@lucide/svelte/icons/rotate-cw-square';
 	import { getViewerState } from '$lib/context/viewer.svelte';
 	import { getPanelState } from './panel-state.svelte';
 	import Separator from '$lib/components/ui/separator/separator.svelte';
@@ -66,10 +64,10 @@
 	<div class="mr-auto flex gap-1">
 		<Select.Root type="single" items={axes} bind:value={getActiveAxis, setActiveAxis}>
 			<Select.Trigger class="mr-auto w-28" aria-label="Select axis">
-				<Axis3D class="size-4" />
+				<Axis3DIcon class="size-4" />
 				{axes[view.axis].label}
 			</Select.Trigger>
-			<Select.Content>
+			<Select.Content side="bottom">
 				{#each axes.values() as axis (axis)}
 					<Select.Item value={axis.value} label={axis.label}>{axis.label}</Select.Item>
 				{/each}
@@ -85,7 +83,7 @@
 						onclick={() => viewerState.rotateViews()}
 						aria-label="Rotate views"
 					>
-						<RotateCwSquare class="size-4" />
+						<RotateCwSquareIcon class="size-4" />
 					</Button>
 				{/snippet}
 			</Tooltip.Trigger>
@@ -110,7 +108,7 @@
 						class="rounded-r-none border-r-0"
 						aria-label="Toggle move/zoom"
 					>
-						<Move class="size-4" />
+						<MoveIcon class="size-4" />
 					</ToggleGroup.Item>
 				{/snippet}
 			</Tooltip.Trigger>
@@ -127,7 +125,7 @@
 						class="rounded-l-none border-l-0"
 						aria-label="Toggle cursor"
 					>
-						<Locate class="size-4" />
+						<LocateIcon class="size-4" />
 					</ToggleGroup.Item>
 				{/snippet}
 			</Tooltip.Trigger>
@@ -149,11 +147,11 @@
 						pressed={panelState.crosshair}
 						onPressedChange={() => panelState.toggleCrosshair()}
 					>
-						<Plus class="size-4" />
+						<PlusIcon class="size-4" />
 					</Toggle>
 				{/snippet}
 			</Tooltip.Trigger>
-			<Tooltip.Content side="bottom">
+			<Tooltip.Content side="left">
 				<span>Toggle crosshair</span>
 			</Tooltip.Content>
 		</Tooltip.Root>
@@ -167,7 +165,7 @@
 						pressed={panelState.directions}
 						onPressedChange={() => panelState.toggleDirections()}
 					>
-						<Compass class="size-4" />
+						<CompassIcon class="size-4" />
 					</Toggle>
 				{/snippet}
 			</Tooltip.Trigger>
@@ -189,7 +187,7 @@
 					onclick={() => viewerState.resetTransform(view.axis)}
 					aria-label="Reset view"
 				>
-					<Fullscreen class="size-4" />
+					<FullscreenIcon class="size-4" />
 				</Button>
 			{/snippet}
 		</Tooltip.Trigger>
@@ -202,7 +200,7 @@
 		<DropdownMenu.Trigger aria-label="Open controls">
 			{#snippet child({ props })}
 				<Button {...props} variant="ghost">
-					<Ellipsis class="size-4" />
+					<EllipsisIcon class="size-4" />
 				</Button>
 			{/snippet}
 		</DropdownMenu.Trigger>
@@ -215,8 +213,9 @@
 						<DropdownMenu.CheckboxItem
 							checked={view.axis === Number(axis.value)}
 							onCheckedChange={() => handleAxisChange(axis.value)}
-							>{axis.label}</DropdownMenu.CheckboxItem
 						>
+							{axis.label}
+						</DropdownMenu.CheckboxItem>
 					{/each}
 				</DropdownMenu.SubContent>
 			</DropdownMenu.Sub>
@@ -230,15 +229,15 @@
 			<DropdownMenu.Label>Visuals</DropdownMenu.Label>
 			<DropdownMenu.Group>
 				<DropdownMenu.Item onclick={() => panelState.toggleCrosshair()}>
-					<Plus class="mr-2 h-4 w-4" />
+					<PlusIcon class="mr-2 h-4 w-4" />
 					Toggle crosshair
 				</DropdownMenu.Item>
 				<DropdownMenu.Item onclick={() => panelState.toggleDirections()}>
-					<Compass class="mr-2 h-4 w-4" />
+					<CompassIcon class="mr-2 h-4 w-4" />
 					Toggle directions
 				</DropdownMenu.Item>
 				<DropdownMenu.Item onclick={() => viewerState.resetTransform(view.axis)}>
-					<Fullscreen class="mr-2 h-4 w-4" />
+					<FullscreenIcon class="mr-2 h-4 w-4" />
 					Reset view
 				</DropdownMenu.Item>
 			</DropdownMenu.Group>

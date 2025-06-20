@@ -20,7 +20,7 @@
 	<div class="flex justify-end gap-3">
 		<Controls {view} {width} />
 	</div>
-	<div class="relative grow">
+	<div class="relative flex-1">
 		<div
 			style={`border-color: ${view.color};`}
 			class="absolute inset-0 overflow-clip rounded-xl border-2 bg-black"

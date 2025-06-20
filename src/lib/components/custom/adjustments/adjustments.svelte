@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getViewerState } from '$lib/context/viewer.svelte';
-	import { RotateCcw } from 'lucide-svelte';
+	import RotateCcwSquareIcon from '@lucide/svelte/icons/rotate-ccw';
 	import { Slider } from '$lib/components/ui/slider';
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button';
@@ -21,20 +21,21 @@
 				aria-label="Reset adjustments"
 				onclick={() => viewerState.resetBrightnessAndContrast()}
 			>
-				<RotateCcw class="size-4" />
+				<RotateCcwSquareIcon class="size-4" />
 			</Button>
 		</div>
 
 		<div class="flex flex-col gap-2">
 			<Label for="opacity">Opacity</Label>
 			<Slider
+				type="single"
 				id="opacity"
 				min={0}
 				max={1}
-				value={[activeVolume.opacity]}
+				value={activeVolume.opacity}
 				step={0.01}
 				aria-label="Opacity"
-				onValueChange={(value) => viewerState.setOpacity(value[0])}
+				onValueChange={(value) => viewerState.setOpacity(value)}
 			/>
 			<div class="flex justify-between">
 				<span class="font-mono text-xs">Transparent</span>
@@ -44,13 +45,14 @@
 		<div class="flex flex-col gap-2">
 			<Label for="brightness">Brightness</Label>
 			<Slider
+				type="single"
 				id="brightness"
 				min={-1}
 				max={1}
-				value={[activeVolume.brightnessFactor]}
+				value={activeVolume.brightnessFactor}
 				step={0.01}
 				aria-label="Brightness"
-				onValueChange={(value) => viewerState.setBrightness(value[0])}
+				onValueChange={(value) => viewerState.setBrightness(value)}
 			/>
 			<div class="flex justify-between">
 				<span class="font-mono text-xs">Darker</span>
@@ -60,13 +62,14 @@
 		<div class="flex flex-col gap-2">
 			<Label for="contrast">Contrast</Label>
 			<Slider
+				type="single"
 				id="contrast"
 				min={0}
 				max={2}
-				value={[activeVolume.contrastFactor]}
+				value={activeVolume.contrastFactor}
 				step={0.01}
 				aria-label="Contrast"
-				onValueChange={(value) => viewerState.setContrast(value[0])}
+				onValueChange={(value) => viewerState.setContrast(value)}
 			/>
 			<div class="flex justify-between">
 				<span class="font-mono text-xs">Low</span>

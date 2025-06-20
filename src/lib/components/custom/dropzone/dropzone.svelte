@@ -2,38 +2,44 @@
 	import { scale } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
 	import { getViewerState } from '$lib/context/viewer.svelte';
-	import { FileUp } from 'lucide-svelte';
+	import FileUpIcon from '@lucide/svelte/icons/file-up';
 	import { getLoaderState } from '$lib/context/loader.svelte';
 
 	const loader = getLoaderState();
 	const viewerState = getViewerState();
 
 	let isDragOver = $state(false);
+	let dropzoneRef: HTMLDivElement;
 	let dragCounter = 0;
 
-	function handleDragEnter(event: DragEvent): void {
-		event.preventDefault();
-		dragCounter += 1;
-		isDragOver = true;
-	}
+	function handleWindowDragOver(event: DragEvent): void {
+		const items = Array.from(event.dataTransfer?.items ?? []);
+		const hasFiles = items.some((i) => i.kind === 'file');
 
-	function handleDragOver(event: DragEvent): void {
-		event.preventDefault();
-	}
+		if (!hasFiles) return;
 
-	function handleDragLeave(event: DragEvent): void {
-		event.preventDefault();
-		dragCounter -= 1;
-		if (dragCounter === 0) {
+		const { left, top, right, bottom } = dropzoneRef.getBoundingClientRect();
+		const { clientX: x, clientY: y } = event;
+
+		if (x >= left && x <= right && y >= top && y <= bottom) {
+			event.preventDefault();
+			isDragOver = true;
+		} else {
 			isDragOver = false;
 		}
 	}
 
-	function handleDrop(event: DragEvent): void {
+	function handleWindowDrop(event: DragEvent) {
+		if (!isDragOver) return;
 		event.preventDefault();
 		isDragOver = false;
-		dragCounter = 0;
 		loader.handleFiles(event);
+	}
+
+	function handleWindowDragLeave(event: DragEvent) {
+		if (event.relatedTarget === null) {
+			isDragOver = false;
+		}
 	}
 
 	function getClasses() {
@@ -57,20 +63,24 @@
 	}
 </script>
 
+<svelte:window
+	on:dragover|capture={handleWindowDragOver}
+	on:drop|capture={handleWindowDrop}
+	on:dragleave|capture={handleWindowDragLeave}
+/>
+
 <div
-	class="transition-color absolute inset-0 z-10 grid h-full place-content-center p-5 duration-100 ease-in"
+	bind:this={dropzoneRef}
+	class="transition-color absolute inset-0 z-25 grid h-full place-content-center p-5 transition-colors"
 	class:bg-background={isDragOver}
+	class:pointer-events-none={viewerState.volumes.length > 0}
 	role="region"
 	aria-label="File upload area"
 	aria-describedby="file-upload-instructions"
-	ondragenter={handleDragEnter}
-	ondragover={handleDragOver}
-	ondragleave={handleDragLeave}
-	ondrop={handleDrop}
 >
 	{#if viewerState.volumes.length === 0 || isDragOver}
 		<div transition:scale={{ duration: 100, easing: cubicInOut }} class={getClasses()}>
-			<span class="mb-5"><FileUp size={48} aria-hidden="true" /></span>
+			<span class="mb-5"><FileUpIcon size={48} aria-hidden="true" /></span>
 			<p id="file-upload-instructions" class="mb-1 text-center text-xl font-light">
 				{#if viewerState.volumes.length === 0}
 					<span class="font-semibold">Upload files</span> or drag and drop

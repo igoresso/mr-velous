@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { LoaderCircle, Telescope } from 'lucide-svelte';
+	import LoaderCircleIcon from '@lucide/svelte/icons/loader-circle';
+	import TelescopeIcon from '@lucide/svelte/icons/telescope';
 	import { Button } from '$lib/components/ui/button';
 	import { getLoaderState } from '$lib/context/loader.svelte';
 
@@ -8,9 +9,9 @@
 
 <Button class="ring-offset-2" onclick={() => loader.loadDemo()} disabled={loader.isLoading}>
 	{#if loader.isLoading}
-		<LoaderCircle class="mr-2 h-4 w-4 animate-spin" />
+		<LoaderCircleIcon class="mr-2 h-4 w-4 animate-spin" />
 	{:else}
-		<Telescope class="mr-2 h-4 w-4" />
+		<TelescopeIcon class="mr-2 h-4 w-4" />
 	{/if}
 	Explore a demo
 </Button>

@@ -5,7 +5,10 @@
 	import { draggable } from '$lib/actions/draggable';
 	import { getViewerState } from '$lib/context/viewer.svelte';
 	import { getLoaderState } from '$lib/context/loader.svelte';
-	import { Eye, EyeOff, FilePlus2, Trash2 } from 'lucide-svelte';
+	import EyeIcon from '@lucide/svelte/icons/eye';
+	import EyeOffIcon from '@lucide/svelte/icons/eye-off';
+	import FilePlusIcon from '@lucide/svelte/icons/file-plus-2';
+	import TrashIcon from '@lucide/svelte/icons/trash-2';
 	import { clamp } from '$lib/helpers';
 	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
@@ -15,12 +18,12 @@
 
 	let fileInput = $state<HTMLInputElement | null>(null);
 	let hoverIndex = $state(Infinity);
-	let maxIndex = $derived(viewerState.volumes.length);
+	let maxIndex = $derived(viewerState.volumes.length - 1);
 	let listItemRefs = $state<HTMLElement[]>([]);
 
 	function handleDragStart(e: CustomEvent<{ x: number; y: number }>, index: number) {
 		const element = e.currentTarget as HTMLElement;
-		element.classList.add('opacity-50', 'shadow-md', 'z-10');
+		element.classList.add('opacity-50', 'z-10');
 		hoverIndex = index;
 	}
 
@@ -35,7 +38,7 @@
 
 	function handleDragEnd(e: CustomEvent, index: number) {
 		const element = e.currentTarget as HTMLElement;
-		element.classList.remove('opacity-50', 'shadow-md', 'z-10');
+		element.classList.remove('opacity-50', 'z-10');
 
 		const targetIndex =
 			hoverIndex >= index ? Math.min(hoverIndex, maxIndex) : Math.min(hoverIndex + 1, maxIndex);
@@ -77,7 +80,7 @@
 {#if viewerState.volumes.length > 0}
 	<section class="flex flex-col gap-2">
 		<div class="flex gap-2">
-			<h2 class="grow text-lg font-semibold">Layers</h2>
+			<h2 class="flex-1 text-lg font-semibold">Layers</h2>
 			<Button
 				variant="ghost"
 				size="sm"
@@ -86,7 +89,7 @@
 				disabled={loader.isLoading}
 				onclick={() => fileInput?.click()}
 			>
-				<FilePlus2 class="size-4" />
+				<FilePlusIcon class="size-4" />
 			</Button>
 			<input
 				type="file"
@@ -104,7 +107,7 @@
 				class="p-2"
 				onclick={() => viewerState.removeActiveVolume()}
 			>
-				<Trash2 class="size-4" />
+				<TrashIcon class="size-4" />
 				<span class="sr-only">Remove volume</span>
 			</Button>
 		</div>
@@ -128,16 +131,16 @@
 						onclick={() => viewerState.toggleVisibility(volume.id)}
 					>
 						{#if volume.isVisible}
-							<Eye size="16" />
+							<EyeIcon size="16" />
 						{:else}
-							<EyeOff size="16" />
+							<EyeOffIcon size="16" />
 						{/if}
 						<span class="sr-only">Toggle visibility</span>
 					</Button>
 					<Button
 						variant="link"
 						size="sm"
-						class={`inline-block grow justify-start truncate overflow-hidden p-2 text-start font-mono text-sm ${volume.isActive && 'font-bold'}`}
+						class={`inline-block flex-1 justify-start truncate p-2 text-start font-mono ${volume.isActive && 'font-bold'}`}
 						onclick={() => viewerState.setActiveVolume(volume.id)}
 						onkeydown={(e) => handleKeyDown(e, index)}
 					>

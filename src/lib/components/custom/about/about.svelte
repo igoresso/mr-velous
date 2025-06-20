@@ -17,8 +17,9 @@
 	MR Viewer with Enhanced Layout and Optimized User Experience, or simply
 	<span
 		class="bg-gradient-to-r from-sky-500 via-fuchsia-500 to-amber-500 bg-clip-text font-semibold text-transparent"
-		>MR.VELOUS</span
-	>, is a free and open-source medical image viewer distributed under the MIT license. It is
+	>
+		MR.VELOUS
+	</span>, is a free and open-source medical image viewer distributed under the MIT license. It is
 	designed for research, education, and non-clinical use. Built on the ITK-Wasm library, it
 	leverages WebAssembly pipelines to efficiently load and visualize medical images directly in the
 	browser.
@@ -26,9 +27,9 @@
 
 <Dialog.Footer>
 	<p class="text-pretty">
-		The demo image is provided courtesy of the <a
-			href="https://medicine.unimelb.edu.au/school-structure/medicine/research/mbciu"
-			>Melbourne Brain Centre Imaging Unit (MBCIU)</a
-		> .
+		The demo image is provided courtesy of the
+		<a href="https://medicine.unimelb.edu.au/school-structure/medicine/research/mbciu">
+			Melbourne Brain Centre Imaging Unit (MBCIU)
+		</a>.
 	</p>
 </Dialog.Footer>
