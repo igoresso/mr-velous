@@ -151,7 +151,7 @@
 					</Toggle>
 				{/snippet}
 			</Tooltip.Trigger>
-			<Tooltip.Content side="left">
+			<Tooltip.Content side="bottom">
 				<span>Toggle crosshair</span>
 			</Tooltip.Content>
 		</Tooltip.Root>
