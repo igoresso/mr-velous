@@ -5,6 +5,8 @@ import { base } from '$app/paths';
 import { ViewerState } from '$lib/context/viewer.svelte';
 import { loadFileFromURL } from '$lib/helpers';
 import { InterfaceTypes, WorkerPool } from 'itk-wasm';
+import { DICOM_TAGS } from '$lib/config';
+import type { TagCode } from '$lib/types';
 import type {
 	setPipelinesBaseUrl as SetPipelinesBaseUrlType,
 	runPipeline as RunPipelineType,
@@ -172,27 +174,28 @@ export class LoaderState {
 			}
 		} else if (firstFile.name.endsWith('.dcm')) {
 			const { tags, webWorker } = await readDicomTags(firstFile, {
-				tagsToRead: { tags: ['0020|000d', '0008|103e'] }
+				tagsToRead: { tags: Object.values(DICOM_TAGS) as TagCode[] }
 			});
 
 			this.worker = webWorker;
 
-			const studyName = tags.find((tag) => tag[0] === '0008|103e')?.[1] || 'Unknown Study';
-			const studyRefUID = tags.find((tag) => tag[0] === '0020|000d')?.[1];
+			const header = new Map<string, string>(tags);
+			const studyName = header.get(DICOM_TAGS.SeriesDescription) || 'Unknown Study';
+			const studyInstanceUID = header.get(DICOM_TAGS.StudyInstanceUID);
 
 			const filesFiltered = [];
 
 			for (const file of files) {
 				const { tags, webWorker } = await readDicomTags(file, {
 					webWorker: this.worker,
-					tagsToRead: { tags: ['0020|000d'] }
+					tagsToRead: { tags: [DICOM_TAGS.StudyInstanceUID] }
 				});
 
 				this.worker = webWorker;
 
-				const studyUID = tags.find((tag) => tag[0] === '0020|000d')?.[1];
+				const studyUID = tags.find((tag) => tag[0] === DICOM_TAGS.StudyInstanceUID)?.[1];
 
-				if (studyUID === studyRefUID) {
+				if (studyUID === studyInstanceUID) {
 					filesFiltered.push(file);
 				}
 			}
@@ -203,7 +206,15 @@ export class LoaderState {
 					webWorkerPool: this.workerPool
 				});
 				this.workerPool = webWorkerPool;
-				this.viewer.addVolume(studyName, outputImage);
+
+				if (this.viewer.volumes.length === 0) {
+					this.viewer.addVolume(studyName, { ...outputImage, metadata: header });
+					this.viewer.referenceImage = outputImage;
+				} else {
+					const resampledImage = await this.resampleImageToReference(outputImage);
+					this.viewer.addVolume(studyName, { ...resampledImage, metadata: header });
+				}
+
 				toast.success(`Study loaded successfully`, {
 					description: studyName,
 					class: 'break-all'

@@ -1,5 +1,6 @@
 import type { Image } from 'itk-wasm';
 import type { ZoomTransform } from 'd3-zoom';
+import { DICOM_TAGS } from '$lib/config';
 
 export type NumberTypedArray =
 	| Int8Array
@@ -13,7 +14,6 @@ export type NumberTypedArray =
 	| Float64Array;
 
 export type BigIntTypedArray = BigInt64Array | BigUint64Array;
-
 export type TypedArray = NumberTypedArray | BigIntTypedArray;
 
 export type Volume = Image & {
@@ -43,3 +43,8 @@ export type View = {
 	flipY: boolean;
 	transpose: boolean;
 };
+
+export type TagName = keyof typeof DICOM_TAGS;
+export type TagCode = (typeof DICOM_TAGS)[TagName];
+export type DicomHeaderByName = { [K in TagName]: string };
+export type DicomHeaderByCode = { [C in TagCode]: string };

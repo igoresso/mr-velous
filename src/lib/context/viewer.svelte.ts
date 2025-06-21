@@ -73,8 +73,6 @@ export class ViewerState {
 		this.views = [Axis.X, Axis.Y, Axis.Z].map((axis) =>
 			this.createView(axis, size, spacing, matrix, axisColors)
 		);
-
-		this.activeTile = 'Settings';
 	}
 
 	private createView(

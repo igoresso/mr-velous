@@ -26,6 +26,7 @@
 	import { Adjustments } from '$lib/components/custom/adjustments';
 
 	import '../app.pcss';
+	import Metadata from '$lib/components/custom/metadata/metadata.svelte';
 
 	let { children }: { children: Snippet } = $props();
 
@@ -108,22 +109,25 @@
 
 			{#if isSidebarVisible}
 				<div
-					class="shrink-0 border-r-2"
+					class="h-full shrink-0 border-r-2"
 					transition:slide={{ duration: 500, easing: quintOut, axis: 'x' }}
 				>
-					<div class="flex h-full min-h-0 w-72 flex-col">
+					<div class="flex h-full w-72 flex-col overflow-hidden">
 						<header class="border-b-2 p-3">
 							<h1 class="text-center text-xl font-bold">MR.VELOUS</h1>
 						</header>
 
-						<ScrollArea class="flex-1 overflow-hidden" orientation="vertical">
+						<ScrollArea class="min-h-0 flex-1" type="auto" orientation="vertical">
 							<aside class="flex h-full flex-col gap-5 px-5 py-3">
-								{#if viewer.activeTile === 'Information'}
+								{#if viewer.activeTile === 'Information' && viewer.volumes.length === 0}
 									<Information />
-								{:else if viewer.activeTile === 'Settings'}
-									<Adjustments />
-									<Dimensions />
+								{:else if viewer.activeTile === 'Information' && viewer.volumes.length > 0}
 									<Layers />
+									<Metadata />
+								{:else if viewer.activeTile === 'Settings'}
+									<Layers />
+									<Dimensions />
+									<Adjustments />
 								{/if}
 							</aside>
 						</ScrollArea>
