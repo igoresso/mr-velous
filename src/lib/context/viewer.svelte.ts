@@ -1,13 +1,15 @@
 import { getContext, setContext } from 'svelte';
+
 import { zoomIdentity } from 'd3-zoom';
+import type { ZoomTransform } from 'd3-zoom';
+import type { Image } from 'itk-wasm';
+
 import {
-	isBigIntArray,
 	computeMinAndMax,
 	extractSliceFromVolume,
+	isBigIntArray,
 	vectorToMatrix
 } from '$lib/helpers';
-import type { Image } from 'itk-wasm';
-import type { ZoomTransform } from 'd3-zoom';
 import type { NumberTypedArray, View, Volume } from '$lib/types';
 
 enum Axis {

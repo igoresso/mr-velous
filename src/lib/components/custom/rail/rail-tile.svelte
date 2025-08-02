@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { Button } from 'bits-ui';
+
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import type { Tile } from './index.ts';
 	import { cn } from '$lib/utils.js';
+
+	import type { Tile } from './index.ts';
 
 	type Props = {
 		tile: Tile;

@@ -1,8 +1,9 @@
 // isBigIntArray.test.ts
+import { describe, expect, it } from 'vitest';
 
-import { describe, it, expect } from 'vitest';
-import { isBigIntArray } from './isBigIntArray';
 import type { TypedArray } from '$lib/types';
+
+import { isBigIntArray } from './isBigIntArray';
 
 describe('isBigIntArray', () => {
 	it('should return true for BigInt64Array', () => {

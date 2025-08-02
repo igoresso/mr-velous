@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { getViewerState } from '$lib/context/viewer.svelte';
-	import { DICOM_TAGS_VISIBLE } from '$lib/config';
 	import * as Table from '$lib/components/ui/table/index.js';
+	import { DICOM_TAGS_VISIBLE } from '$lib/config';
+	import { getViewerState } from '$lib/context/viewer.svelte';
 	import type { TagName } from '$lib/types';
 
 	const viewerState = getViewerState();

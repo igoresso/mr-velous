@@ -1,5 +1,6 @@
-import type { Image } from 'itk-wasm';
 import type { ZoomTransform } from 'd3-zoom';
+import type { Image } from 'itk-wasm';
+
 import { DICOM_TAGS } from '$lib/config';
 
 export type NumberTypedArray =

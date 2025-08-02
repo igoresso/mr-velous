@@ -1,9 +1,10 @@
 <script lang="ts">
 	import LockIcon from '@lucide/svelte/icons/lock';
-	import { getViewerState } from '$lib/context/viewer.svelte';
+
+	import * as Alert from '$lib/components/ui/alert';
 	import { Demo } from '$lib/components/custom/demo';
 	import { Separator } from '$lib/components/ui/separator';
-	import * as Alert from '$lib/components/ui/alert';
+	import { getViewerState } from '$lib/context/viewer.svelte';
 
 	const viewerState = getViewerState();
 </script>

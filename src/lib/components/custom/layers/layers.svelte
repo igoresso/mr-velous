@@ -1,17 +1,19 @@
 <script lang="ts">
 	import { tick } from 'svelte';
-	import { slide } from 'svelte/transition';
 	import { quadOut } from 'svelte/easing';
-	import { draggable } from '$lib/actions/draggable';
-	import { getViewerState } from '$lib/context/viewer.svelte';
-	import { getLoaderState } from '$lib/context/loader.svelte';
+	import { slide } from 'svelte/transition';
+
 	import EyeIcon from '@lucide/svelte/icons/eye';
 	import EyeOffIcon from '@lucide/svelte/icons/eye-off';
 	import FilePlusIcon from '@lucide/svelte/icons/file-plus-2';
 	import TrashIcon from '@lucide/svelte/icons/trash-2';
-	import { clamp } from '$lib/helpers';
+
+	import { draggable } from '$lib/actions/draggable';
 	import { Button } from '$lib/components/ui/button';
 	import { Separator } from '$lib/components/ui/separator';
+	import { getLoaderState } from '$lib/context/loader.svelte';
+	import { getViewerState } from '$lib/context/viewer.svelte';
+	import { clamp } from '$lib/helpers';
 
 	const viewerState = getViewerState();
 	const loader = getLoaderState();

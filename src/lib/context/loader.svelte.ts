@@ -1,24 +1,27 @@
-import { getContext, setContext } from 'svelte';
-import { toast } from 'svelte-sonner';
 import { browser } from '$app/environment';
 import { base } from '$app/paths';
-import { ViewerState } from '$lib/context/viewer.svelte';
-import { loadFileFromURL } from '$lib/helpers';
-import { InterfaceTypes, WorkerPool } from 'itk-wasm';
-import { DICOM_TAGS } from '$lib/config';
-import type { TagCode } from '$lib/types';
+
+import { getContext, setContext } from 'svelte';
+import { toast } from 'svelte-sonner';
+
 import type {
-	setPipelinesBaseUrl as SetPipelinesBaseUrlType,
-	runPipeline as RunPipelineType,
+	readDicomTags as ReadDicomTagsType,
+	readImageDicomFileSeries as ReadImageDicomFileSeriesType
+} from '@itk-wasm/dicom';
+import type { niftiReadImage as NiftiReadImageType } from '@itk-wasm/image-io';
+import { InterfaceTypes, WorkerPool } from 'itk-wasm';
+import type {
+	Image,
 	PipelineInput,
 	PipelineOutput,
-	Image
+	runPipeline as RunPipelineType,
+	setPipelinesBaseUrl as SetPipelinesBaseUrlType
 } from 'itk-wasm';
-import type { niftiReadImage as NiftiReadImageType } from '@itk-wasm/image-io';
-import type {
-	readImageDicomFileSeries as ReadImageDicomFileSeriesType,
-	readDicomTags as ReadDicomTagsType
-} from '@itk-wasm/dicom';
+
+import { DICOM_TAGS } from '$lib/config';
+import { ViewerState } from '$lib/context/viewer.svelte';
+import { loadFileFromURL } from '$lib/helpers';
+import type { TagCode } from '$lib/types';
 
 let setPipelinesBaseUrl: typeof SetPipelinesBaseUrlType;
 let runPipeline: typeof RunPipelineType;

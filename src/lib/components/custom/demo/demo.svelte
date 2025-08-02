@@ -1,6 +1,7 @@
 <script lang="ts">
 	import LoaderCircleIcon from '@lucide/svelte/icons/loader-circle';
 	import TelescopeIcon from '@lucide/svelte/icons/telescope';
+
 	import { Button } from '$lib/components/ui/button';
 	import { getLoaderState } from '$lib/context/loader.svelte';
 

@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { getViewerState } from '$lib/context/viewer.svelte';
-	import { getPanelState } from './panel-state.svelte';
-	import { sliceDataToImageArray } from '$lib/helpers';
 	import type { ScaleLinear } from 'd3-scale';
+
+	import { getViewerState } from '$lib/context/viewer.svelte';
+	import { sliceDataToImageArray } from '$lib/helpers';
 	import type { View, Volume } from '$lib/types';
+
+	import { getPanelState } from './panel-state.svelte';
 
 	type Props = {
 		ctx: CanvasRenderingContext2D;

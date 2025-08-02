@@ -1,23 +1,25 @@
 <script lang="ts">
 	import Axis3DIcon from '@lucide/svelte/icons/axis-3d';
+	import CompassIcon from '@lucide/svelte/icons/compass';
+	import EllipsisIcon from '@lucide/svelte/icons/ellipsis';
+	import FullscreenIcon from '@lucide/svelte/icons/fullscreen';
 	import LocateIcon from '@lucide/svelte/icons/locate';
 	import MoveIcon from '@lucide/svelte/icons/move';
-	import FullscreenIcon from '@lucide/svelte/icons/fullscreen';
 	import PlusIcon from '@lucide/svelte/icons/plus';
-	import EllipsisIcon from '@lucide/svelte/icons/ellipsis';
-	import CompassIcon from '@lucide/svelte/icons/compass';
 	import RotateCwSquareIcon from '@lucide/svelte/icons/rotate-cw-square';
-	import { getViewerState } from '$lib/context/viewer.svelte';
-	import { getPanelState } from './panel-state.svelte';
-	import Separator from '$lib/components/ui/separator/separator.svelte';
+
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Select from '$lib/components/ui/select';
 	import * as ToggleGroup from '$lib/components/ui/toggle-group';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { Toggle } from '$lib/components/ui/toggle';
 	import { Button } from '$lib/components/ui/button';
+	import Separator from '$lib/components/ui/separator/separator.svelte';
+	import { Toggle } from '$lib/components/ui/toggle';
+	import { getViewerState } from '$lib/context/viewer.svelte';
 	import type { View } from '$lib/types';
+
 	import type { Mode } from './index';
+	import { getPanelState } from './panel-state.svelte';
 
 	type Props = {
 		view: View;

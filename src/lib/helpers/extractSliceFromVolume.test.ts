@@ -1,6 +1,7 @@
-import { describe, it, expect } from 'vitest';
-import { extractSliceFromVolume } from './extractSliceFromVolume';
+import { describe, expect, it } from 'vitest';
+
 import type { NumberTypedArray } from '../types';
+import { extractSliceFromVolume } from './extractSliceFromVolume';
 
 type TypedArrayConstructor =
 	| Uint8ArrayConstructor

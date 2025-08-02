@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { setPanelState } from './panel-state.svelte';
+	import type { View } from '$lib/types';
+
 	import Canvas from './panel-canvas.svelte';
 	import Controls from './panel-controls.svelte';
-	import type { View } from '$lib/types';
+	import { setPanelState } from './panel-state.svelte';
 
 	type Props = {
 		view: View;

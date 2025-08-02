@@ -1,6 +1,6 @@
 // loadFileFromURL.test.ts
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { describe, it, expect, vi, afterEach } from 'vitest';
 import { loadFileFromURL } from './loadFileFromURL';
 
 describe('loadFileFromURL', () => {

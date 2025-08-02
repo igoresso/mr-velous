@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { getViewerState } from '$lib/context/viewer.svelte';
 	import * as Resizable from '$lib/components/ui/resizable';
 	import { Dropzone } from '$lib/components/custom/dropzone';
 	import { Panel } from '$lib/components/custom/panel';
+	import { getViewerState } from '$lib/context/viewer.svelte';
 
 	const viewerState = getViewerState();
 

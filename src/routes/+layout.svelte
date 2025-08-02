@@ -1,39 +1,39 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { slide } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
-	import { ModeWatcher, toggleMode } from 'mode-watcher';
-	import PanelLeftOpenIcon from '@lucide/svelte/icons/panel-left-open';
-	import PanelLeftCloseIcon from '@lucide/svelte/icons/panel-left-close';
-	import InfoIcon from '@lucide/svelte/icons/info';
-	import SlidersHorizontalIcon from '@lucide/svelte/icons/sliders-horizontal';
-	import MoonIcon from '@lucide/svelte/icons/moon';
-	import SunIcon from '@lucide/svelte/icons/sun';
-	import HelpCircleIcon from '@lucide/svelte/icons/help-circle';
+	import { slide } from 'svelte/transition';
+
 	import GithubIcon from '@lucide/svelte/icons/github';
-	import { setViewerState } from '$lib/context/viewer.svelte';
-	import { setDialogState } from '$lib/context/dialog.svelte';
-	import { setLoaderState } from '$lib/context/loader.svelte';
-	import { Toaster } from '$lib/components/ui/sonner';
-	import { TooltipProvider } from '$lib/components/ui/tooltip/index.js';
-	import { Dialog, DialogContent } from '$lib/components/ui/dialog';
-	import { ScrollArea } from '$lib/components/ui/scroll-area';
-	import { Rail } from '$lib/components/custom/rail';
+	import HelpCircleIcon from '@lucide/svelte/icons/help-circle';
+	import InfoIcon from '@lucide/svelte/icons/info';
+	import MoonIcon from '@lucide/svelte/icons/moon';
+	import PanelLeftCloseIcon from '@lucide/svelte/icons/panel-left-close';
+	import PanelLeftOpenIcon from '@lucide/svelte/icons/panel-left-open';
+	import SlidersHorizontalIcon from '@lucide/svelte/icons/sliders-horizontal';
+	import SunIcon from '@lucide/svelte/icons/sun';
+	import { ModeWatcher, toggleMode } from 'mode-watcher';
+
 	import { About } from '$lib/components/custom/about';
+	import { Adjustments } from '$lib/components/custom/adjustments';
+	import { Dimensions } from '$lib/components/custom/dimensions';
 	import { Information } from '$lib/components/custom/information';
 	import { Layers } from '$lib/components/custom/layers';
-	import { Dimensions } from '$lib/components/custom/dimensions';
-	import { Adjustments } from '$lib/components/custom/adjustments';
+	import Metadata from '$lib/components/custom/metadata/metadata.svelte';
+	import { Rail } from '$lib/components/custom/rail';
+	import { Dialog, DialogContent } from '$lib/components/ui/dialog';
+	import { ScrollArea } from '$lib/components/ui/scroll-area';
+	import { Toaster } from '$lib/components/ui/sonner';
+	import { TooltipProvider } from '$lib/components/ui/tooltip/index.js';
+	import { setDialogState } from '$lib/context/dialog.svelte';
+	import { setLoaderState } from '$lib/context/loader.svelte';
+	import { setViewerState } from '$lib/context/viewer.svelte';
 
 	import '../app.pcss';
-	import Metadata from '$lib/components/custom/metadata/metadata.svelte';
 
 	let { children }: { children: Snippet } = $props();
 
 	const viewer = setViewerState();
-
 	const dialog = setDialogState();
-
 	setLoaderState(viewer);
 
 	let innerWidth = $state(0);

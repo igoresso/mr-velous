@@ -1,11 +1,11 @@
+import { build, files, version } from '$service-worker';
+
 /// <reference types="@sveltejs/kit" />
 /// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 
 declare let self: ServiceWorkerGlobalScope;
-
-import { build, files, version } from '$service-worker';
 
 const CACHE = `cache-${version}`;
 const ASSETS = [...build, ...files];

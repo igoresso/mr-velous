@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Tile from './rail-tile.svelte';
 	import type { Tile as TileType } from './index.ts';
+	import Tile from './rail-tile.svelte';
 
 	// Props for the rail
 	type Props = {

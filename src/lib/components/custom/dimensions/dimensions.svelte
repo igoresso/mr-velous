@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { getViewerState } from '$lib/context/viewer.svelte';
-	import { Label } from '$lib/components/ui/label';
 	import { Input } from '$lib/components/ui/input';
+	import { Label } from '$lib/components/ui/label';
 	import { Separator } from '$lib/components/ui/separator';
+	import { getViewerState } from '$lib/context/viewer.svelte';
 
 	const viewerState = getViewerState();
 

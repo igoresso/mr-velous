@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { zoom } from 'd3-zoom';
-	import { select } from 'd3-selection';
-	import { getViewerState } from '$lib/context/viewer.svelte';
-	import { getPanelState } from './panel-state.svelte';
 	import { scaleLinear } from 'd3-scale';
-	import Content from './panel-content.svelte';
+	import { select } from 'd3-selection';
+	import { zoom } from 'd3-zoom';
+
+	import { getViewerState } from '$lib/context/viewer.svelte';
 	import type { View } from '$lib/types';
+
+	import Content from './panel-content.svelte';
+	import { getPanelState } from './panel-state.svelte';
 
 	type Props = {
 		view: View;

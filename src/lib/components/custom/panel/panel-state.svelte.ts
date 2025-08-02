@@ -1,5 +1,6 @@
 import { getContext, setContext } from 'svelte';
-import type { Mode, Cursor } from './index';
+
+import type { Cursor, Mode } from './index';
 
 const modeToCursor = new Map<Mode, Cursor>([
 	['cursor', 'cursor-crosshair'],

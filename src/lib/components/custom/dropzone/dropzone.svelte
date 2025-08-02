@@ -1,9 +1,11 @@
 <script lang="ts">
-	import { scale } from 'svelte/transition';
 	import { cubicInOut } from 'svelte/easing';
-	import { getViewerState } from '$lib/context/viewer.svelte';
+	import { scale } from 'svelte/transition';
+
 	import FileUpIcon from '@lucide/svelte/icons/file-up';
+
 	import { getLoaderState } from '$lib/context/loader.svelte';
+	import { getViewerState } from '$lib/context/viewer.svelte';
 
 	const loader = getLoaderState();
 	const viewerState = getViewerState();
