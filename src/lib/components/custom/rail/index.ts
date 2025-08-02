@@ -1,12 +1,13 @@
-import type { Icon } from 'lucide-svelte';
+import type { Component } from 'svelte';
 
 export type Tile = {
 	name: string;
-	icon: typeof Icon;
+	icon: Component;
 	class?: string;
 	href?: string;
 	onClick?: () => void;
 	isDisabled?: boolean;
+	isDialog?: boolean;
 };
 
 export { default as Rail } from './rail.svelte';
