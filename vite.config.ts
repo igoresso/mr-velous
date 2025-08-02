@@ -8,6 +8,17 @@ export default defineConfig({
 	optimizeDeps: {
 		exclude: ['itk-wasm', '@itk-wasm/image-io', '@itk-wasm/dicom']
 	},
+	build: {
+		rollupOptions: {
+			output: {
+				manualChunks: {
+					d3: ['d3-zoom', 'd3-selection', 'd3-scale'],
+					components: ['bits-ui', '@lucide/svelte'],
+					itk: ['@itk-wasm/image-io', '@itk-wasm/dicom', 'itk-wasm']
+				}
+			}
+		}
+	},
 	test: {
 		workspace: [
 			{
