@@ -4,9 +4,9 @@
 </script>
 
 <Dialog.Header>
-	<Dialog.Title class="flex items-center gap-1">
+	<Dialog.Title class="flex items-center gap-3">
 		<h2 class="text-3xl">MR.VELOUS</h2>
-		<Badge class="ml-2" variant="destructive">non-clinical use</Badge>
+		<Badge class="leading-none py-1" variant="destructive">non-clinical use</Badge>
 	</Dialog.Title>
 	<Dialog.Description class="text-left">
 		This software is for investigational use only and not intended for diagnostic, therapeutic, or
