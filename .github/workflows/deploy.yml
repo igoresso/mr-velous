@@ -48,7 +48,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy ${{ env.BUILD_DIRECTORY }} --project-name=${{ github.event.repository.name }} --compatibility-flags single-page-application
+          command: pages deploy ${{ env.BUILD_DIRECTORY }} --project-name=${{ github.event.repository.name }}
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🚀 Deploy Preview
@@ -58,5 +58,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy ${{ env.BUILD_DIRECTORY }} --project-name=${{ github.event.repository.name }} --branch=staging --compatibility-flags single-page-application
+          command: pages deploy ${{ env.BUILD_DIRECTORY }} --project-name=${{ github.event.repository.name }} --branch=staging
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
