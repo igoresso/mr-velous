@@ -12,9 +12,7 @@ export default defineConfig({
 		rollupOptions: {
 			output: {
 				manualChunks: {
-					d3: ['d3-zoom', 'd3-selection', 'd3-scale'],
-					components: ['bits-ui', '@lucide/svelte'],
-					itk: ['@itk-wasm/image-io', '@itk-wasm/dicom', 'itk-wasm']
+					components: ['bits-ui', '@lucide/svelte']
 				}
 			}
 		}
