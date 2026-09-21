@@ -1,6 +1,6 @@
 # 🩻 MR.VELOUS
 
-![Deployment: gh-pages](https://github.com/igoresso/mr-velous/actions/workflows/deploy.yml/badge.svg)
+![Deployment: gh-pages](https://github.com/iggstatic/mr-velous/actions/workflows/deploy.yml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Welcome to **MR.VELOUS**! This passion project is dedicated to exploring medical images with both style and ease. One of the main goals was to harness the potential of **Svelte 5**, leveraging its cutting-edge features to craft cleaner, more efficient code and deliver a seamless user experience.

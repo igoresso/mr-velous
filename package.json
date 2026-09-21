@@ -5,9 +5,9 @@
 	"private": true,
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/igoresso/mr-velous/issues"
+		"url": "https://github.com/iggstatic/mr-velous/issues"
 	},
-	"homepage": "https://igoresso.github.io/mr-velous/",
+	"homepage": "https://iggstatic.github.io/mr-velous/",
 	"scripts": {
 		"copy:nifti": "cpx \"node_modules/@itk-wasm/image-io/dist/pipelines/nifti-read-image.{js,wasm.zst}\" static/pipelines",
 		"copy:dicom-series": "cpx \"node_modules/@itk-wasm/dicom/dist/pipelines/read-image-dicom-file-series.{js,wasm.zst}\" static/pipelines",

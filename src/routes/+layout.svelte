@@ -92,7 +92,7 @@
 				dialog.openDialog(About);
 			}
 		},
-		{ name: 'GitHub link', icon: GithubIcon, href: 'https://github.com/igoresso/mr-velous' }
+		{ name: 'GitHub link', icon: GithubIcon, href: 'https://github.com/iggstatic/mr-velous' }
 	]);
 </script>
 
